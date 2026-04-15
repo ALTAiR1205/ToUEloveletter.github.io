@@ -360,6 +360,9 @@
     }
   </style>
 </head>
+
+
+  
 <body>
   <header class="topbar">
     <div class="container topbar-inner">
@@ -539,5 +542,25 @@
       themeBtn.textContent = isDark ? "白天模式" : "夜晚模式";
     });
   </script>
+  <audio id="bgm" loop preload="auto">
+  <source src="music/bgm.mp3" type="audio/mpeg" />
+  你的浏览器不支持音频播放。
+  </audio>
+
+<div class="music-intro" id="musicIntro">
+  <div class="music-intro-card">
+    <p class="music-intro-title">打开这封信之前</p>
+    <p class="music-intro-text">要不要先让音乐轻轻响起来？</p>
+    <div class="music-intro-actions">
+      <button id="startMusicBtn" class="music-main-btn">开启音乐</button>
+      <button id="skipMusicBtn" class="music-sub-btn">先安静地看看</button>
+    </div>
+  </div>
+</div>
+
+<button class="floating-player" id="floatingPlayer" type="button">
+  ♫ 音乐已暂停
+</button>
+  
 </body>
 </html>
