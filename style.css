@@ -1,32 +1,32 @@
 :root {
-  --bg: #f8f1ec;
-  --bg-soft: #fcf8f5;
-  --paper: rgba(255, 252, 248, 0.78);
-  --paper-strong: rgba(255, 251, 247, 0.94);
+  --bg: #f5ede7;
+  --bg-soft: #faf5f1;
+  --paper: rgba(255, 251, 247, 0.76);
+  --paper-strong: rgba(255, 250, 246, 0.92);
   --text: #2d2926;
   --muted: #7d726c;
   --line: rgba(132, 111, 96, 0.18);
-  --accent: #c38da1;
-  --accent-deep: #b6798f;
-  --accent-soft: rgba(195, 141, 161, 0.12);
+  --accent: #bf8b9d;
+  --accent-deep: #ae7387;
+  --accent-soft: rgba(191, 139, 157, 0.11);
   --shadow: 0 16px 48px rgba(82, 60, 54, 0.10);
   --shadow-soft: 0 10px 26px rgba(82, 60, 54, 0.07);
   --max-width: 860px;
 }
 
 body.dark {
-  --bg: #11141a;
-  --bg-soft: #171b22;
-  --paper: rgba(27, 31, 40, 0.74);
-  --paper-strong: rgba(30, 35, 45, 0.92);
+  --bg: #0e131b;
+  --bg-soft: #141a23;
+  --paper: rgba(24, 29, 37, 0.76);
+  --paper-strong: rgba(27, 33, 42, 0.92);
   --text: #ece8e1;
-  --muted: #b2aaad;
-  --line: rgba(255, 255, 255, 0.09);
-  --accent: #c89cae;
-  --accent-deep: #b9879e;
-  --accent-soft: rgba(200, 156, 174, 0.14);
-  --shadow: 0 18px 54px rgba(0, 0, 0, 0.34);
-  --shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.24);
+  --muted: #b7afb2;
+  --line: rgba(255, 255, 255, 0.08);
+  --accent: #c39ca8;
+  --accent-deep: #ac7d8a;
+  --accent-soft: rgba(195, 156, 168, 0.13);
+  --shadow: 0 18px 54px rgba(0, 0, 0, 0.38);
+  --shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.26);
 }
 
 * {
@@ -71,20 +71,20 @@ button {
   z-index: -5;
   pointer-events: none;
   background:
-    linear-gradient(to bottom, rgba(255, 249, 250, 0.58), rgba(248, 241, 236, 0.78)),
-    radial-gradient(circle at 14% 18%, rgba(255, 213, 229, 0.42), transparent 17%),
-    radial-gradient(circle at 84% 15%, rgba(255, 222, 233, 0.33), transparent 20%),
-    radial-gradient(circle at 76% 80%, rgba(255, 236, 241, 0.22), transparent 18%),
-    linear-gradient(to bottom, #fff8fb 0%, #fef8f6 25%, #f8efe8 60%, #f3ebe3 100%);
+    linear-gradient(to bottom, rgba(248, 242, 239, 0.72), rgba(245, 237, 231, 0.88)),
+    radial-gradient(circle at 14% 18%, rgba(236, 189, 205, 0.24), transparent 18%),
+    radial-gradient(circle at 84% 15%, rgba(236, 197, 211, 0.18), transparent 22%),
+    radial-gradient(circle at 76% 80%, rgba(241, 221, 228, 0.12), transparent 18%),
+    linear-gradient(to bottom, #fbf7f6 0%, #f8f2ef 28%, #f2ebe5 60%, #ece4dc 100%);
 }
 
 body.dark .spring-bg {
   background:
-    linear-gradient(to bottom, rgba(17, 20, 26, 0.84), rgba(17, 20, 26, 0.94)),
-    radial-gradient(circle at 14% 18%, rgba(227, 171, 197, 0.16), transparent 17%),
-    radial-gradient(circle at 84% 15%, rgba(213, 171, 192, 0.12), transparent 20%),
-    radial-gradient(circle at 76% 80%, rgba(255, 223, 235, 0.06), transparent 18%),
-    linear-gradient(to bottom, #1c212a 0%, #171b22 36%, #12161d 100%);
+    radial-gradient(circle at 18% 18%, rgba(255, 204, 132, 0.16), transparent 18%),
+    radial-gradient(circle at 82% 24%, rgba(255, 216, 150, 0.12), transparent 16%),
+    radial-gradient(circle at 50% 78%, rgba(255, 218, 170, 0.06), transparent 18%),
+    linear-gradient(to bottom, rgba(11, 16, 24, 0.92), rgba(15, 21, 30, 0.96)),
+    linear-gradient(to bottom, #131922 0%, #111822 42%, #0d1219 100%);
 }
 
 body::before {
@@ -94,10 +94,17 @@ body::before {
   z-index: -4;
   pointer-events: none;
   background:
-    radial-gradient(circle at 18% 28%, rgba(255, 255, 255, 0.24), transparent 12%),
-    radial-gradient(circle at 74% 20%, rgba(255, 255, 255, 0.18), transparent 10%),
-    radial-gradient(circle at 64% 72%, rgba(255, 255, 255, 0.12), transparent 9%);
+    radial-gradient(circle at 18% 28%, rgba(255, 255, 255, 0.14), transparent 12%),
+    radial-gradient(circle at 74% 20%, rgba(255, 255, 255, 0.10), transparent 10%),
+    radial-gradient(circle at 64% 72%, rgba(255, 255, 255, 0.08), transparent 9%);
   filter: blur(18px);
+}
+
+body.dark::before {
+  background:
+    radial-gradient(circle at 18% 28%, rgba(255, 214, 150, 0.10), transparent 12%),
+    radial-gradient(circle at 74% 20%, rgba(255, 208, 138, 0.08), transparent 10%),
+    radial-gradient(circle at 64% 72%, rgba(255, 236, 200, 0.04), transparent 9%);
 }
 
 .sakura-canopy,
@@ -112,7 +119,7 @@ body::before {
   width: 42vmax;
   height: 22vmax;
   filter: blur(8px);
-  opacity: 0.86;
+  opacity: 0.58;
 }
 
 .sakura-canopy::before,
@@ -121,7 +128,7 @@ body::before {
   position: absolute;
   border-radius: 999px;
   background:
-    radial-gradient(circle, rgba(255, 214, 228, 0.92) 0%, rgba(255, 200, 220, 0.82) 45%, rgba(255, 241, 246, 0) 72%);
+    radial-gradient(circle, rgba(243, 196, 212, 0.72) 0%, rgba(232, 183, 200, 0.52) 45%, rgba(255, 241, 246, 0) 72%);
 }
 
 .sakura-canopy::before {
@@ -147,7 +154,7 @@ body::before {
 body.dark .sakura-canopy::before,
 body.dark .sakura-canopy::after {
   background:
-    radial-gradient(circle, rgba(216, 162, 185, 0.44) 0%, rgba(189, 137, 160, 0.30) 42%, rgba(255, 241, 246, 0) 72%);
+    radial-gradient(circle, rgba(170, 124, 144, 0.30) 0%, rgba(142, 102, 121, 0.18) 42%, rgba(255, 241, 246, 0) 72%);
 }
 
 .branch {
@@ -208,7 +215,73 @@ body.dark .sakura-canopy::after {
 }
 
 body.dark .branch {
-  opacity: 0.20;
+  opacity: 0.16;
+}
+
+.night-lamp {
+  position: fixed;
+  bottom: -2vh;
+  z-index: -2;
+  width: 10px;
+  height: 34vh;
+  border-radius: 999px;
+  background: linear-gradient(to bottom, rgba(37, 43, 51, 0.0), rgba(57, 66, 77, 0.74) 22%, rgba(73, 82, 92, 0.88) 100%);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.night-lamp::before {
+  content: "";
+  position: absolute;
+  top: 14%;
+  width: 72px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(84, 95, 108, 0.92);
+}
+
+.night-lamp::after {
+  content: "";
+  position: absolute;
+  top: calc(14% + 2px);
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, rgba(255, 237, 194, 0.95) 0%, rgba(255, 224, 156, 0.72) 32%, rgba(255, 206, 126, 0.22) 60%, rgba(255, 202, 120, 0) 74%);
+  box-shadow:
+    0 0 22px rgba(255, 214, 138, 0.55),
+    0 0 58px rgba(255, 206, 126, 0.22);
+}
+
+.lamp-left {
+  left: 8.5vw;
+}
+
+.lamp-left::before {
+  left: 8px;
+}
+
+.lamp-left::after {
+  left: 62px;
+}
+
+.lamp-right {
+  right: 9.5vw;
+}
+
+.lamp-right::before {
+  right: 8px;
+}
+
+.lamp-right::after {
+  right: 62px;
+}
+
+body.dark .night-lamp {
+  opacity: 1;
 }
 
 .petal-layer {
@@ -225,11 +298,11 @@ body.dark .branch {
   width: var(--size);
   height: calc(var(--size) * 0.72);
   opacity: var(--opacity);
-  background: linear-gradient(135deg, #ffd8e7 0%, #ffc3da 48%, #fff2f7 100%);
+  background: linear-gradient(135deg, #f2cad8 0%, #e8bac9 48%, #faedf2 100%);
   border-radius: 70% 0 70% 0;
   box-shadow:
-    0 0 10px rgba(255, 206, 223, 0.22),
-    inset -1px -1px 3px rgba(255, 255, 255, 0.42);
+    0 0 8px rgba(235, 196, 210, 0.14),
+    inset -1px -1px 3px rgba(255, 255, 255, 0.28);
   transform: rotate(var(--rotate));
   animation:
     petal-fall var(--fall-duration) linear infinite,
@@ -238,10 +311,10 @@ body.dark .branch {
 }
 
 body.dark .petal {
-  background: linear-gradient(135deg, #e4b4c7 0%, #c890a8 48%, #f1dce5 100%);
+  background: linear-gradient(135deg, #b98da2 0%, #9c7085 48%, #d5bcc7 100%);
   box-shadow:
-    0 0 10px rgba(228, 176, 200, 0.12),
-    inset -1px -1px 3px rgba(255, 255, 255, 0.10);
+    0 0 8px rgba(180, 134, 154, 0.08),
+    inset -1px -1px 3px rgba(255, 255, 255, 0.06);
 }
 
 @keyframes petal-fall {
@@ -278,7 +351,7 @@ body.dark .petal {
 }
 
 body.dark .topbar {
-  background: rgba(8, 10, 14, 0.22);
+  background: rgba(9, 12, 18, 0.28);
 }
 
 .topbar-inner {
@@ -336,9 +409,13 @@ body.dark .topbar {
   height: 220px;
   border-radius: 999px;
   pointer-events: none;
-  background: radial-gradient(circle, rgba(255, 220, 232, 0.28), transparent 68%);
+  background: radial-gradient(circle, rgba(242, 204, 218, 0.18), transparent 68%);
   filter: blur(10px);
   z-index: -1;
+}
+
+body.dark .hero::after {
+  background: radial-gradient(circle, rgba(255, 214, 146, 0.18), rgba(255, 199, 120, 0.06) 38%, transparent 70%);
 }
 
 .eyebrow {
@@ -700,6 +777,30 @@ main {
 
   .branch {
     width: 42vmax;
+  }
+
+  .night-lamp {
+    height: 28vh;
+  }
+
+  .lamp-left {
+    left: 3vw;
+  }
+
+  .lamp-right {
+    right: 4vw;
+  }
+
+  .night-lamp::before {
+    width: 56px;
+  }
+
+  .lamp-left::after {
+    left: 48px;
+  }
+
+  .lamp-right::after {
+    right: 48px;
   }
 }
 
