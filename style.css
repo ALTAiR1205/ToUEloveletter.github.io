@@ -706,62 +706,6 @@ body.dark .counter-item span {
   margin-top: 10px;
 }
 
-.reply-wall {
-  display: grid;
-  gap: 18px;
-}
-
-.reply-card {
-  position: relative;
-  overflow: hidden;
-}
-
-.reply-card::before {
-  content: "";
-  position: absolute;
-  top: -60px;
-  right: -56px;
-  width: 180px;
-  height: 180px;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(191, 139, 157, 0.16), transparent 70%);
-  pointer-events: none;
-}
-
-body.dark .reply-card::before {
-  background: radial-gradient(circle, rgba(255, 212, 150, 0.10), transparent 70%);
-}
-
-.reply-meta {
-  position: relative;
-  z-index: 1;
-  color: var(--muted);
-  font-size: 0.92rem;
-  letter-spacing: 0.03em;
-  margin-bottom: 8px;
-}
-
-.reply-title {
-  position: relative;
-  z-index: 1;
-  margin: 0 0 10px;
-  font-size: 1.28rem;
-  font-weight: 600;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.16);
-}
-
-.reply-text {
-  position: relative;
-  z-index: 1;
-  margin: 0;
-  color: var(--text);
-}
-
-.reply-card .tags {
-  position: relative;
-  z-index: 1;
-}
-
 .about {
   color: var(--muted);
 }
@@ -1145,25 +1089,6 @@ body.dark .reply-card::before {
     gap: 10px;
   }
 
-  .reply-wall {
-    gap: 14px;
-  }
-
-  .reply-meta {
-    font-size: 0.82rem;
-    line-height: 1.5;
-  }
-
-  .reply-title {
-    margin-bottom: 8px;
-    font-size: 1.08rem;
-    line-height: 1.35;
-  }
-
-  .reply-text {
-    font-size: 0.96rem;
-  }
-
   .quote {
     padding: 16px 14px;
     border-radius: 14px;
@@ -1351,10 +1276,6 @@ body.dark .reply-card::before {
     font-size: 1.04rem;
   }
 
-  .reply-title {
-    font-size: 1.02rem;
-  }
-
   .letter-meta,
   .section-note,
   .tag,
@@ -1389,3 +1310,254 @@ body.dark .reply-card::before {
     height: 18px;
   }
 }
+
+/* ===== Collapsible sections / 折叠板块 ===== */
+.fold-section {
+  margin-top: 18px;
+  scroll-margin-top: 96px;
+}
+
+.fold-panel {
+  border: 0;
+}
+
+.fold-summary,
+.letter-summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.fold-summary::-webkit-details-marker,
+.letter-summary::-webkit-details-marker {
+  display: none;
+}
+
+.fold-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--paper);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform 0.25s ease, background 0.35s ease, border-color 0.35s ease;
+}
+
+.fold-summary:hover {
+  transform: translateY(-2px);
+  background: var(--paper-strong);
+}
+
+.fold-summary-text {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.fold-kicker {
+  color: var(--accent-deep);
+  font-size: 0.86rem;
+  letter-spacing: 0.12em;
+}
+
+body.dark .fold-kicker {
+  color: var(--accent);
+}
+
+.fold-summary strong {
+  font-size: 1.18rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.fold-summary small {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.fold-toggle,
+.expand-hint {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.86rem;
+}
+
+.fold-panel[open] > .fold-summary {
+  border-color: rgba(191, 139, 157, 0.28);
+  background: var(--paper-strong);
+}
+
+.fold-content {
+  padding-top: 14px;
+  animation: foldReveal 0.28s ease both;
+}
+
+@keyframes foldReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.compact-letters {
+  gap: 12px;
+}
+
+.letter-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.letter-card:hover {
+  transform: translateY(-1px);
+}
+
+.letter-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px 18px;
+}
+
+.letter-summary-main {
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.letter-summary .letter-meta,
+.letter-summary .letter-title {
+  display: block;
+}
+
+.letter-summary .letter-title {
+  margin: 0;
+}
+
+.letter-body {
+  padding: 0 18px 20px;
+  border-top: 1px solid var(--line);
+  animation: foldReveal 0.28s ease both;
+}
+
+.letter-body .letter-excerpt {
+  margin-top: 16px;
+}
+
+.reply-wall {
+  display: grid;
+  gap: 14px;
+}
+
+.reply-card p {
+  margin: 0;
+}
+
+.reply-meta {
+  color: var(--muted);
+  font-size: 0.92rem;
+  letter-spacing: 0.03em;
+  margin-bottom: 8px;
+}
+
+.reply-title {
+  margin: 0 0 10px;
+  font-size: 1.22rem;
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .fold-section {
+    margin-top: 14px;
+    scroll-margin-top: 116px;
+  }
+
+  .fold-summary {
+    align-items: flex-start;
+    gap: 12px;
+    padding: 15px 14px;
+    border-radius: 18px;
+  }
+
+  .fold-summary strong {
+    font-size: 1.02rem;
+  }
+
+  .fold-summary small {
+    font-size: 0.82rem;
+  }
+
+  .fold-kicker {
+    font-size: 0.76rem;
+  }
+
+  .fold-toggle,
+  .expand-hint {
+    min-width: 46px;
+    padding: 6px 9px;
+    font-size: 0.78rem;
+  }
+
+  .fold-content {
+    padding-top: 10px;
+  }
+
+  .letter-summary {
+    padding: 15px 14px;
+    gap: 10px;
+  }
+
+  .letter-body {
+    padding: 0 14px 16px;
+  }
+
+  .reply-title {
+    font-size: 1.06rem;
+  }
+
+  .reply-meta {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .fold-summary {
+    padding: 14px 12px;
+  }
+
+  .fold-summary strong {
+    font-size: 0.98rem;
+  }
+
+  .fold-summary small {
+    font-size: 0.78rem;
+  }
+
+  .letter-summary {
+    padding: 14px 12px;
+  }
+
+  .letter-body {
+    padding: 0 12px 15px;
+  }
+}
+
