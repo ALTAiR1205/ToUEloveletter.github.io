@@ -22,6 +22,7 @@
       <div class="site-name">想你的时候</div>
       <nav class="nav" aria-label="页面导航">
         <a href="#home">首页</a>
+        <a href="#counter">我们的时间</a>
         <a href="#letters">写给你</a>
         <a href="#fragments">碎碎念</a>
         <a href="#about">关于</a>
@@ -53,6 +54,46 @@
           我把那些突然想到你的瞬间，一些很轻很轻的心事，都留在了这里。<br />
           每一句背后，都有一个我认真想你的时刻。
         </p>
+      </div>
+    </section>
+
+    <section class="section love-counter-section" id="counter">
+      <h2 class="section-title">我们的时间</h2>
+      <p class="section-note">从 2026.03.20 正式在一起开始，这里会替我一秒一秒地记着。</p>
+
+      <div class="card counter-card">
+        <p class="counter-kicker">我们已经在一起</p>
+        <div class="counter-grid" aria-label="我们已经在一起的时间">
+          <div class="counter-item">
+            <span id="togetherDays">0</span>
+            <small>天</small>
+          </div>
+          <div class="counter-item">
+            <span id="togetherHours">0</span>
+            <small>小时</small>
+          </div>
+          <div class="counter-item">
+            <span id="togetherMinutes">0</span>
+            <small>分钟</small>
+          </div>
+          <div class="counter-item">
+            <span id="togetherSeconds">0</span>
+            <small>秒</small>
+          </div>
+        </div>
+        <p class="counter-sentence" id="togetherSentence">
+          从 2026.03.20 开始，我们的故事正在继续。
+        </p>
+        <div class="counter-subgrid">
+          <div class="counter-mini">
+            <span id="knownDays">0</span>
+            <small>从 2026.03.05 认识起，已经过去的天数</small>
+          </div>
+          <div class="counter-mini">
+            <span>2026.03.20</span>
+            <small>正式在一起的日子</small>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -313,8 +354,48 @@
     const skipMusicBtn = document.getElementById("skipMusicBtn");
     const floatingPlayer = document.getElementById("floatingPlayer");
     const petalLayer = document.getElementById("petalLayer");
+    const togetherDays = document.getElementById("togetherDays");
+    const togetherHours = document.getElementById("togetherHours");
+    const togetherMinutes = document.getElementById("togetherMinutes");
+    const togetherSeconds = document.getElementById("togetherSeconds");
+    const togetherSentence = document.getElementById("togetherSentence");
+    const knownDays = document.getElementById("knownDays");
+
+    const togetherStart = new Date(2026, 2, 20, 0, 0, 0);
+    const knownStart = new Date(2026, 2, 5, 0, 0, 0);
 
     bgm.volume = 0.6;
+
+    function getDurationParts(fromDate, toDate) {
+      const diff = Math.max(0, toDate.getTime() - fromDate.getTime());
+      const oneSecond = 1000;
+      const oneMinute = 60 * oneSecond;
+      const oneHour = 60 * oneMinute;
+      const oneDay = 24 * oneHour;
+
+      const days = Math.floor(diff / oneDay);
+      const hours = Math.floor((diff % oneDay) / oneHour);
+      const minutes = Math.floor((diff % oneHour) / oneMinute);
+      const seconds = Math.floor((diff % oneMinute) / oneSecond);
+
+      return { days, hours, minutes, seconds };
+    }
+
+    function updateLoveCounter() {
+      const now = new Date();
+      const together = getDurationParts(togetherStart, now);
+      const known = getDurationParts(knownStart, now);
+
+      if (togetherDays) togetherDays.textContent = together.days;
+      if (togetherHours) togetherHours.textContent = together.hours;
+      if (togetherMinutes) togetherMinutes.textContent = together.minutes;
+      if (togetherSeconds) togetherSeconds.textContent = together.seconds;
+      if (knownDays) knownDays.textContent = known.days;
+
+      if (togetherSentence) {
+        togetherSentence.textContent = `从 2026.03.20 开始，我们已经一起走过 ${together.days} 天 ${together.hours} 小时 ${together.minutes} 分钟 ${together.seconds} 秒。`;
+      }
+    }
 
     function updatePlayerText() {
       floatingPlayer.textContent = bgm.paused ? "♫ 音乐已暂停" : "♫ 音乐播放中";
@@ -393,6 +474,8 @@
       });
     }
 
+    updateLoveCounter();
+    setInterval(updateLoveCounter, 1000);
     updatePlayerText();
   </script>
 </body>
