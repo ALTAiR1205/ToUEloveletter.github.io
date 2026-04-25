@@ -1561,3 +1561,118 @@ body.dark .fold-kicker {
   }
 }
 
+
+
+/* ===== Multi-song music player / 多歌曲播放器 ===== */
+.music-player {
+  width: min(390px, calc(100% - 40px));
+  max-width: 390px;
+  padding: 14px 16px;
+  border-radius: 24px;
+  display: grid;
+  gap: 10px;
+  cursor: default;
+}
+
+.music-player:hover {
+  transform: translateY(-1px);
+}
+
+.player-info {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.player-label {
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+}
+
+.player-info strong {
+  color: var(--text);
+  font-size: 0.98rem;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-info small {
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.45;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-controls {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1fr;
+  gap: 8px;
+}
+
+.player-btn {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.10);
+  color: var(--text);
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: transform 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+  font-size: 0.86rem;
+}
+
+.player-btn:hover {
+  transform: translateY(-1px);
+  background: var(--accent-soft);
+}
+
+.player-main {
+  color: #fffaf5;
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  box-shadow: var(--shadow-soft);
+}
+
+.player-main:hover {
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+}
+
+@media (max-width: 700px) {
+  .music-player {
+    width: calc(100% - 28px);
+    max-width: 390px;
+    padding: 12px 13px;
+    gap: 9px;
+  }
+
+  .player-info strong {
+    font-size: 0.92rem;
+  }
+
+  .player-info small {
+    font-size: 0.72rem;
+  }
+
+  .player-controls {
+    gap: 7px;
+  }
+
+  .player-btn {
+    padding: 8px 8px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .player-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .player-btn {
+    width: 100%;
+  }
+}
