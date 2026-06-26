@@ -9,6 +9,7 @@
 </head>
 <body>
   <div class="spring-bg" aria-hidden="true"></div>
+  <canvas class="universe-canvas" id="universeCanvas" aria-hidden="true"></canvas>
   <div class="sakura-canopy sakura-left" aria-hidden="true"></div>
   <div class="sakura-canopy sakura-right" aria-hidden="true"></div>
   <div class="branch branch-left" aria-hidden="true"></div>
@@ -28,6 +29,24 @@
   <div class="firefly-layer" id="fireflyLayer" aria-hidden="true"></div>
   <div class="interaction-layer" id="interactionLayer" aria-hidden="true"></div>
   <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+  <div class="entry-portal" id="entryPortal" aria-hidden="false">
+    <div class="portal-ring" aria-hidden="true"></div>
+    <div class="portal-core">
+      <span class="portal-kicker">VEGALTAiR</span>
+      <strong>Welcome to our little universe</strong>
+      <small>把星光、花瓣和想你的每一秒，都放在这里。</small>
+    </div>
+  </div>
+
+  <nav class="journey-rail" id="journeyRail" aria-label="页面章节进度">
+    <a href="#home" data-label="首页"><span></span></a>
+    <a href="#counter" data-label="时间"><span></span></a>
+    <a href="#letters" data-label="写给你"><span></span></a>
+    <a href="#fragments" data-label="碎碎念"><span></span></a>
+    <a href="#replies" data-label="回信"><span></span></a>
+    <a href="#about" data-label="关于"><span></span></a>
+  </nav>
 
   <header class="topbar">
     <div class="container topbar-inner">
@@ -54,6 +73,9 @@
       我爱你宝宝，我爱你老婆。<br />
       我爱你杜叶。
     </p>
+    <div class="hero-orbit fade-in fade-delay-3" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
     <div class="hero-actions fade-in fade-delay-3">
       <a class="btn primary" href="#letters">进入信里</a>
       <a class="btn" href="#about">看看这里</a>
@@ -1384,310 +1406,6 @@
     </div>
   </div>
 
-  <script>
-    const themeBtn = document.getElementById("themeBtn");
-    const savedTheme = localStorage.getItem("theme");
-
-    if (savedTheme === "dark") {
-      document.body.classList.add("dark");
-      themeBtn.textContent = "白天模式";
-    }
-
-    themeBtn.addEventListener("click", () => {
-      document.body.classList.toggle("dark");
-      const isDark = document.body.classList.contains("dark");
-      localStorage.setItem("theme", isDark ? "dark" : "light");
-      themeBtn.textContent = isDark ? "白天模式" : "夜晚模式";
-    });
-
-    const playlist = [
-      { title: "η", note: "by α·Pav", src: "music/bgm.mp3" },
-      { title: "Gotta have you", note: "by The Weepies", src: "music/bgm2.mp3" },
-      { title: "Little bit better", note: "by Caleb Hearn/ROSIE", src: "music/bgm3.mp3" }
-    ];
-
-    const bgm = document.getElementById("bgm");
-    const musicIntro = document.getElementById("musicIntro");
-    const startMusicBtn = document.getElementById("startMusicBtn");
-    const skipMusicBtn = document.getElementById("skipMusicBtn");
-    const musicPlayer = document.getElementById("musicPlayer");
-    const playerTrackTitle = document.getElementById("playerTrackTitle");
-    const playerTrackNote = document.getElementById("playerTrackNote");
-    const introTrackTitle = document.getElementById("introTrackTitle");
-    const introTrackNote = document.getElementById("introTrackNote");
-    const prevTrackBtn = document.getElementById("prevTrackBtn");
-    const togglePlayBtn = document.getElementById("togglePlayBtn");
-    const nextTrackBtn = document.getElementById("nextTrackBtn");
-    const petalLayer = document.getElementById("petalLayer");
-    const fireflyLayer = document.getElementById("fireflyLayer");
-    const interactionLayer = document.getElementById("interactionLayer");
-    const cursorGlow = document.getElementById("cursorGlow");
-    const togetherDays = document.getElementById("togetherDays");
-    const togetherHours = document.getElementById("togetherHours");
-    const togetherMinutes = document.getElementById("togetherMinutes");
-    const togetherSeconds = document.getElementById("togetherSeconds");
-    const togetherSentence = document.getElementById("togetherSentence");
-    const knownDays = document.getElementById("knownDays");
-
-    const togetherStart = new Date(2026, 2, 20, 0, 0, 0);
-    const knownStart = new Date(2026, 2, 5, 0, 0, 0);
-
-    let currentTrackIndex = Number(localStorage.getItem("currentTrackIndex"));
-    if (!Number.isInteger(currentTrackIndex) || currentTrackIndex < 0 || currentTrackIndex >= playlist.length) {
-      currentTrackIndex = 0;
-    }
-
-    bgm.volume = 0.6;
-
-    function getDurationParts(fromDate, toDate) {
-      const diff = Math.max(0, toDate.getTime() - fromDate.getTime());
-      const oneSecond = 1000;
-      const oneMinute = 60 * oneSecond;
-      const oneHour = 60 * oneMinute;
-      const oneDay = 24 * oneHour;
-
-      const days = Math.floor(diff / oneDay);
-      const hours = Math.floor((diff % oneDay) / oneHour);
-      const minutes = Math.floor((diff % oneHour) / oneMinute);
-      const seconds = Math.floor((diff % oneMinute) / oneSecond);
-
-      return { days, hours, minutes, seconds };
-    }
-
-    function updateLoveCounter() {
-      const now = new Date();
-      const together = getDurationParts(togetherStart, now);
-      const known = getDurationParts(knownStart, now);
-
-      if (togetherDays) togetherDays.textContent = together.days;
-      if (togetherHours) togetherHours.textContent = together.hours;
-      if (togetherMinutes) togetherMinutes.textContent = together.minutes;
-      if (togetherSeconds) togetherSeconds.textContent = together.seconds;
-      if (knownDays) knownDays.textContent = known.days;
-
-      if (togetherSentence) {
-        togetherSentence.textContent = `从 2026.03.20 开始，我们已经一起走过 ${together.days} 天 ${together.hours} 小时 ${together.minutes} 分钟 ${together.seconds} 秒。`;
-      }
-    }
-
-    function updatePlayerUI() {
-      const currentTrack = playlist[currentTrackIndex];
-      const countText = `第 ${currentTrackIndex + 1} 首 / 共 ${playlist.length} 首`;
-
-      if (playerTrackTitle) playerTrackTitle.textContent = currentTrack.title;
-      if (playerTrackNote) playerTrackNote.textContent = `${countText} · ${currentTrack.note}`;
-      if (introTrackTitle) introTrackTitle.textContent = currentTrack.title;
-      if (introTrackNote) introTrackNote.textContent = currentTrack.note;
-      if (togglePlayBtn) togglePlayBtn.textContent = bgm.paused ? "播放" : "暂停";
-      if (musicPlayer) musicPlayer.classList.toggle("is-playing", !bgm.paused);
-      document.body.classList.toggle("music-playing", !bgm.paused);
-    }
-
-    function loadTrack(index, shouldPlay = false) {
-      currentTrackIndex = (index + playlist.length) % playlist.length;
-      localStorage.setItem("currentTrackIndex", String(currentTrackIndex));
-      bgm.src = playlist[currentTrackIndex].src;
-      bgm.load();
-      updatePlayerUI();
-
-      if (shouldPlay) {
-        playMusic();
-      }
-    }
-
-    async function playMusic() {
-      try {
-        await bgm.play();
-        updatePlayerUI();
-      } catch (err) {
-        console.error("音乐播放失败：", err);
-        updatePlayerUI();
-      }
-    }
-
-    function pauseMusic() {
-      bgm.pause();
-      updatePlayerUI();
-    }
-
-    function playNextTrack() {
-      loadTrack(currentTrackIndex + 1, true);
-    }
-
-    function playPreviousTrack() {
-      loadTrack(currentTrackIndex - 1, true);
-    }
-
-    function hideIntro() {
-      musicIntro.classList.add("hidden");
-      musicIntro.setAttribute("aria-hidden", "true");
-    }
-
-    startMusicBtn.addEventListener("click", async () => {
-      hideIntro();
-      await playMusic();
-    });
-
-    skipMusicBtn.addEventListener("click", () => {
-      hideIntro();
-      pauseMusic();
-    });
-
-    togglePlayBtn.addEventListener("click", async () => {
-      if (bgm.paused) {
-        await playMusic();
-      } else {
-        pauseMusic();
-      }
-    });
-
-    prevTrackBtn.addEventListener("click", playPreviousTrack);
-    nextTrackBtn.addEventListener("click", playNextTrack);
-
-    bgm.addEventListener("play", updatePlayerUI);
-    bgm.addEventListener("pause", updatePlayerUI);
-    bgm.addEventListener("ended", playNextTrack);
-    bgm.addEventListener("error", () => {
-      console.error("当前曲目加载失败，请确认文件存在：", playlist[currentTrackIndex].src);
-      updatePlayerUI();
-    });
-
-    function createPetals(count) {
-      if (!petalLayer) return;
-      petalLayer.innerHTML = "";
-
-      for (let i = 0; i < count; i += 1) {
-        const petal = document.createElement("span");
-        petal.className = "petal";
-
-        const left = Math.random() * 100;
-        const size = 10 + Math.random() * 16;
-        const opacity = 0.34 + Math.random() * 0.40;
-        const rotate = `${Math.random() * 360}deg`;
-        const drift = `${-80 + Math.random() * 160}px`;
-        const fallDuration = `${10 + Math.random() * 12}s`;
-        const swayDuration = `${2.8 + Math.random() * 3.6}s`;
-        const delay = `${-Math.random() * 18}s`;
-
-        petal.style.left = `${left}vw`;
-        petal.style.setProperty("--size", `${size}px`);
-        petal.style.setProperty("--opacity", opacity);
-        petal.style.setProperty("--rotate", rotate);
-        petal.style.setProperty("--drift", drift);
-        petal.style.setProperty("--fall-duration", fallDuration);
-        petal.style.setProperty("--sway-duration", swayDuration);
-        petal.style.setProperty("--delay", delay);
-
-        petalLayer.appendChild(petal);
-      }
-    }
-
-
-    function createFireflies(count) {
-      if (!fireflyLayer) return;
-      fireflyLayer.innerHTML = "";
-
-      for (let i = 0; i < count; i += 1) {
-        const firefly = document.createElement("span");
-        firefly.className = "firefly";
-
-        firefly.style.left = `${Math.random() * 100}vw`;
-        firefly.style.top = `${12 + Math.random() * 78}vh`;
-        firefly.style.setProperty("--float-x", `${-26 + Math.random() * 52}px`);
-        firefly.style.setProperty("--float-y", `${-18 + Math.random() * 36}px`);
-        firefly.style.setProperty("--duration", `${5 + Math.random() * 7}s`);
-        firefly.style.setProperty("--delay", `${-Math.random() * 8}s`);
-        firefly.style.setProperty("--scale", `${0.65 + Math.random() * 0.85}`);
-
-        fireflyLayer.appendChild(firefly);
-      }
-    }
-
-    function moveCursorGlow(event) {
-      if (!cursorGlow || window.innerWidth < 800) return;
-      cursorGlow.style.opacity = "1";
-      cursorGlow.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0) translate(-50%, -50%)`;
-    }
-
-    function hideCursorGlow() {
-      if (cursorGlow) cursorGlow.style.opacity = "0";
-    }
-
-    function createClickBurst(event) {
-      if (!interactionLayer || reducedMotion) return;
-
-      const isDark = document.body.classList.contains("dark");
-      const burstCount = window.innerWidth < 700 ? 8 : 14;
-      const x = event.clientX;
-      const y = event.clientY;
-
-      for (let i = 0; i < burstCount; i += 1) {
-        const spark = document.createElement("span");
-        const usePetal = !isDark && i % 3 !== 0;
-        spark.className = usePetal ? "touch-petal" : "touch-star";
-
-        const angle = (Math.PI * 2 * i) / burstCount + Math.random() * 0.7;
-        const distance = 22 + Math.random() * 54;
-        const tx = Math.cos(angle) * distance;
-        const ty = Math.sin(angle) * distance;
-        const size = usePetal ? 8 + Math.random() * 10 : 4 + Math.random() * 8;
-
-        spark.style.left = `${x}px`;
-        spark.style.top = `${y}px`;
-        spark.style.setProperty("--tx", `${tx}px`);
-        spark.style.setProperty("--ty", `${ty}px`);
-        spark.style.setProperty("--burst-size", `${size}px`);
-        spark.style.setProperty("--spin", `${Math.random() * 220 - 110}deg`);
-
-        interactionLayer.appendChild(spark);
-        window.setTimeout(() => spark.remove(), 950);
-      }
-    }
-
-    document.addEventListener("pointermove", moveCursorGlow);
-    document.addEventListener("pointerleave", hideCursorGlow);
-    document.addEventListener("pointerdown", createClickBurst);
-
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!reducedMotion) {
-      createPetals(window.innerWidth < 700 ? 14 : 22);
-      createFireflies(window.innerWidth < 700 ? 8 : 16);
-      window.addEventListener("resize", () => {
-        createPetals(window.innerWidth < 700 ? 14 : 22);
-        createFireflies(window.innerWidth < 700 ? 8 : 16);
-      });
-    }
-
-    function refreshFoldLabels() {
-      document.querySelectorAll("details.fold-panel").forEach((panel) => {
-        const toggle = panel.querySelector(".fold-toggle");
-        if (toggle) toggle.textContent = panel.open ? "收起" : "展开";
-      });
-
-      document.querySelectorAll("details.letter-card").forEach((panel) => {
-        const hint = panel.querySelector(".expand-hint");
-        if (hint) hint.textContent = panel.open ? "收起" : "展开";
-      });
-    }
-
-    document.querySelectorAll("details.fold-panel, details.letter-card").forEach((panel) => {
-      panel.addEventListener("toggle", refreshFoldLabels);
-    });
-
-    document.querySelectorAll('a[href^="#"]').forEach((link) => {
-      link.addEventListener("click", () => {
-        const target = document.querySelector(link.getAttribute("href"));
-        if (!target) return;
-        const panel = target.querySelector("details.fold-panel");
-        if (panel) panel.open = true;
-      });
-    });
-
-    loadTrack(currentTrackIndex, false);
-    updateLoveCounter();
-    setInterval(updateLoveCounter, 1000);
-    refreshFoldLabels();
-    updatePlayerUI();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
