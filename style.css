@@ -2286,3 +2286,55 @@ body.dark .footer::before {
     display: none !important;
   }
 }
+
+/* ===== Player position hotfix / 音乐播放器位置修复 =====
+   Keep the player in the lower-right corner on desktop/tablet, so it does not
+   become a wide bar on the left side when browser zoom or viewport width
+   triggers the old mobile media query. */
+.floating-player.music-player {
+  position: fixed !important;
+  left: auto !important;
+  right: 22px !important;
+  bottom: 22px !important;
+  width: min(340px, calc(100vw - 44px)) !important;
+  max-width: 340px !important;
+  transform: none !important;
+  z-index: 80 !important;
+}
+
+.floating-player.music-player:hover {
+  transform: translateY(-2px) !important;
+}
+
+.floating-player.music-player:active {
+  transform: none !important;
+}
+
+/* Give the bottom a little breathing room so the fixed player does not cover the footer visually. */
+.footer {
+  padding-bottom: 104px;
+}
+
+/* Only on real small phone screens do we center it as a bottom bar. */
+@media (max-width: 560px) {
+  .floating-player.music-player {
+    left: 50% !important;
+    right: auto !important;
+    bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+    width: calc(100% - 28px) !important;
+    max-width: 390px !important;
+    transform: translateX(-50%) !important;
+  }
+
+  .floating-player.music-player:hover {
+    transform: translateX(-50%) translateY(-1px) !important;
+  }
+
+  .floating-player.music-player:active {
+    transform: translateX(-50%) !important;
+  }
+
+  .footer {
+    padding-bottom: calc(154px + env(safe-area-inset-bottom));
+  }
+}
