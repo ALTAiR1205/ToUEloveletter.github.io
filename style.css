@@ -3021,3 +3021,62 @@ body.music-playing .moon {
     transition: none;
   }
 }
+
+/* ===== Hero title visibility fix / 首页标题可见性修复 =====
+   Keep the opening portal animation, but make the real hero title on the page
+   always visible in both light and dark modes. Some browsers can render
+   background-clipped transparent text too faint or invisible, so the main text
+   now uses a solid readable color with a separate soft glow/sheen layer. */
+.hero h1 {
+  position: relative;
+  display: inline-block;
+  color: var(--text) !important;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.36),
+    0 16px 42px rgba(191, 139, 157, 0.16);
+  animation: rise 0.8s ease forwards !important;
+}
+
+.hero h1::after {
+  content: "";
+  position: absolute;
+  left: -4%;
+  right: -4%;
+  bottom: -0.12em;
+  height: 0.18em;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(191, 139, 157, 0.42), rgba(255, 226, 190, 0.42), transparent);
+  filter: blur(6px);
+  opacity: 0.72;
+  pointer-events: none;
+  animation: heroTitleGlow 5.4s ease-in-out infinite;
+}
+
+body.dark .hero h1 {
+  color: #fff7ee !important;
+  background: none !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-shadow:
+    0 0 18px rgba(255, 222, 178, 0.20),
+    0 18px 48px rgba(255, 196, 214, 0.10);
+}
+
+body.dark .hero h1::after {
+  background: linear-gradient(90deg, transparent, rgba(231, 183, 194, 0.54), rgba(255, 224, 173, 0.54), transparent);
+  opacity: 0.86;
+}
+
+@keyframes heroTitleGlow {
+  0%, 100% {
+    opacity: 0.42;
+    transform: scaleX(0.72);
+  }
+  50% {
+    opacity: 0.88;
+    transform: scaleX(1);
+  }
+}
