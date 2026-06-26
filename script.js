@@ -594,3 +594,37 @@
     });
   }
 })();
+
+
+// Hard safety net: make sure the real hero title exists after the entry portal.
+function ensureRealHeroTitle() {
+  const hero = document.querySelector(".hero#home, #home.hero");
+  if (!hero) return;
+
+  let title = hero.querySelector("#heroMainTitle, .hero-main-title");
+  if (!title) {
+    const eyebrow = hero.querySelector(".eyebrow");
+    title = document.createElement("h1");
+    title.id = "heroMainTitle";
+    title.className = "hero-main-title";
+    title.textContent = "欢迎来到我们的小世界";
+    if (eyebrow && eyebrow.parentNode === hero) {
+      eyebrow.insertAdjacentElement("afterend", title);
+    } else {
+      hero.prepend(title);
+    }
+  }
+
+  title.textContent = title.textContent.trim() || "欢迎来到我们的小世界";
+  title.style.display = "block";
+  title.style.visibility = "visible";
+  title.style.opacity = "1";
+  title.style.color = getComputedStyle(document.body).getPropertyValue("--text") || "#2d2926";
+  title.style.webkitTextFillColor = "currentColor";
+  title.style.background = "none";
+}
+
+ensureRealHeroTitle();
+window.addEventListener("load", ensureRealHeroTitle);
+setTimeout(ensureRealHeroTitle, 900);
+setTimeout(ensureRealHeroTitle, 2600);

@@ -3080,3 +3080,97 @@ body.dark .hero h1::after {
     transform: scaleX(1);
   }
 }
+
+
+/* ===== Hard fix: real homepage title / 强制恢复首页真实标题 =====
+   This is separate from the opening portal text. It stays inside the hero after
+   the portal disappears, and it is forced visible even if older title effects
+   or browser cache styles try to hide clipped-gradient text. */
+.hero .hero-main-title,
+#heroMainTitle {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 3 !important;
+  margin: 0 0 18px !important;
+  padding: 0 !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  font-weight: 650 !important;
+  font-size: clamp(2.35rem, 7vw, 4.7rem) !important;
+  line-height: 1.14 !important;
+  letter-spacing: 0.04em !important;
+  color: var(--text) !important;
+  -webkit-text-fill-color: var(--text) !important;
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+  transform: none !important;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.42),
+    0 10px 30px rgba(191, 139, 157, 0.18),
+    0 24px 68px rgba(191, 139, 157, 0.11) !important;
+  animation: heroTitleSolidEnter 0.95s cubic-bezier(.2,.72,.22,1) both !important;
+}
+
+body.dark .hero .hero-main-title,
+body.dark #heroMainTitle {
+  color: #fff7ee !important;
+  -webkit-text-fill-color: #fff7ee !important;
+  text-shadow:
+    0 0 18px rgba(255, 222, 178, 0.24),
+    0 18px 48px rgba(255, 196, 214, 0.13) !important;
+}
+
+.hero .hero-main-title::after,
+#heroMainTitle::after {
+  content: "";
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  bottom: -0.14em;
+  height: 0.18em;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(191, 139, 157, 0.50), rgba(255, 226, 190, 0.48), transparent);
+  filter: blur(6px);
+  opacity: 0.74;
+  pointer-events: none;
+  animation: heroTitleGlow 5.4s ease-in-out infinite;
+}
+
+body.dark .hero .hero-main-title::after,
+body.dark #heroMainTitle::after {
+  background: linear-gradient(90deg, transparent, rgba(231, 183, 194, 0.58), rgba(255, 224, 173, 0.58), transparent);
+}
+
+@keyframes heroTitleSolidEnter {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.985);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@media (max-width: 700px) {
+  .hero .hero-main-title,
+  #heroMainTitle {
+    font-size: clamp(1.9rem, 9vw, 2.9rem) !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0.02em !important;
+    margin-bottom: 14px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero .hero-main-title,
+  #heroMainTitle {
+    font-size: clamp(1.72rem, 10vw, 2.3rem) !important;
+  }
+}
