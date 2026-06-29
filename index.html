@@ -6,7 +6,7 @@
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <title>Love Universe V4 · VEGALTAiR</title>
 <meta content="我们的宇宙里保存的一封信。" name="description"/>
-<link href="style.css?v=4.6-spring-poster" rel="stylesheet"/>
+<link href="style.css?v=4.7-sakura-branch" rel="stylesheet"/>
 </head>
 <body class="home-page">
 <canvas aria-hidden="true" class="space-canvas" id="spaceCanvas"></canvas>
@@ -75,112 +75,116 @@
 <span class="orbit orbit-b"></span>
 <span class="orbit orbit-c"></span>
 <span class="planet-label">LOVE<br/>UNIVERSE</span>
-<div aria-hidden="true" class="spring-hero-art">
+<div aria-hidden="true" class="spring-hero-art spring-hero-branch-art">
 <svg viewBox="0 0 900 680" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
   <defs>
-    <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#fffdf9" stop-opacity="0.98"/>
-      <stop offset="42%" stop-color="#ffe9ef" stop-opacity="0.82"/>
-      <stop offset="78%" stop-color="#ffd7e1" stop-opacity="0.30"/>
-      <stop offset="100%" stop-color="#ffd7e1" stop-opacity="0"/>
+    <radialGradient id="sunGlow2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fffdfa" stop-opacity="0.98"/>
+      <stop offset="45%" stop-color="#fff1f3" stop-opacity="0.88"/>
+      <stop offset="76%" stop-color="#ffdfe7" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#ffdfe7" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="bloomHaze" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ffdfe9" stop-opacity="0.72"/>
-      <stop offset="60%" stop-color="#f5b9cb" stop-opacity="0.22"/>
-      <stop offset="100%" stop-color="#f5b9cb" stop-opacity="0"/>
+    <radialGradient id="haze2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffdbe7" stop-opacity="0.70"/>
+      <stop offset="62%" stop-color="#f4b5c9" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#f4b5c9" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="branchGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#7d594d"/>
-      <stop offset="45%" stop-color="#b07a67"/>
-      <stop offset="100%" stop-color="#5d3f36"/>
+    <linearGradient id="branchGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7b5649"/>
+      <stop offset="45%" stop-color="#b27a66"/>
+      <stop offset="100%" stop-color="#5f4138"/>
     </linearGradient>
-    <radialGradient id="petalGrad" cx="38%" cy="30%" r="72%">
-      <stop offset="0%" stop-color="#fffdfd" stop-opacity="0.98"/>
-      <stop offset="32%" stop-color="#ffd8e5" stop-opacity="0.98"/>
-      <stop offset="72%" stop-color="#f1a9be" stop-opacity="0.96"/>
-      <stop offset="100%" stop-color="#e48fad" stop-opacity="0.92"/>
+    <radialGradient id="petalCore2" cx="36%" cy="28%" r="72%">
+      <stop offset="0%" stop-color="#fffefe" stop-opacity="0.98"/>
+      <stop offset="32%" stop-color="#ffe6ee" stop-opacity="0.98"/>
+      <stop offset="74%" stop-color="#f3b3c7" stop-opacity="0.96"/>
+      <stop offset="100%" stop-color="#e28aaa" stop-opacity="0.94"/>
     </radialGradient>
-    <radialGradient id="petalGradSoft" cx="38%" cy="28%" r="72%">
+    <radialGradient id="petalSoft2" cx="40%" cy="30%" r="72%">
       <stop offset="0%" stop-color="#fffdfd" stop-opacity="0.9"/>
-      <stop offset="45%" stop-color="#ffe5ee" stop-opacity="0.86"/>
-      <stop offset="100%" stop-color="#f4bdd0" stop-opacity="0.84"/>
+      <stop offset="42%" stop-color="#ffe8f0" stop-opacity="0.84"/>
+      <stop offset="100%" stop-color="#f4bfd0" stop-opacity="0.82"/>
     </radialGradient>
-    <filter id="softBlur" x="-20%" y="-20%" width="140%" height="140%">
+    <filter id="softBlur2" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="18"/>
     </filter>
-    <filter id="dropGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#e4a5ba" flood-opacity="0.28"/>
+    <filter id="branchShadow2" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#e2a1b6" flood-opacity="0.24"/>
     </filter>
-    <g id="flowerBig">
-      <ellipse cx="0" cy="-16" rx="16" ry="24" fill="url(#petalGrad)"/>
-      <ellipse cx="15" cy="-4" rx="16" ry="24" fill="url(#petalGrad)" transform="rotate(72 15 -4)"/>
-      <ellipse cx="10" cy="14" rx="16" ry="24" fill="url(#petalGrad)" transform="rotate(144 10 14)"/>
-      <ellipse cx="-10" cy="14" rx="16" ry="24" fill="url(#petalGrad)" transform="rotate(216 -10 14)"/>
-      <ellipse cx="-15" cy="-4" rx="16" ry="24" fill="url(#petalGrad)" transform="rotate(288 -15 -4)"/>
-      <circle cx="0" cy="2" r="7" fill="#f7df93" opacity="0.9"/>
-      <circle cx="0" cy="2" r="3.4" fill="#c98563" opacity="0.85"/>
+    <g id="blossom2">
+      <ellipse cx="0" cy="-14" rx="14" ry="21" fill="url(#petalCore2)"/>
+      <ellipse cx="14" cy="-3" rx="14" ry="21" fill="url(#petalCore2)" transform="rotate(72 14 -3)"/>
+      <ellipse cx="9" cy="12" rx="14" ry="21" fill="url(#petalCore2)" transform="rotate(144 9 12)"/>
+      <ellipse cx="-9" cy="12" rx="14" ry="21" fill="url(#petalCore2)" transform="rotate(216 -9 12)"/>
+      <ellipse cx="-14" cy="-3" rx="14" ry="21" fill="url(#petalCore2)" transform="rotate(288 -14 -3)"/>
+      <circle cx="0" cy="1.5" r="5.5" fill="#f7de98" opacity="0.92"/>
+      <circle cx="0" cy="1.5" r="2.5" fill="#be7d60" opacity="0.82"/>
     </g>
-    <g id="flowerSmall">
-      <ellipse cx="0" cy="-10" rx="10" ry="15" fill="url(#petalGradSoft)"/>
-      <ellipse cx="10" cy="-2" rx="10" ry="15" fill="url(#petalGradSoft)" transform="rotate(72 10 -2)"/>
-      <ellipse cx="6" cy="10" rx="10" ry="15" fill="url(#petalGradSoft)" transform="rotate(144 6 10)"/>
-      <ellipse cx="-6" cy="10" rx="10" ry="15" fill="url(#petalGradSoft)" transform="rotate(216 -6 10)"/>
-      <ellipse cx="-10" cy="-2" rx="10" ry="15" fill="url(#petalGradSoft)" transform="rotate(288 -10 -2)"/>
-      <circle cx="0" cy="1" r="4.2" fill="#f7e0a1" opacity="0.9"/>
+    <g id="blossomMini2">
+      <ellipse cx="0" cy="-8" rx="8" ry="12" fill="url(#petalSoft2)"/>
+      <ellipse cx="8" cy="-2" rx="8" ry="12" fill="url(#petalSoft2)" transform="rotate(72 8 -2)"/>
+      <ellipse cx="5" cy="8" rx="8" ry="12" fill="url(#petalSoft2)" transform="rotate(144 5 8)"/>
+      <ellipse cx="-5" cy="8" rx="8" ry="12" fill="url(#petalSoft2)" transform="rotate(216 -5 8)"/>
+      <ellipse cx="-8" cy="-2" rx="8" ry="12" fill="url(#petalSoft2)" transform="rotate(288 -8 -2)"/>
+      <circle cx="0" cy="1" r="3.5" fill="#f8e2a5" opacity="0.88"/>
     </g>
-    <g id="fallPetal">
-      <path d="M0 0 C10 -10 24 -8 28 8 C18 18 8 18 0 0Z" fill="url(#petalGradSoft)"/>
+    <g id="singlePetal2">
+      <path d="M0 0 C10 -12 22 -8 25 7 C14 17 5 15 0 0Z" fill="url(#petalSoft2)"/>
     </g>
   </defs>
 
-  <rect x="18" y="18" width="864" height="644" rx="54" fill="rgba(255,255,255,0)"/>
-  <circle cx="670" cy="162" r="132" fill="url(#sunGlow)"/>
-  <ellipse cx="380" cy="560" rx="220" ry="54" fill="url(#bloomHaze)" filter="url(#softBlur)" opacity="0.55"/>
-  <ellipse cx="262" cy="170" rx="168" ry="120" fill="url(#bloomHaze)" filter="url(#softBlur)" opacity="0.55"/>
-  <ellipse cx="668" cy="286" rx="164" ry="126" fill="url(#bloomHaze)" filter="url(#softBlur)" opacity="0.42"/>
+  <circle cx="248" cy="164" r="136" fill="url(#sunGlow2)"/>
+  <ellipse cx="274" cy="190" rx="185" ry="124" fill="url(#haze2)" filter="url(#softBlur2)" opacity="0.56"/>
+  <ellipse cx="650" cy="290" rx="192" ry="138" fill="url(#haze2)" filter="url(#softBlur2)" opacity="0.42"/>
+  <ellipse cx="372" cy="560" rx="228" ry="56" fill="url(#haze2)" filter="url(#softBlur2)" opacity="0.48"/>
 
-  <g filter="url(#dropGlow)">
-    <path d="M-20 168 C110 178 196 214 290 282 C332 311 378 336 442 348" fill="none" stroke="url(#branchGrad)" stroke-width="16" stroke-linecap="round"/>
-    <path d="M56 196 C152 216 224 246 282 292" fill="none" stroke="url(#branchGrad)" stroke-width="9" stroke-linecap="round" opacity="0.9"/>
-    <path d="M146 144 C228 176 308 230 366 286" fill="none" stroke="url(#branchGrad)" stroke-width="8" stroke-linecap="round" opacity="0.88"/>
-    <path d="M904 136 C784 152 690 196 592 278 C548 315 500 334 434 348" fill="none" stroke="url(#branchGrad)" stroke-width="16" stroke-linecap="round"/>
-    <path d="M834 182 C748 202 676 232 610 284" fill="none" stroke="url(#branchGrad)" stroke-width="9" stroke-linecap="round" opacity="0.9"/>
-    <path d="M748 130 C668 168 602 224 548 286" fill="none" stroke="url(#branchGrad)" stroke-width="8" stroke-linecap="round" opacity="0.88"/>
+  <g filter="url(#branchShadow2)" fill="none" stroke="url(#branchGrad2)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M915 110 C805 126 724 170 632 246 C586 284 538 318 462 356" stroke-width="16"/>
+    <path d="M690 188 C642 204 604 228 566 264" stroke-width="8" opacity="0.95"/>
+    <path d="M752 228 C696 244 652 280 616 324" stroke-width="8" opacity="0.92"/>
+    <path d="M604 230 C566 246 534 270 510 302" stroke-width="6" opacity="0.88"/>
+    <path d="M-36 466 C70 442 146 412 210 374 C248 352 276 332 322 304" stroke-width="13" opacity="0.92"/>
+    <path d="M82 430 C128 418 168 400 196 378" stroke-width="7" opacity="0.88"/>
+    <path d="M164 404 C210 390 248 366 278 336" stroke-width="7" opacity="0.88"/>
   </g>
 
   <g opacity="0.98">
-    <use href="#flowerBig" x="178" y="194" transform="scale(1.1)"/>
-    <use href="#flowerSmall" x="246" y="216" transform="scale(1.14)"/>
-    <use href="#flowerBig" x="316" y="280" transform="scale(1.02)"/>
-    <use href="#flowerSmall" x="392" y="314" transform="scale(1.18)"/>
-    <use href="#flowerSmall" x="134" y="244" transform="scale(.96)"/>
-    <use href="#flowerBig" x="638" y="196" transform="scale(1.08)"/>
-    <use href="#flowerSmall" x="570" y="222" transform="scale(1.12)"/>
-    <use href="#flowerBig" x="506" y="296" transform="scale(1.0)"/>
-    <use href="#flowerSmall" x="432" y="322" transform="scale(1.12)"/>
-    <use href="#flowerSmall" x="692" y="244" transform="scale(.98)"/>
+    <use href="#blossom2" x="656" y="214" transform="scale(1.04)"/>
+    <use href="#blossomMini2" x="612" y="242" transform="scale(1.08)"/>
+    <use href="#blossomMini2" x="704" y="248" transform="scale(.96)"/>
+    <use href="#blossom2" x="562" y="284" transform="scale(.98)"/>
+    <use href="#blossomMini2" x="514" y="310" transform="scale(1.04)"/>
+    <use href="#blossomMini2" x="602" y="314" transform="scale(.88)"/>
+    <use href="#blossom2" x="458" y="354" transform="scale(.94)"/>
+    <use href="#blossomMini2" x="404" y="378" transform="scale(.92)"/>
+
+    <use href="#blossom2" x="190" y="390" transform="scale(1.0)"/>
+    <use href="#blossomMini2" x="148" y="414" transform="scale(.96)"/>
+    <use href="#blossomMini2" x="246" y="362" transform="scale(.90)"/>
+    <use href="#blossom2" x="294" y="320" transform="scale(.92)"/>
+    <use href="#blossomMini2" x="334" y="296" transform="scale(.84)"/>
   </g>
 
-  <g opacity="0.88">
-    <use href="#flowerSmall" x="228" y="148" transform="scale(.88)"/>
-    <use href="#flowerSmall" x="300" y="192" transform="scale(.84)"/>
-    <use href="#flowerSmall" x="548" y="152" transform="scale(.84)"/>
-    <use href="#flowerSmall" x="612" y="242" transform="scale(.82)"/>
-    <use href="#flowerSmall" x="474" y="246" transform="scale(.78)"/>
-    <use href="#flowerSmall" x="382" y="266" transform="scale(.74)"/>
+  <g opacity="0.86">
+    <use href="#blossomMini2" x="734" y="188" transform="scale(.82)"/>
+    <use href="#blossomMini2" x="760" y="278" transform="scale(.8)"/>
+    <use href="#blossomMini2" x="534" y="236" transform="scale(.8)"/>
+    <use href="#blossomMini2" x="478" y="282" transform="scale(.78)"/>
+    <use href="#blossomMini2" x="264" y="282" transform="scale(.84)"/>
+    <use href="#blossomMini2" x="120" y="446" transform="scale(.8)"/>
   </g>
 
   <g opacity="0.8">
-    <use href="#fallPetal" x="220" y="378" transform="rotate(-8 220 378) scale(1.0)"/>
-    <use href="#fallPetal" x="332" y="452" transform="rotate(22 332 452) scale(.8)"/>
-    <use href="#fallPetal" x="560" y="418" transform="rotate(-14 560 418) scale(.88)"/>
-    <use href="#fallPetal" x="694" y="360" transform="rotate(10 694 360) scale(.78)"/>
-    <use href="#fallPetal" x="600" y="492" transform="rotate(-28 600 492) scale(.72)"/>
+    <use href="#singlePetal2" x="242" y="468" transform="rotate(6 242 468) scale(.9)"/>
+    <use href="#singlePetal2" x="336" y="426" transform="rotate(-12 336 426) scale(.72)"/>
+    <use href="#singlePetal2" x="462" y="448" transform="rotate(20 462 448) scale(.84)"/>
+    <use href="#singlePetal2" x="602" y="392" transform="rotate(-18 602 392) scale(.82)"/>
+    <use href="#singlePetal2" x="696" y="334" transform="rotate(10 696 334) scale(.74)"/>
+    <use href="#singlePetal2" x="538" y="510" transform="rotate(-26 538 510) scale(.68)"/>
   </g>
 
-  <path d="M150 566 C266 548 624 548 748 566" fill="none" stroke="rgba(209,122,149,0.20)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M150 574 C276 558 628 558 748 574" fill="none" stroke="rgba(210,125,152,0.18)" stroke-width="2" stroke-linecap="round"/>
 </svg>
-</div>
 </div>
 </div>
 </section>
@@ -276,7 +280,7 @@
 </div>
 </div>
 
-<script src="content.js?v=4.6-spring-poster"></script>
-<script src="script.js?v=4.6-spring-poster"></script>
+<script src="content.js?v=4.7-sakura-branch"></script>
+<script src="script.js?v=4.7-sakura-branch"></script>
 </body>
 </html>
