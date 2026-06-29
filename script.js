@@ -3,6 +3,7 @@
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => Array.from(root.querySelectorAll(s));
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches || window.innerWidth <= 820;
   const isHomePage = document.body.classList.contains('home-page');
   const assetPrefix = isHomePage ? '' : '../';
 
@@ -18,7 +19,7 @@
   });
 
   const loader = $('#openingLoader');
-  if (loader) setTimeout(() => loader.classList.add('is-hidden'), 1150);
+  if (loader) setTimeout(() => loader.classList.add('is-hidden'), isCoarsePointer ? 720 : 1150);
 
   const cursorAura = $('#cursorAura');
   window.addEventListener('pointermove', (e) => {
@@ -29,7 +30,7 @@
   if (!reduced) {
     window.addEventListener('click', (e) => {
       if (e.target.closest('button,a')) return;
-      for (let i=0;i<12;i++) {
+      for (let i=0;i<(isCoarsePointer ? 5 : 12);i++) {
         const s = document.createElement('span');
         s.className = 'spark';
         s.style.left = e.clientX + 'px';
@@ -61,7 +62,7 @@
   }, {threshold:.45});
   sections.forEach(s => sio.observe(s));
 
-  if (!reduced) {
+  if (!reduced && !isCoarsePointer) {
     $$('[data-tilt]').forEach(card => {
       card.addEventListener('pointermove', (e) => {
         const r = card.getBoundingClientRect();
@@ -244,7 +245,7 @@
     function resize(){
       w=canvas.width=innerWidth*devicePixelRatio; h=canvas.height=innerHeight*devicePixelRatio;
       canvas.style.width=innerWidth+'px'; canvas.style.height=innerHeight+'px';
-      const count = innerWidth < 700 ? 70 : 150;
+      const count = innerWidth < 700 ? 38 : (innerWidth < 980 ? 80 : 150);
       particles = Array.from({length:count}, () => ({
         x:Math.random()*w, y:Math.random()*h, z:.3+Math.random()*1.4,
         vx:(Math.random()-.5)*.18, vy:(Math.random()-.5)*.18,

@@ -648,3 +648,659 @@ body.sub-page {
   display: block;
   margin-bottom: 10px;
 }
+
+
+/* ===== V4.2 Mobile Adaptation / 手机端重新适配 ===== */
+@media (max-width: 820px) {
+  :root {
+    --shadow: 0 18px 58px rgba(0,0,0,.34);
+  }
+
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    line-height: 1.72;
+    background:
+      radial-gradient(circle at 16% 18%, rgba(255, 180, 208, .16), transparent 42vw),
+      radial-gradient(circle at 88% 20%, rgba(180, 215, 255, .13), transparent 38vw),
+      linear-gradient(135deg, var(--bg), var(--bg2));
+  }
+
+  .space-canvas {
+    opacity: .58;
+  }
+
+  .ambient-orb {
+    filter: blur(34px);
+    opacity: .35;
+  }
+
+  .orb-one { width: 74vw; height: 74vw; left: -36vw; top: 9vh; }
+  .orb-two { width: 66vw; height: 66vw; right: -40vw; top: 28vh; }
+  .orb-three { display: none; }
+
+  .opening-loader {
+    padding: 22px;
+  }
+
+  .loader-ring {
+    width: min(72vw, 280px);
+  }
+
+  .opening-loader p {
+    max-width: 82vw;
+    font-size: clamp(1.35rem, 7vw, 2.15rem);
+    line-height: 1.18;
+  }
+
+  .site-header {
+    top: max(8px, env(safe-area-inset-top));
+    left: 10px;
+    right: 10px;
+    width: auto;
+    transform: none;
+    padding: 8px 9px;
+    border-radius: 22px;
+    gap: 8px;
+    align-items: flex-start;
+    flex-direction: column;
+    background: rgba(10, 12, 20, .58);
+  }
+
+  body:not(.dark) .site-header {
+    background: rgba(255,255,255,.68);
+  }
+
+  .brand {
+    width: 100%;
+    gap: 8px;
+    font-size: .74rem;
+    letter-spacing: .10em;
+    line-height: 1;
+  }
+
+  .brand-mark {
+    width: 25px;
+    height: 25px;
+    font-size: .9rem;
+  }
+
+  .top-nav {
+    width: 100%;
+    gap: 6px;
+    padding: 1px 0 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .top-nav a,
+  .theme-btn {
+    flex: 0 0 auto;
+    padding: 5px 8px;
+    font-size: .74rem;
+    line-height: 1.25;
+    border-color: var(--line);
+    background: rgba(255,255,255,.045);
+  }
+
+  .chapter-rail,
+  .cursor-aura {
+    display: none !important;
+  }
+
+  .stage {
+    width: min(calc(100% - 24px), var(--max));
+    min-height: auto;
+    padding: 112px 0 58px;
+    display: block;
+  }
+
+  .hero-stage {
+    padding-top: 126px;
+    grid-template-columns: 1fr;
+  }
+
+  .hero-copy {
+    max-width: 100%;
+  }
+
+  .eyebrow {
+    margin-bottom: 12px;
+    font-size: .72rem;
+    letter-spacing: .18em;
+  }
+
+  .mega-title {
+    max-width: 100%;
+    display: grid;
+    gap: 10px;
+    font-size: clamp(2.45rem, 12vw, 3.7rem);
+    line-height: 1.10;
+    letter-spacing: -0.045em;
+  }
+
+  .mega-title span {
+    white-space: nowrap;
+  }
+
+  .hero-subtitle {
+    margin-top: 22px;
+    font-size: .96rem;
+    line-height: 1.75;
+  }
+
+  .hero-actions,
+  .center-action,
+  .reader-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .action {
+    width: 100%;
+    min-width: 0;
+    min-height: 46px;
+    padding: 11px 14px;
+    font-size: .92rem;
+  }
+
+  .hero-visual {
+    min-height: 270px;
+    margin-top: 26px;
+  }
+
+  .planet-core {
+    width: min(78vw, 300px);
+  }
+
+  .planet-label {
+    font-size: .9rem;
+    letter-spacing: .16em;
+  }
+
+  .orbit-a { inset: 8%; }
+  .orbit-b { inset: 18%; }
+  .orbit-c { display: none; }
+
+  .section-heading {
+    text-align: left;
+    margin: 0 0 20px;
+  }
+
+  .section-heading span,
+  .ending-card span {
+    font-size: .68rem;
+    letter-spacing: .18em;
+  }
+
+  .section-heading h2,
+  .ending-card h2,
+  .library-hero h1,
+  .article-shell h1 {
+    font-size: clamp(2rem, 10.5vw, 3rem);
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+  }
+
+  .section-heading p {
+    margin-top: 12px;
+    font-size: .92rem;
+    line-height: 1.72;
+  }
+
+  .time-core {
+    min-height: 430px;
+    padding: 22px 14px 14px;
+    border-radius: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .time-core::before {
+    width: 360px;
+    height: 360px;
+  }
+
+  .time-core p {
+    position: static;
+    order: -1;
+    margin: 0;
+    width: 100%;
+    font-size: .84rem;
+    line-height: 1.65;
+    text-align: center;
+  }
+
+  .time-orbit {
+    width: min(68vw, 270px);
+    left: 50%;
+    top: 46%;
+    transform: translate(-50%, -50%);
+  }
+
+  .time-main {
+    position: relative;
+    z-index: 1;
+  }
+
+  .time-main span {
+    font-size: clamp(4.3rem, 27vw, 7rem);
+    letter-spacing: -0.07em;
+  }
+
+  .time-dials {
+    position: static;
+    z-index: 1;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .time-dials div {
+    padding: 10px 8px;
+    border-radius: 16px;
+    text-align: center;
+  }
+
+  .time-dials strong {
+    display: block;
+    font-size: 1.34rem;
+    line-height: 1;
+  }
+
+  .time-dials small {
+    margin-top: 4px;
+    font-size: .72rem;
+  }
+
+  .timeline-shell {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .timeline-line {
+    display: none;
+  }
+
+  .timeline-node,
+  .transmission-card,
+  .library-card,
+  .nebula-card,
+  .ending-card,
+  .article-shell {
+    border-radius: 22px;
+    padding: 16px;
+  }
+
+  .timeline-node strong,
+  .transmission-card strong {
+    margin: 8px 0;
+    font-size: 1.05rem;
+    line-height: 1.35;
+  }
+
+  .timeline-node p,
+  .transmission-card p,
+  .library-card p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    font-size: .86rem;
+    line-height: 1.65;
+  }
+
+  .node-date,
+  .timeline-node small,
+  .transmission-card small,
+  .library-card small {
+    font-size: .7rem;
+    letter-spacing: .10em;
+  }
+
+  .node-tags,
+  .tag-row {
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .node-tags span,
+  .tag-row span {
+    padding: 4px 8px;
+    font-size: .68rem;
+  }
+
+  .nebula-grid,
+  .fragment-list {
+    width: 100%;
+    gap: 10px;
+  }
+
+  .nebula-card,
+  .nebula-card:nth-child(n) {
+    grid-template-columns: 1fr;
+    gap: 7px;
+    padding: 15px 15px 15px 17px;
+  }
+
+  .nebula-card::after {
+    top: 14px;
+    bottom: 14px;
+  }
+
+  .nebula-card small {
+    order: 0;
+    margin: 0;
+    font-size: .68rem;
+    letter-spacing: .10em;
+  }
+
+  .home-page .nebula-card .quote-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+  }
+
+  .nebula-card .quote-text,
+  .fragment-library .quote-text,
+  .nebula-card p,
+  .nebula-card .quote {
+    font-size: .88rem;
+    line-height: 1.65;
+  }
+
+  .transmission-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .transmission-card {
+    min-height: 0;
+    padding-left: 18px;
+  }
+
+  .signal-line {
+    width: 2px;
+  }
+
+  .ending-card {
+    text-align: left;
+    padding: 22px 18px;
+  }
+
+  .ending-card p {
+    font-size: .92rem;
+    line-height: 1.72;
+  }
+
+  .music-dock {
+    left: max(10px, env(safe-area-inset-left));
+    right: max(10px, env(safe-area-inset-right));
+    bottom: max(10px, env(safe-area-inset-bottom));
+    width: auto;
+    padding: 9px;
+    border-radius: 20px;
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+
+  .disc {
+    width: 42px;
+    height: 42px;
+  }
+
+  .music-info strong {
+    font-size: .88rem;
+    line-height: 1.25;
+  }
+
+  .music-info small {
+    font-size: .70rem;
+    line-height: 1.25;
+  }
+
+  .music-bars {
+    display: none;
+  }
+
+  .music-controls {
+    grid-column: auto;
+    display: flex;
+    gap: 4px;
+  }
+
+  .music-controls button {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    font-size: 0;
+    border-radius: 999px;
+  }
+
+  .music-controls button::after {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  #prevTrackBtn::after { content: "‹"; }
+  #togglePlayBtn::after { content: "▶"; font-size: .78rem; }
+  .music-dock.is-playing #togglePlayBtn::after { content: "Ⅱ"; font-size: .82rem; }
+  #nextTrackBtn::after { content: "›"; }
+
+  body {
+    padding-bottom: calc(96px + env(safe-area-inset-bottom));
+  }
+
+  .library-page,
+  .article-page {
+    width: min(calc(100% - 24px), var(--max));
+    padding: 104px 0 calc(120px + env(safe-area-inset-bottom));
+  }
+
+  .library-hero {
+    min-height: auto;
+    padding: 22px 0 24px;
+    align-content: start;
+  }
+
+  .library-hero p {
+    font-size: .92rem;
+    line-height: 1.72;
+  }
+
+  .library-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .library-card h2 {
+    font-size: 1.08rem;
+    line-height: 1.34;
+  }
+
+  .fragment-list .library-card {
+    padding: 16px;
+  }
+
+  .back-link {
+    margin-bottom: 12px;
+    font-size: .88rem;
+  }
+
+  .article-shell {
+    padding: 22px 16px;
+  }
+
+  .article-kicker {
+    font-size: .68rem;
+    letter-spacing: .18em;
+  }
+
+  .article-meta {
+    font-size: .82rem;
+    line-height: 1.55;
+  }
+
+  .article-body {
+    margin-top: 22px;
+    font-size: .96rem;
+    line-height: 1.9;
+  }
+
+  .reader-modal {
+    padding: 10px;
+  }
+
+  .reader-panel {
+    width: 100%;
+    max-height: calc(100dvh - 20px);
+    border-radius: 22px;
+    padding: 22px 16px;
+  }
+
+  .reader-close {
+    width: 38px;
+    height: 38px;
+    font-size: 1.15rem;
+  }
+
+  .reader-panel h2 {
+    margin-right: 42px;
+    font-size: clamp(1.72rem, 9.5vw, 2.65rem);
+    line-height: 1.12;
+    letter-spacing: -0.04em;
+  }
+
+  .reader-body {
+    margin-top: 20px;
+    font-size: .95rem;
+    line-height: 1.88;
+  }
+}
+
+@media (max-width: 420px) {
+  .site-header {
+    left: 8px;
+    right: 8px;
+    padding: 7px 8px;
+  }
+
+  .brand span:last-child {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .top-nav a,
+  .theme-btn {
+    padding: 5px 7px;
+    font-size: .70rem;
+  }
+
+  .stage {
+    width: calc(100% - 18px);
+    padding-top: 104px;
+  }
+
+  .hero-stage {
+    padding-top: 118px;
+  }
+
+  .mega-title {
+    font-size: clamp(2.25rem, 11.5vw, 3.05rem);
+    gap: 8px;
+  }
+
+  .section-heading h2,
+  .ending-card h2,
+  .library-hero h1,
+  .article-shell h1 {
+    font-size: clamp(1.85rem, 10vw, 2.55rem);
+  }
+
+  .planet-core {
+    width: min(76vw, 260px);
+  }
+
+  .time-core {
+    min-height: 405px;
+    padding: 18px 12px 12px;
+  }
+
+  .time-main span {
+    font-size: clamp(3.9rem, 25vw, 6.2rem);
+  }
+
+  .time-dials div {
+    padding: 9px 5px;
+  }
+
+  .time-dials strong {
+    font-size: 1.18rem;
+  }
+
+  .timeline-node,
+  .transmission-card,
+  .library-card,
+  .nebula-card,
+  .ending-card,
+  .article-shell {
+    border-radius: 20px;
+    padding: 14px;
+  }
+
+  .music-dock {
+    left: 8px;
+    right: 8px;
+    grid-template-columns: 38px minmax(0, 1fr) auto;
+    gap: 7px;
+  }
+
+  .disc {
+    width: 38px;
+    height: 38px;
+  }
+
+  .music-controls button {
+    width: 29px;
+    height: 29px;
+  }
+
+  .music-info strong {
+    font-size: .82rem;
+  }
+
+  .music-info small {
+    font-size: .66rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .brand span:last-child {
+    display: none;
+  }
+
+  .mega-title {
+    font-size: 2.05rem;
+  }
+
+  .music-info small {
+    display: none;
+  }
+}
