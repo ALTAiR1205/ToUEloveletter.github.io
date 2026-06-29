@@ -182,7 +182,12 @@
   });
 
   const loader = $('#openingLoader');
-  if (loader) setTimeout(() => loader.classList.add('is-hidden'), isCoarsePointer ? 720 : 1150);
+  if (loader) {
+    requestAnimationFrame(() => loader.classList.add('is-ready'));
+    const hideLoader = () => loader.classList.add('is-hidden');
+    setTimeout(hideLoader, isCoarsePointer ? 1850 : 2350);
+    loader.addEventListener('click', hideLoader, { once: true });
+  }
 
   window.addEventListener('pointermove', (e) => {
     document.documentElement.style.setProperty('--mx', e.clientX + 'px');
