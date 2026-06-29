@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>我爱你，我要我们永远在一起 · VEGALTAiR</title>
   <meta name="description" content="我们的宇宙里保存的一封信。" />
-  <link rel="stylesheet" href="../style.css?v=4.0" />
+  <link rel="stylesheet" href="../style.css?v=4.1" />
 </head>
 <body class="sub-page article-sub-page">
   
@@ -63,6 +63,21 @@
       </article>
     </main>
     
-  <script src="../script.js?v=4.0"></script>
+<audio id="bgm" preload="auto"></audio>
+<div class="music-dock" id="musicDock" aria-label="音乐播放器">
+  <button class="disc" id="discBtn" type="button" aria-label="播放或暂停"><span></span></button>
+  <div class="music-info">
+    <strong id="trackTitle">η</strong>
+    <small id="trackNote">第 1 首 / 共 3 首</small>
+  </div>
+  <div class="music-bars" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+  <div class="music-controls">
+    <button id="prevTrackBtn" type="button">Prev</button>
+    <button id="togglePlayBtn" type="button">Play</button>
+    <button id="nextTrackBtn" type="button">Next</button>
+  </div>
+</div>
+
+  <script src="../script.js?v=4.1"></script>
 </body>
 </html>
