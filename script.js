@@ -3,6 +3,8 @@
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => Array.from(root.querySelectorAll(s));
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isHomePage = document.body.classList.contains('home-page');
+  const assetPrefix = isHomePage ? '' : '../';
 
   const themeBtn = $('#themeBtn');
   const savedTheme = localStorage.getItem('theme');
@@ -98,13 +100,15 @@
   updateTime(); setInterval(updateTime, 1000);
 
   const playlist = [
-    { title: 'η', note: 'by α·Pav', src: 'music/bgm.mp3' },
-    { title: 'Gotta have you', note: 'by The Weepies', src: 'music/bgm2.mp3' },
-    { title: 'Little bit better', note: 'by Caleb Hearn/ROSIE', src: 'music/bgm3.mp3' }
+    { title: 'η', note: 'by α·Pav', src: assetPrefix + 'music/bgm.mp3' },
+    { title: 'Gotta have you', note: 'by The Weepies', src: assetPrefix + 'music/bgm2.mp3' },
+    { title: 'Little bit better', note: 'by Caleb Hearn/ROSIE', src: assetPrefix + 'music/bgm3.mp3' }
   ];
   const bgm = $('#bgm'), dock = $('#musicDock'), discBtn = $('#discBtn'), toggle = $('#togglePlayBtn'), prev = $('#prevTrackBtn'), next = $('#nextTrackBtn'), title = $('#trackTitle'), note = $('#trackNote');
   let current = Number(localStorage.getItem('currentTrackIndex'));
   if (!Number.isInteger(current) || current < 0 || current >= playlist.length) current = 0;
+  const savedMusicTime = Number(localStorage.getItem('musicCurrentTime') || '0');
+  const shouldResumeMusic = localStorage.getItem('musicWasPlaying') === 'yes';
   function updateMusicUI() {
     if (!bgm) return;
     const t = playlist[current];
@@ -114,13 +118,26 @@
     dock?.classList.toggle('is-playing', !bgm.paused);
     document.body.classList.toggle('music-active', !bgm.paused);
   }
-  function loadTrack(i, play=false) {
+  function rememberMusicState() {
+    if (!bgm) return;
+    localStorage.setItem('currentTrackIndex', String(current));
+    localStorage.setItem('musicCurrentTime', String(Math.max(0, bgm.currentTime || 0)));
+    localStorage.setItem('musicWasPlaying', bgm.paused ? 'no' : 'yes');
+  }
+
+  function loadTrack(i, play=false, resumeTime=0) {
     if (!bgm) return;
     current = (i + playlist.length) % playlist.length;
     localStorage.setItem('currentTrackIndex', String(current));
     bgm.src = playlist[current].src;
     bgm.volume = .62;
-    bgm.load(); updateMusicUI();
+    bgm.load();
+    bgm.addEventListener('loadedmetadata', () => {
+      if (resumeTime > 0 && Number.isFinite(resumeTime) && resumeTime < (bgm.duration || Infinity)) {
+        bgm.currentTime = resumeTime;
+      }
+    }, { once: true });
+    updateMusicUI();
     if (play) bgm.play().catch(console.warn).finally(updateMusicUI);
   }
   discBtn?.addEventListener('click', () => { if (bgm.paused) bgm.play().catch(console.warn).finally(updateMusicUI); else { bgm.pause(); updateMusicUI(); } });
@@ -128,8 +145,95 @@
   prev?.addEventListener('click', () => loadTrack(current-1, true));
   next?.addEventListener('click', () => loadTrack(current+1, true));
   bgm?.addEventListener('ended', () => loadTrack(current+1, true));
-  bgm?.addEventListener('play', updateMusicUI); bgm?.addEventListener('pause', updateMusicUI);
-  loadTrack(current, false);
+  bgm?.addEventListener('play', () => { updateMusicUI(); rememberMusicState(); });
+  bgm?.addEventListener('pause', () => { updateMusicUI(); rememberMusicState(); });
+  bgm?.addEventListener('timeupdate', () => { if (Math.floor((bgm.currentTime || 0) % 3) === 0) rememberMusicState(); });
+  window.addEventListener('beforeunload', rememberMusicState);
+
+  loadTrack(current, shouldResumeMusic, savedMusicTime);
+
+  const readerModal = $('#readerModal');
+  const readerTitle = $('#readerTitle');
+  const readerMeta = $('#readerMeta');
+  const readerKicker = $('#readerKicker');
+  const readerTags = $('#readerTags');
+  const readerBody = $('#readerBody');
+  const readerFullLink = $('#readerFullLink');
+  let lastFocusedReaderLink = null;
+
+  function openReader() {
+    if (!readerModal) return;
+    readerModal.classList.add('is-open');
+    readerModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('reader-open');
+    const closeBtn = readerModal.querySelector('[data-reader-close]');
+    closeBtn?.focus({ preventScroll: true });
+  }
+
+  function closeReader() {
+    if (!readerModal) return;
+    readerModal.classList.remove('is-open');
+    readerModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('reader-open');
+    lastFocusedReaderLink?.focus?.({ preventScroll: true });
+  }
+
+  function normalizeArticleUrl(url) {
+    try { return new URL(url, location.href); } catch { return null; }
+  }
+
+  async function loadArticleIntoReader(url, sourceLabel) {
+    const targetUrl = normalizeArticleUrl(url);
+    if (!targetUrl || !readerModal) return false;
+    if (readerTitle) readerTitle.textContent = '正在打开';
+    if (readerMeta) readerMeta.textContent = '';
+    if (readerTags) readerTags.innerHTML = '';
+    if (readerBody) readerBody.innerHTML = '<p>正在从星轨里取出这封信……</p>';
+    if (readerFullLink) readerFullLink.href = targetUrl.href;
+    if (readerKicker) readerKicker.textContent = sourceLabel || 'Archive';
+    openReader();
+    try {
+      const res = await fetch(targetUrl.href, { cache: 'no-cache' });
+      if (!res.ok) throw new Error('Fetch failed');
+      const html = await res.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const shell = doc.querySelector('.article-shell');
+      if (!shell) throw new Error('Article shell not found');
+      const titleText = shell.querySelector('h1')?.textContent?.trim() || '一封信';
+      const metaText = shell.querySelector('.article-meta')?.textContent?.trim() || '';
+      const kickerText = shell.querySelector('.article-kicker')?.textContent?.trim() || sourceLabel || 'Archive';
+      const tags = shell.querySelector('.tag-row')?.innerHTML || '';
+      const body = shell.querySelector('.article-body')?.innerHTML || '<p>这封信暂时没有正文。</p>';
+      if (readerTitle) readerTitle.textContent = titleText;
+      if (readerMeta) readerMeta.textContent = metaText;
+      if (readerKicker) readerKicker.textContent = kickerText;
+      if (readerTags) readerTags.innerHTML = tags;
+      if (readerBody) readerBody.innerHTML = body;
+    } catch (err) {
+      console.warn(err);
+      if (readerBody) readerBody.innerHTML = '<p>这封信没有成功在当前页面打开。你可以点下面的“打开完整页面”。</p>';
+    }
+    return true;
+  }
+
+  if (readerModal) {
+    document.addEventListener('click', (e) => {
+      const closeTrigger = e.target.closest('[data-reader-close]');
+      if (closeTrigger) { closeReader(); return; }
+      const link = e.target.closest('a[href]');
+      if (!link || link.target === '_blank' || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const href = link.getAttribute('href') || '';
+      const isArticle = /^(letters|replies)\/(letter|reply)-\d+\.html$/.test(href);
+      if (!isHomePage || !isArticle) return;
+      e.preventDefault();
+      rememberMusicState();
+      lastFocusedReaderLink = link;
+      loadArticleIntoReader(href, href.startsWith('letters/') ? 'Letter Archive' : 'Incoming Transmission');
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && readerModal.classList.contains('is-open')) closeReader();
+    });
+  }
 
   const canvas = $('#spaceCanvas');
   if (canvas && !reduced) {

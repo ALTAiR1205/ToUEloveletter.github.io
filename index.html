@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Love Universe V4 · VEGALTAiR</title>
   <meta name="description" content="我们的宇宙里保存的一封信。" />
-  <link rel="stylesheet" href="style.css?v=4.0" />
+  <link rel="stylesheet" href="style.css?v=4.1" />
 </head>
 <body class="home-page">
   
@@ -48,7 +48,7 @@
   <section class="stage hero-stage snap-section" id="hero" data-section="hero">
     <div class="hero-copy reveal">
       <p class="eyebrow">To：杜叶</p>
-      <h1 class="mega-title">欢迎来到<br />我们的小世界</h1>
+      <h1 class="mega-title"><span>欢迎来到</span><span>我们的小世界</span></h1>
       <p class="hero-subtitle">这里不再是一页普通情书，而是一座只属于我们的宇宙。时间、信件、歌和回信，都被收进不同的星轨里。</p>
       <div class="hero-actions">
         <a class="action primary magnetic" href="#time">进入宇宙</a>
@@ -165,13 +165,13 @@
   <section class="stage nebula-stage snap-section" id="fragments" data-section="fragments">
     <div class="section-heading reveal">
       <span>Chapter 03</span>
-      <h2>碎碎念星云</h2>
-      <p>短句不再像列表，而像漂浮在宇宙里的小纸片。</p>
+      <h2>碎碎念</h2>
+      <p>还是保留列表式的阅读感，只是让它更轻、更高级，像一行行落在宇宙里的旁白。</p>
     </div>
     <div class="nebula-grid reveal delay-1">
       
 <article class="nebula-card tilt-card" data-tilt>
-  <p><div class="quote">
+  <div class="quote-text">
           Will you still love me, when I am no longer young and beautiful.<br/>
           你是否爱我如初，当我年华老去，容颜不再？<br/>
           Will you still love me, when I got nothing but my aching soul.<br/>
@@ -179,82 +179,82 @@
           I know you will.<br/>
           我知道你会，我知道你的爱经久绵长。
           
-</div></p>
+</div>
   <small>2026.06.25</small>
 </article>
 
 <article class="nebula-card tilt-card" data-tilt>
-  <p><div class="quote">
+  <div class="quote-text">
           我们一起解决问题，我不能失去你。
           
-</div></p>
+</div>
   <small>2026.06.20</small>
 </article>
 
 <article class="nebula-card tilt-card" data-tilt>
-  <p><div class="quote">
+  <div class="quote-text">
           漫长一生，唯有爱抵岁月漫长。-来自宝宝
           
-</div></p>
+</div>
   <small>2026.06.18</small>
 </article>
 
 <article class="nebula-card tilt-card" data-tilt>
-  <p><div class="quote">
+  <div class="quote-text">
           我可以跟在你身后，像影子追着光梦游。我可以等在这路口，不管你会不会经过。-追光者
           
-</div></p>
+</div>
   <small>2026.06.15</small>
 </article>
 
 <article class="nebula-card tilt-card" data-tilt>
-  <p><div class="quote">
+  <div class="quote-text">
           And I know that the sun will swallow the only earth we will ever have. And I am in love with you. Sorry. <br/>
           即便我知道太阳最终会吞没我们唯一的地球，但我还是要爱你。对不起。-The Fault in Our Stars
           
-</div></p>
+</div>
   <small>2026.06.12</small>
 </article>
 
 <article class="nebula-card tilt-card" data-tilt>
-  <p><div class="quote">
+  <div class="quote-text">
           宇宙的尽头是烤棉花糖。-Outer Wilds
           
-</div></p>
+</div>
   <small>2026.06.05</small>
 </article>
 
 <article class="nebula-card tilt-card" data-tilt>
-  <p><div class="quote">
+  <div class="quote-text">
           如果有明天，祝福你亲爱的。-老男孩
           
-</div></p>
+</div>
   <small>2026.05.31</small>
 </article>
 
 <article class="nebula-card tilt-card" data-tilt>
-  <p><div class="quote">
+  <div class="quote-text">
           我愿意安静地或在每个有你的角落。如果生活还有什么会让你难过，别怕让我留在你身边，都陪你度过。-让我留在你身边
           
-</div></p>
+</div>
   <small>2026.05.28</small>
 </article>
 
 <article class="nebula-card tilt-card" data-tilt>
-  <p><div class="quote">
+  <div class="quote-text">
           But I warn you, I'll break your heart.<br/>
           Already broken. -Picky blinders
           
-</div></p>
+</div>
   <small>2026.05.27</small>
 </article>
 
 <article class="nebula-card tilt-card" data-tilt>
-  <p><div class="quote">
+  <div class="quote-text">
           To fear love is to fear life, and those who fear life are already three parts dead.<br/>
           畏惧爱情就是畏惧生命。而畏惧生命的人，离死亡已不远了。-《Marriage and Morals》
           
-</div></p>
+</div>
   <small>2026.05.26</small>
 </article>
     </div>
@@ -318,6 +318,22 @@
   </section>
 </main>
 
+<div class="reader-modal" id="readerModal" aria-hidden="true">
+  <div class="reader-backdrop" data-reader-close></div>
+  <article class="reader-panel" role="dialog" aria-modal="true" aria-labelledby="readerTitle">
+    <button class="reader-close" type="button" data-reader-close aria-label="关闭文章">×</button>
+    <div class="reader-kicker" id="readerKicker">Archive</div>
+    <h2 id="readerTitle">正在打开</h2>
+    <p class="reader-meta" id="readerMeta"></p>
+    <div class="tag-row reader-tags" id="readerTags"></div>
+    <div class="reader-body" id="readerBody"></div>
+    <div class="reader-actions">
+      <a class="action ghost" id="readerFullLink" href="#">打开完整页面</a>
+      <button class="action primary" type="button" data-reader-close>继续听歌</button>
+    </div>
+  </article>
+</div>
+
 <audio id="bgm" preload="auto"></audio>
 <div class="music-dock" id="musicDock" aria-label="音乐播放器">
   <button class="disc" id="discBtn" type="button" aria-label="播放或暂停"><span></span></button>
@@ -333,6 +349,6 @@
   </div>
 </div>
 
-  <script src="script.js?v=4.0"></script>
+  <script src="script.js?v=4.1"></script>
 </body>
 </html>

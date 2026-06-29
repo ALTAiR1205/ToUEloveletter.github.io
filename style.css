@@ -376,3 +376,275 @@ body:not(.dark) .music-dock { background: rgba(255,255,255,.52); }
   *, *::before, *::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
   .space-canvas, .cursor-aura { display:none; }
 }
+
+/* ===== V4.1 Refinement: cleaner hero title, list fragments, reader modal ===== */
+.mega-title {
+  display: grid;
+  gap: clamp(8px, 1.2vw, 18px);
+  font-size: clamp(3.6rem, 8.2vw, 8.8rem);
+  line-height: 1.02;
+  letter-spacing: -0.065em;
+  max-width: 980px;
+  word-break: keep-all;
+  overflow-wrap: normal;
+}
+
+.mega-title span {
+  display: block;
+  white-space: nowrap;
+}
+
+.hero-subtitle {
+  margin-top: clamp(24px, 3vw, 42px);
+}
+
+/* 碎碎念：从漂浮星云改回高级列表 */
+.nebula-stage .section-heading {
+  margin-bottom: 28px;
+}
+
+.nebula-grid {
+  width: min(920px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.nebula-card,
+.nebula-card:nth-child(2n),
+.nebula-card:nth-child(3n) {
+  min-height: 0;
+  animation: none;
+  transform: none;
+  display: grid;
+  grid-template-columns: minmax(92px, 128px) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  padding: 18px 20px;
+  border-radius: 22px;
+  background:
+    linear-gradient(90deg, rgba(255, 224, 163, .10), transparent 32%),
+    linear-gradient(135deg, rgba(255,255,255,.105), rgba(255,255,255,.035));
+}
+
+.nebula-card::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 18px;
+  bottom: 18px;
+  width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(var(--gold), var(--accent), transparent);
+  opacity: .85;
+  box-shadow: 0 0 18px rgba(255, 224, 163, .32);
+}
+
+.nebula-card small {
+  order: -1;
+  margin: 2px 0 0;
+  color: var(--gold);
+  font-size: .78rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.nebula-card .quote-text,
+.fragment-library .quote-text {
+  color: var(--text);
+  font-size: .98rem;
+  line-height: 1.8;
+}
+
+.nebula-card p,
+.nebula-card .quote {
+  margin: 0;
+  font-size: .98rem;
+  line-height: 1.8;
+}
+
+.fragment-library {
+  animation: none;
+  transform: none !important;
+  min-height: 0;
+}
+
+.fragment-library .quote-text,
+.fragment-library p {
+  margin: 0;
+}
+
+/* 在主页直接打开文章，音乐不会因为页面跳转中断 */
+.reader-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .32s ease, visibility .32s ease;
+}
+
+.reader-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.reader-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 180, 208, .18), transparent 34%),
+    rgba(4, 6, 13, .72);
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+}
+
+.reader-panel {
+  position: relative;
+  width: min(940px, 100%);
+  max-height: min(82vh, 860px);
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 34px;
+  padding: clamp(28px, 4vw, 54px);
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.055)),
+    rgba(10, 12, 20, .72);
+  box-shadow: 0 40px 140px rgba(0, 0, 0, .56);
+  backdrop-filter: blur(26px) saturate(150%);
+  -webkit-backdrop-filter: blur(26px) saturate(150%);
+  transform: translateY(22px) scale(.985);
+  transition: transform .32s cubic-bezier(.2,.9,.2,1);
+}
+
+.reader-modal.is-open .reader-panel {
+  transform: none;
+}
+
+body:not(.dark) .reader-panel {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.72), rgba(255,255,255,.36)),
+    rgba(255, 247, 243, .76);
+}
+
+.reader-close {
+  position: sticky;
+  float: right;
+  top: 0;
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.10);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 1.35rem;
+}
+
+.reader-kicker {
+  color: var(--gold);
+  font-size: .78rem;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+}
+
+.reader-panel h2 {
+  margin: 10px 48px 10px 0;
+  font-size: clamp(2rem, 5vw, 4.6rem);
+  line-height: 1.05;
+  letter-spacing: -.055em;
+}
+
+.reader-meta {
+  color: var(--muted);
+  margin: 0 0 16px;
+}
+
+.reader-body {
+  margin-top: 26px;
+  color: var(--text);
+  font-size: clamp(.98rem, 1.5vw, 1.08rem);
+  line-height: 2.05;
+}
+
+.reader-body p {
+  margin: 0;
+}
+
+.reader-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+body.reader-open {
+  overflow: hidden;
+}
+
+body.sub-page {
+  padding-bottom: 132px;
+}
+
+@media (max-width: 700px) {
+  .mega-title {
+    font-size: clamp(2.65rem, 12.5vw, 4.35rem);
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+    gap: 8px;
+  }
+
+  .mega-title span {
+    white-space: nowrap;
+  }
+
+  .nebula-card,
+  .nebula-card:nth-child(n) {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 16px 16px 16px 18px;
+  }
+
+  .nebula-card small {
+    order: 0;
+  }
+
+  .reader-modal {
+    padding: 12px;
+  }
+
+  .reader-panel {
+    max-height: 84vh;
+    border-radius: 24px;
+    padding: 24px 18px;
+  }
+
+  .reader-panel h2 {
+    margin-right: 42px;
+  }
+}
+
+.fragment-list {
+  grid-template-columns: 1fr;
+  width: min(920px, 100%);
+  margin: 0 auto;
+}
+
+.fragment-list .library-card {
+  min-height: 0;
+  padding: 18px 20px;
+  border-radius: 22px;
+}
+
+.fragment-list .library-card small {
+  display: block;
+  margin-bottom: 10px;
+}
