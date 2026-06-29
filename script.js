@@ -1,12 +1,148 @@
-
 (() => {
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => Array.from(root.querySelectorAll(s));
+  const DATA = window.SITE_CONTENT || { playlist: [], letters: [], replies: [], fragments: [] };
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches || window.innerWidth <= 820;
   const isHomePage = document.body.classList.contains('home-page');
-  const assetPrefix = isHomePage ? '' : '../';
 
+  function plainText(html) {
+    const div = document.createElement('div');
+    div.innerHTML = html || '';
+    return div.textContent.replace(/\s+/g, ' ').trim();
+  }
+  function excerpt(html, n=170) {
+    const s = plainText(html);
+    return s.length > n ? s.slice(0, n) + '…' : s;
+  }
+  function esc(s) {
+    return String(s ?? '').replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+  }
+  function getCollection(type) {
+    if (type === 'letters') return DATA.letters || [];
+    if (type === 'replies') return DATA.replies || [];
+    if (type === 'fragments') return DATA.fragments || [];
+    return [];
+  }
+  function getItem(type, id) {
+    return getCollection(type).find(item => item.id === id);
+  }
+  function articleHref(type, id) {
+    return `article.html?type=${encodeURIComponent(type)}&id=${encodeURIComponent(id)}`;
+  }
+  function archiveHref(type) {
+    return `archive.html?type=${encodeURIComponent(type)}`;
+  }
+  function labelFor(type) {
+    return type === 'letters' ? 'Letter Archive' : type === 'replies' ? 'Incoming Transmission' : 'Fragment Archive';
+  }
+
+  function renderHomeContent() {
+    const lettersBox = $('#lettersPreview');
+    if (lettersBox) {
+      lettersBox.innerHTML = (DATA.letters || []).slice(0, 8).map(item => `
+        <a class="timeline-node tilt-card" href="${articleHref('letters', item.id)}" data-type="letters" data-id="${esc(item.id)}" data-tilt>
+          <span class="node-date">${esc(item.date || item.meta || '')}</span>
+          <strong>${esc(item.title)}</strong>
+          <p>${esc(excerpt(item.body, 190))}</p>
+          <span class="node-tags">${(item.tags || []).map(t => `<span>${esc(t)}</span>`).join('')}</span>
+        </a>`).join('') || '<p class="empty-state">还没有信件。</p>';
+    }
+
+    const fragmentsBox = $('#fragmentsPreview');
+    if (fragmentsBox) {
+      fragmentsBox.innerHTML = (DATA.fragments || []).slice(0, 10).map(item => `
+        <article class="nebula-card tilt-card" data-tilt>
+          <div class="quote-text">${item.body || ''}</div>
+          <small>${esc(item.date || '')}</small>
+        </article>`).join('') || '<p class="empty-state">还没有碎碎念。</p>';
+    }
+
+    const repliesBox = $('#repliesPreview');
+    if (repliesBox) {
+      repliesBox.innerHTML = (DATA.replies || []).slice(0, 4).map(item => `
+        <a class="transmission-card tilt-card" href="${articleHref('replies', item.id)}" data-type="replies" data-id="${esc(item.id)}" data-tilt>
+          <span class="signal-line"></span>
+          <small>${esc(item.meta || item.date || '')}</small>
+          <strong>${esc(item.title)}</strong>
+          <p>${esc(excerpt(item.body, 190))}</p>
+        </a>`).join('') || '<p class="empty-state">还没有回信。</p>';
+    }
+  }
+
+  function renderArchivePage() {
+    if (!document.body.classList.contains('archive-dynamic-page')) return;
+    const params = new URLSearchParams(location.search);
+    const type = params.get('type') || 'letters';
+    const list = getCollection(type);
+    const heroEyebrow = $('#archiveEyebrow');
+    const heroTitle = $('#archiveTitle');
+    const heroDesc = $('#archiveDesc');
+    const grid = $('#archiveGrid');
+    const back = $('#archiveBack');
+    if (back) back.href = 'index.html#' + (type === 'letters' ? 'letters' : type === 'replies' ? 'replies' : 'fragments');
+
+    const titleMap = {
+      letters: ['Archive / Letters', '全部信件', '每一次想你，都被收进这里。'],
+      replies: ['Archive / Replies', '全部回信', '从另一颗星球传来的讯号。'],
+      fragments: ['Archive / Fragments', '全部碎碎念', '书、歌、游戏和一些突然落下来的心情。']
+    };
+    const [ey, title, desc] = titleMap[type] || titleMap.letters;
+    if (heroEyebrow) heroEyebrow.textContent = ey;
+    if (heroTitle) heroTitle.textContent = title;
+    if (heroDesc) heroDesc.textContent = desc;
+    document.title = `${title} · VEGALTAiR`;
+
+    if (!grid) return;
+    if (type === 'fragments') {
+      grid.classList.add('fragment-list');
+      grid.innerHTML = list.map(item => `
+        <article class="library-card fragment-library tilt-card" data-tilt>
+          <small>${esc(item.date || '')}</small>
+          <div class="quote-text">${item.body || ''}</div>
+        </article>`).join('') || '<p class="empty-state">还没有内容。</p>';
+    } else {
+      grid.classList.remove('fragment-list');
+      grid.innerHTML = list.map(item => `
+        <a class="library-card tilt-card" href="${articleHref(type, item.id)}" data-type="${esc(type)}" data-id="${esc(item.id)}" data-tilt>
+          <small>${esc(item.date || item.meta || '')}</small>
+          <h2>${esc(item.title)}</h2>
+          <p>${esc(excerpt(item.body, 180))}</p>
+          ${(item.tags && item.tags.length) ? `<div class="tag-row">${item.tags.map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''}
+        </a>`).join('') || '<p class="empty-state">还没有内容。</p>';
+    }
+  }
+
+  function renderArticlePage() {
+    if (!document.body.classList.contains('article-dynamic-page')) return;
+    const params = new URLSearchParams(location.search);
+    const type = params.get('type') || 'letters';
+    const id = params.get('id') || '';
+    const item = getItem(type, id) || getCollection(type)[0];
+    const back = $('#articleBack');
+    if (back) {
+      back.href = archiveHref(type);
+      back.textContent = type === 'replies' ? '← 返回回信档案' : type === 'fragments' ? '← 返回碎片档案' : '← 返回信件档案';
+    }
+    if (!item) {
+      $('#articleTitle').textContent = '没有找到这篇内容';
+      $('#articleBody').innerHTML = '<p>请回到首页重新打开。</p>';
+      return;
+    }
+    document.title = `${item.title || '阅读'} · VEGALTAiR`;
+    const shell = $('.article-shell');
+    if (shell) shell.classList.toggle('reply-article', type === 'replies');
+    $('#articleKicker').textContent = item.kicker || labelFor(type);
+    $('#articleTitle').textContent = item.title || '未命名';
+    $('#articleMeta').textContent = item.meta || item.date || '';
+    const tagRow = $('#articleTags');
+    if (tagRow) tagRow.innerHTML = (item.tags || []).map(t => `<span>${esc(t)}</span>`).join('');
+    $('#articleBody').innerHTML = type === 'fragments' ? `<div class="quote-text">${item.body || ''}</div>` : (item.body || '<p>这里还没有正文。</p>');
+  }
+
+  renderHomeContent();
+  renderArchivePage();
+  renderArticlePage();
 
   function rebuildSakuraPetals() {
     const layer = document.getElementById('sakuraPetalLayer');
@@ -48,7 +184,6 @@
   const loader = $('#openingLoader');
   if (loader) setTimeout(() => loader.classList.add('is-hidden'), isCoarsePointer ? 720 : 1150);
 
-  const cursorAura = $('#cursorAura');
   window.addEventListener('pointermove', (e) => {
     document.documentElement.style.setProperty('--mx', e.clientX + 'px');
     document.documentElement.style.setProperty('--my', e.clientY + 'px');
@@ -89,8 +224,11 @@
   }, {threshold:.45});
   sections.forEach(s => sio.observe(s));
 
-  if (!reduced && !isCoarsePointer) {
-    $$('[data-tilt]').forEach(card => {
+  function setupTiltAndMagnetics(root=document) {
+    if (reduced || isCoarsePointer) return;
+    $$('[data-tilt]', root).forEach(card => {
+      if (card.dataset.tiltReady === 'yes') return;
+      card.dataset.tiltReady = 'yes';
       card.addEventListener('pointermove', (e) => {
         const r = card.getBoundingClientRect();
         const x = (e.clientX - r.left) / r.width - .5;
@@ -99,8 +237,9 @@
       });
       card.addEventListener('pointerleave', () => { card.style.transform = ''; });
     });
-
-    $$('.magnetic').forEach(btn => {
+    $$('.magnetic', root).forEach(btn => {
+      if (btn.dataset.magneticReady === 'yes') return;
+      btn.dataset.magneticReady = 'yes';
       btn.addEventListener('pointermove', (e) => {
         const r = btn.getBoundingClientRect();
         const x = e.clientX - (r.left + r.width/2);
@@ -110,6 +249,7 @@
       btn.addEventListener('pointerleave', () => btn.style.transform = '');
     });
   }
+  setupTiltAndMagnetics();
 
   const togetherStart = new Date('2026-03-20T23:22:00-05:00');
   const knownStart = new Date('2026-03-05T00:00:00-05:00');
@@ -127,11 +267,9 @@
   }
   updateTime(); setInterval(updateTime, 1000);
 
-  const playlist = [
-    { title: 'η', note: 'by α·Pav', src: assetPrefix + 'music/bgm.mp3' },
-    { title: 'Gotta have you', note: 'by The Weepies', src: assetPrefix + 'music/bgm2.mp3' },
-    { title: 'Little bit better', note: 'by Caleb Hearn/ROSIE', src: assetPrefix + 'music/bgm3.mp3' }
-  ];
+  const playlist = (DATA.playlist && DATA.playlist.length ? DATA.playlist : [
+    { title: 'η', note: 'by α·Pav', src: 'music/bgm.mp3' }
+  ]);
   const bgm = $('#bgm'), dock = $('#musicDock'), discBtn = $('#discBtn'), toggle = $('#togglePlayBtn'), prev = $('#prevTrackBtn'), next = $('#nextTrackBtn'), title = $('#trackTitle'), note = $('#trackNote');
   let current = Number(localStorage.getItem('currentTrackIndex'));
   if (!Number.isInteger(current) || current < 0 || current >= playlist.length) current = 0;
@@ -141,7 +279,7 @@
     if (!bgm) return;
     const t = playlist[current];
     if (title) title.textContent = t.title;
-    if (note) note.textContent = `第 ${current+1} 首 / 共 ${playlist.length} 首 · ${t.note}`;
+    if (note) note.textContent = `第 ${current+1} 首 / 共 ${playlist.length} 首 · ${t.note || ''}`;
     if (toggle) toggle.textContent = bgm.paused ? 'Play' : 'Pause';
     dock?.classList.toggle('is-playing', !bgm.paused);
     document.body.classList.toggle('music-active', !bgm.paused);
@@ -152,7 +290,6 @@
     localStorage.setItem('musicCurrentTime', String(Math.max(0, bgm.currentTime || 0)));
     localStorage.setItem('musicWasPlaying', bgm.paused ? 'no' : 'yes');
   }
-
   function loadTrack(i, play=false, resumeTime=0) {
     if (!bgm) return;
     current = (i + playlist.length) % playlist.length;
@@ -161,9 +298,7 @@
     bgm.volume = .62;
     bgm.load();
     bgm.addEventListener('loadedmetadata', () => {
-      if (resumeTime > 0 && Number.isFinite(resumeTime) && resumeTime < (bgm.duration || Infinity)) {
-        bgm.currentTime = resumeTime;
-      }
+      if (resumeTime > 0 && Number.isFinite(resumeTime) && resumeTime < (bgm.duration || Infinity)) bgm.currentTime = resumeTime;
     }, { once: true });
     updateMusicUI();
     if (play) bgm.play().catch(console.warn).finally(updateMusicUI);
@@ -177,7 +312,6 @@
   bgm?.addEventListener('pause', () => { updateMusicUI(); rememberMusicState(); });
   bgm?.addEventListener('timeupdate', () => { if (Math.floor((bgm.currentTime || 0) % 3) === 0) rememberMusicState(); });
   window.addEventListener('beforeunload', rememberMusicState);
-
   loadTrack(current, shouldResumeMusic, savedMusicTime);
 
   const readerModal = $('#readerModal');
@@ -188,7 +322,6 @@
   const readerBody = $('#readerBody');
   const readerFullLink = $('#readerFullLink');
   let lastFocusedReaderLink = null;
-
   function openReader() {
     if (!readerModal) return;
     readerModal.classList.add('is-open');
@@ -197,7 +330,6 @@
     const closeBtn = readerModal.querySelector('[data-reader-close]');
     closeBtn?.focus({ preventScroll: true });
   }
-
   function closeReader() {
     if (!readerModal) return;
     readerModal.classList.remove('is-open');
@@ -205,45 +337,18 @@
     document.body.classList.remove('reader-open');
     lastFocusedReaderLink?.focus?.({ preventScroll: true });
   }
-
-  function normalizeArticleUrl(url) {
-    try { return new URL(url, location.href); } catch { return null; }
-  }
-
-  async function loadArticleIntoReader(url, sourceLabel) {
-    const targetUrl = normalizeArticleUrl(url);
-    if (!targetUrl || !readerModal) return false;
-    if (readerTitle) readerTitle.textContent = '正在打开';
-    if (readerMeta) readerMeta.textContent = '';
-    if (readerTags) readerTags.innerHTML = '';
-    if (readerBody) readerBody.innerHTML = '<p>正在从星轨里取出这封信……</p>';
-    if (readerFullLink) readerFullLink.href = targetUrl.href;
-    if (readerKicker) readerKicker.textContent = sourceLabel || 'Archive';
+  function loadArticleIntoReader(type, id) {
+    const item = getItem(type, id);
+    if (!item || !readerModal) return false;
+    if (readerTitle) readerTitle.textContent = item.title || '一封信';
+    if (readerMeta) readerMeta.textContent = item.meta || item.date || '';
+    if (readerKicker) readerKicker.textContent = item.kicker || labelFor(type);
+    if (readerTags) readerTags.innerHTML = (item.tags || []).map(t => `<span>${esc(t)}</span>`).join('');
+    if (readerBody) readerBody.innerHTML = type === 'fragments' ? `<div class="quote-text">${item.body || ''}</div>` : (item.body || '<p>这里还没有正文。</p>');
+    if (readerFullLink) readerFullLink.href = articleHref(type, id);
     openReader();
-    try {
-      const res = await fetch(targetUrl.href, { cache: 'no-cache' });
-      if (!res.ok) throw new Error('Fetch failed');
-      const html = await res.text();
-      const doc = new DOMParser().parseFromString(html, 'text/html');
-      const shell = doc.querySelector('.article-shell');
-      if (!shell) throw new Error('Article shell not found');
-      const titleText = shell.querySelector('h1')?.textContent?.trim() || '一封信';
-      const metaText = shell.querySelector('.article-meta')?.textContent?.trim() || '';
-      const kickerText = shell.querySelector('.article-kicker')?.textContent?.trim() || sourceLabel || 'Archive';
-      const tags = shell.querySelector('.tag-row')?.innerHTML || '';
-      const body = shell.querySelector('.article-body')?.innerHTML || '<p>这封信暂时没有正文。</p>';
-      if (readerTitle) readerTitle.textContent = titleText;
-      if (readerMeta) readerMeta.textContent = metaText;
-      if (readerKicker) readerKicker.textContent = kickerText;
-      if (readerTags) readerTags.innerHTML = tags;
-      if (readerBody) readerBody.innerHTML = body;
-    } catch (err) {
-      console.warn(err);
-      if (readerBody) readerBody.innerHTML = '<p>这封信没有成功在当前页面打开。你可以点下面的“打开完整页面”。</p>';
-    }
     return true;
   }
-
   if (readerModal) {
     document.addEventListener('click', (e) => {
       const closeTrigger = e.target.closest('[data-reader-close]');
@@ -251,12 +356,15 @@
       const link = e.target.closest('a[href]');
       if (!link || link.target === '_blank' || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const href = link.getAttribute('href') || '';
-      const isArticle = /^(letters|replies)\/(letter|reply)-\d+\.html$/.test(href);
-      if (!isHomePage || !isArticle) return;
+      const url = new URL(href, location.href);
+      if (!isHomePage || !url.pathname.endsWith('/article.html')) return;
+      const type = url.searchParams.get('type');
+      const id = url.searchParams.get('id');
+      if (!type || !id || type === 'fragments') return;
       e.preventDefault();
       rememberMusicState();
       lastFocusedReaderLink = link;
-      loadArticleIntoReader(href, href.startsWith('letters/') ? 'Letter Archive' : 'Incoming Transmission');
+      loadArticleIntoReader(type, id);
     });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && readerModal.classList.contains('is-open')) closeReader();
@@ -287,7 +395,7 @@
       for(const p of particles){
         const mx = mouse.x*devicePixelRatio, my = mouse.y*devicePixelRatio;
         const dx=p.x-mx, dy=p.y-my, dist=Math.hypot(dx,dy);
-        if(dist<150*devicePixelRatio){ p.x += dx/dist*1.2; p.y += dy/dist*1.2; }
+        if(dist<150*devicePixelRatio && dist>0){ p.x += dx/dist*1.2; p.y += dy/dist*1.2; }
         p.x += p.vx*p.z*(active?2.1:1); p.y += p.vy*p.z*(active?2.1:1);
         if(p.x<0) p.x=w; if(p.x>w) p.x=0; if(p.y<0) p.y=h; if(p.y>h) p.y=0;
         const a = (dark ? .55 : .22) + Math.sin(t*.002+p.tw)*.18;

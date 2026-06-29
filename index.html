@@ -1,361 +1,161 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Love Universe V4 · VEGALTAiR</title>
-  <meta name="description" content="我们的宇宙里保存的一封信。" />
-  <link rel="stylesheet" href="style.css?v=4.3-sakura-redone" />
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Love Universe V4 · VEGALTAiR</title>
+<meta content="我们的宇宙里保存的一封信。" name="description"/>
+<link href="style.css?v=4.4-single-source" rel="stylesheet"/>
 </head>
 <body class="home-page">
-  
-<canvas class="space-canvas" id="spaceCanvas" aria-hidden="true"></canvas>
-<div class="sakura-day-scene" aria-hidden="true">
-  <div class="sakura-day-glow"></div>
-  <div class="sakura-day-branch branch-a"></div>
-  <div class="sakura-day-branch branch-b"></div>
-  <div class="sakura-petal-layer" id="sakuraPetalLayer"></div>
+<canvas aria-hidden="true" class="space-canvas" id="spaceCanvas"></canvas>
+<div aria-hidden="true" class="sakura-day-scene">
+<div class="sakura-day-glow"></div>
+<div class="sakura-day-branch branch-a"></div>
+<div class="sakura-day-branch branch-b"></div>
+<div class="sakura-petal-layer" id="sakuraPetalLayer"></div>
 </div>
-
-<div class="ambient-orb orb-one" aria-hidden="true"></div>
-<div class="ambient-orb orb-two" aria-hidden="true"></div>
-<div class="ambient-orb orb-three" aria-hidden="true"></div>
-<div class="cursor-aura" id="cursorAura" aria-hidden="true"></div>
-
-  
+<div aria-hidden="true" class="ambient-orb orb-one"></div>
+<div aria-hidden="true" class="ambient-orb orb-two"></div>
+<div aria-hidden="true" class="ambient-orb orb-three"></div>
+<div aria-hidden="true" class="cursor-aura" id="cursorAura"></div>
 <div class="opening-loader" id="openingLoader">
-  <div class="loader-ring"></div>
-  <p>Welcome to our little universe</p>
+<div class="loader-ring"></div>
+<p>Welcome to our little universe</p>
 </div>
-
-
 <header class="site-header" id="siteHeader">
-  <a class="brand" href="index.html" aria-label="回到首页">
-    <span class="brand-mark">∞</span><span>VEGALTAiR</span>
-  </a>
-  <nav class="top-nav" aria-label="主导航">
-    <a href="index.html#time">时间</a>
-    <a href="index.html#letters">信件</a>
-    <a href="index.html#fragments">碎片</a>
-    <a href="index.html#replies">回信</a>
-    <button class="theme-btn" id="themeBtn" type="button">夜晚模式</button>
-  </nav>
+<a aria-label="回到首页" class="brand" href="index.html">
+<span class="brand-mark">∞</span><span>VEGALTAiR</span>
+</a>
+<nav aria-label="主导航" class="top-nav">
+<a href="index.html#time">时间</a>
+<a href="index.html#letters">信件</a>
+<a href="index.html#fragments">碎片</a>
+<a href="index.html#replies">回信</a>
+<button class="theme-btn" id="themeBtn" type="button">夜晚模式</button>
+</nav>
 </header>
-
-
-<aside class="chapter-rail" aria-label="章节进度">
-  <a href="#hero" data-rail="hero"><span></span>入口</a>
-  <a href="#time" data-rail="time"><span></span>时间</a>
-  <a href="#letters" data-rail="letters"><span></span>信件</a>
-  <a href="#fragments" data-rail="fragments"><span></span>碎片</a>
-  <a href="#replies" data-rail="replies"><span></span>回信</a>
+<aside aria-label="章节进度" class="chapter-rail">
+<a data-rail="hero" href="#hero"><span></span>入口</a>
+<a data-rail="time" href="#time"><span></span>时间</a>
+<a data-rail="letters" href="#letters"><span></span>信件</a>
+<a data-rail="fragments" href="#fragments"><span></span>碎片</a>
+<a data-rail="replies" href="#replies"><span></span>回信</a>
 </aside>
-
 <main>
-  <section class="stage hero-stage snap-section" id="hero" data-section="hero">
-    <div class="hero-copy reveal">
-      <p class="eyebrow">To：杜叶</p>
-      <h1 class="mega-title"><span>欢迎来到</span><span>我们的小世界</span></h1>
-      <p class="hero-subtitle">这里不再是一页普通情书，而是一座只属于我们的宇宙。时间、信件、歌和回信，都被收进不同的星轨里。</p>
-      <div class="hero-actions">
-        <a class="action primary magnetic" href="#time">进入宇宙</a>
-        <a class="action ghost magnetic" href="letters/index.html">打开信件档案</a>
-      </div>
-    </div>
-    <div class="hero-visual reveal delay-1" data-tilt>
-      <div class="planet-core">
-        <span class="orbit orbit-a"></span>
-        <span class="orbit orbit-b"></span>
-        <span class="orbit orbit-c"></span>
-        <span class="planet-label">LOVE<br />UNIVERSE</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="stage time-stage snap-section" id="time" data-section="time">
-    <div class="section-heading reveal">
-      <span>Chapter 01</span>
-      <h2>我们的时间核心</h2>
-      <p>从 2026.03.20 23:22 开始，时间也开始替我记录爱你这件事。</p>
-    </div>
-    <div class="time-core reveal delay-1" data-tilt>
-      <div class="time-orbit"><span></span><span></span><span></span></div>
-      <div class="time-main">
-        <span id="coreDays">0</span>
-        <small>天</small>
-      </div>
-      <div class="time-dials">
-        <div><strong id="coreHours">0</strong><small>小时</small></div>
-        <div><strong id="coreMinutes">0</strong><small>分钟</small></div>
-        <div><strong id="coreSeconds">0</strong><small>秒</small></div>
-      </div>
-      <p id="coreSentence">我们的故事正在继续。</p>
-    </div>
-  </section>
-
-  <section class="stage archive-stage snap-section" id="letters" data-section="letters">
-    <div class="section-heading reveal">
-      <span>Chapter 02</span>
-      <h2>写给你的信件轨道</h2>
-      <p>主页只留下轨迹。完整信件被放进子目录，像一份份可以打开的星际档案。</p>
-    </div>
-    <div class="timeline-shell reveal delay-1">
-      <div class="timeline-line"></div>
-      
-<a class="timeline-node tilt-card" href="letters/letter-01.html" data-tilt>
-  <span class="node-date">2026.06.21</span>
-  <strong>我真的差一点失去你</strong>
-  <p>宝宝：
-              这件事过去之后，我心里一直还有一点后怕。
-              不是因为我们还在吵，也不是因为你还没有原谅我，而是因为我后来慢慢意识到，我真的差一点就把你弄丢了。
-              一开始我一直在解释。我说我心里坦荡，说我没有想瞒你，说我既然敢给你看聊天记录，就说明我…</p>
-  <span class="node-tags"><span>吵架</span><span>对不起</span><span>我爱你</span></span>
-</a>
-
-<a class="timeline-node tilt-card" href="letters/letter-02.html" data-tilt>
-  <span class="node-date">2026.06.15</span>
-  <strong>认识你的第一百天</strong>
-  <p>宝宝，昨天是我们认识的第一百天。 一百天听起来好像不算特别长，可是回头看，又觉得我们已经一起经历了好多好多事情。我们隔着很远的距离，有时差，有想念，有见不到面的委屈，也有过争吵、难过和互相不理解的时候。可是很神奇的是，走到今天，我最清楚的感觉还是：我很庆幸遇见你。 这一百天里，我慢慢认识你，也慢慢被你改变。你让我第一次…</p>
-  <span class="node-tags"><span>百天纪念</span><span>谢谢</span><span>我爱你</span></span>
-</a>
-
-<a class="timeline-node tilt-card" href="letters/letter-03.html" data-tilt>
-  <span class="node-date">2026.06.03</span>
-  <strong>谢谢你还愿意继续爱我</strong>
-  <p>宝宝： 今天我们聊了很多，我也想了很多。 我好像慢慢明白了，其实很多时候你不是想和我吵架，也不是觉得我们不合适，更不是不想继续走下去。你只是很难受，很想我，很需要我陪你。你生气的时候，很多时候也不是想把事情闹大，而是希望那个当下的问题可以被看见、被解决，希望我能马上意识到：你不是在无理取闹，你是在难过。 以前我没有完全…</p>
-  <span class="node-tags"><span>吵架</span><span>谢谢</span><span>我爱你</span></span>
-</a>
-
-<a class="timeline-node tilt-card" href="letters/letter-04.html" data-tilt>
-  <span class="node-date">2026.05.31</span>
-  <strong>万恶淫为首，论迹不论心，论心世上少完人</strong>
-  <p>我想了很久，还是想认真跟你说说我的感受。 可能是我这个人没谈过恋爱，或者我的性格缺陷，让我没办法自如地处理这种情绪。 先说最重要的，我爱你，这一点没有变。我也没有想要放弃你，更不是不在乎你。可我最近真的有一点撑不住了。 我知道你没有安全感，知道你会害怕，知道你会因为距离、时差、见不到面、不能一直在一起而难过。我理解这些…</p>
-  <span class="node-tags"><span>压力</span><span>情绪</span><span>谢谢</span></span>
-</a>
-
-<a class="timeline-node tilt-card" href="letters/letter-05.html" data-tilt>
-  <span class="node-date">2026.05.26</span>
-  <strong>我想陪着你在每一刻</strong>
-  <p>宝宝，你说你难过的时候想自己静一静，不想理我，让我去做自己的事。 我们隔着这么远，有时差，不能想见就见，你会因为这些伤感，我真的很理解。你想安静一会儿也没关系，我不会逼你马上说话，也不会要求你立刻变开心。可是我希望你不要因为怕我担心，就把我完全推开。 我们是在谈恋爱呀。你难过的时候，我不可能真的安心去做自己的事情。不是…</p>
-  <span class="node-tags"><span>距离</span><span>陪伴</span><span>爱你</span></span>
-</a>
-
-<a class="timeline-node tilt-card" href="letters/letter-06.html" data-tilt>
-  <span class="node-date">2026.05.24</span>
-  <strong>我也想和你过细水长流的日子</strong>
-  <p>宝宝： 我把你写给我的这些话看了好几遍，越看越觉得心里软软的。你总说自己不太会表达感情，可是在我看来，你写的每一句都很真实，也很可爱。
-              你说你像一个在我旁边絮絮叨叨的孩子，想到什么就说什么，分享今天遇到了什么人、什么事、你对什么的看法。可是宝宝，我很喜欢这样的你。因为这不是吵闹，也不是没有重…</p>
-  <span class="node-tags"><span>平淡</span><span>未来</span><span>会的</span></span>
-</a>
-
-<a class="timeline-node tilt-card" href="letters/letter-07.html" data-tilt>
-  <span class="node-date">2026.05.21</span>
-  <strong>就这样搞砸所有事情</strong>
-  <p>宝宝今天的事情之后，我一直很难受，也一直在想，我是不是又没有把你照顾好。 你想看我的抖音，想看我的 QQ，也许并不是单纯想看一个账号，而是想更了解我一点，想知道我平时看什么、和谁说话、生活里有哪些你还不知道的部分。可是我当时第一反应是害怕，是抗拒。我承认这里面有我的私心，我会觉得那是我的一点私人空间，会下意识想藏起来，…</p>
-  <span class="node-tags"><span>坦诚</span><span>距离</span><span>会吗</span></span>
-</a>
-
-<a class="timeline-node tilt-card" href="letters/letter-08.html" data-tilt>
-  <span class="node-date">2026.05.14</span>
-  <strong>我不是随口说说，我是在认真想我们的以后</strong>
-  <p>宝宝， 最近我总是会和你说，要不要结婚呀，等我回去就结婚呀。
-              你一开始会很积极地回应我，可后来当你感觉到我好像不只是随口说说，而是真的有一点认真在想这件事的时候，你反而有一点抵触了。
-              你说你还小，前面还有很长的路要走；你也会问我，为什么第一次谈恋爱就好像认定了你；…</p>
-  <span class="node-tags"><span>婚姻</span><span>包容</span><span>爱</span></span>
-</a>
-    </div>
-    <div class="center-action reveal">
-      <a class="action ghost magnetic" href="letters/index.html">查看全部信件</a>
-    </div>
-  </section>
-
-  <section class="stage nebula-stage snap-section" id="fragments" data-section="fragments">
-    <div class="section-heading reveal">
-      <span>Chapter 03</span>
-      <h2>碎碎念</h2>
-      <p>还是保留列表式的阅读感，只是让它更轻、更高级，像一行行落在宇宙里的旁白。</p>
-    </div>
-    <div class="nebula-grid reveal delay-1">
-      
-<article class="nebula-card tilt-card" data-tilt>
-  <div class="quote-text">
-          Will you still love me, when I am no longer young and beautiful.<br/>
-          你是否爱我如初，当我年华老去，容颜不再？<br/>
-          Will you still love me, when I got nothing but my aching soul.<br/>
-          你是否爱我如初，当我一无所有，遍体鳞伤？<br/>
-          I know you will.<br/>
-          我知道你会，我知道你的爱经久绵长。
-          
+<section class="stage hero-stage snap-section" data-section="hero" id="hero">
+<div class="hero-copy reveal">
+<p class="eyebrow">To：杜叶</p>
+<h1 class="mega-title"><span>欢迎来到</span><span>我们的小世界</span></h1>
+<p class="hero-subtitle">这里不再是一页普通情书，而是一座只属于我们的宇宙。时间、信件、歌和回信，都被收进不同的星轨里。</p>
+<div class="hero-actions">
+<a class="action primary magnetic" href="#time">进入宇宙</a>
+<a class="action ghost magnetic" href="archive.html?type=letters">打开信件档案</a>
 </div>
-  <small>2026.06.25</small>
-</article>
-
-<article class="nebula-card tilt-card" data-tilt>
-  <div class="quote-text">
-          我们一起解决问题，我不能失去你。
-          
 </div>
-  <small>2026.06.20</small>
-</article>
-
-<article class="nebula-card tilt-card" data-tilt>
-  <div class="quote-text">
-          漫长一生，唯有爱抵岁月漫长。-来自宝宝
-          
+<div class="hero-visual reveal delay-1" data-tilt="">
+<div class="planet-core">
+<span class="orbit orbit-a"></span>
+<span class="orbit orbit-b"></span>
+<span class="orbit orbit-c"></span>
+<span class="planet-label">LOVE<br/>UNIVERSE</span>
 </div>
-  <small>2026.06.18</small>
-</article>
-
-<article class="nebula-card tilt-card" data-tilt>
-  <div class="quote-text">
-          我可以跟在你身后，像影子追着光梦游。我可以等在这路口，不管你会不会经过。-追光者
-          
 </div>
-  <small>2026.06.15</small>
-</article>
-
-<article class="nebula-card tilt-card" data-tilt>
-  <div class="quote-text">
-          And I know that the sun will swallow the only earth we will ever have. And I am in love with you. Sorry. <br/>
-          即便我知道太阳最终会吞没我们唯一的地球，但我还是要爱你。对不起。-The Fault in Our Stars
-          
+</section>
+<section class="stage time-stage snap-section" data-section="time" id="time">
+<div class="section-heading reveal">
+<span>Chapter 01</span>
+<h2>我们的时间核心</h2>
+<p>从 2026.03.20 23:22 开始，时间也开始替我记录爱你这件事。</p>
 </div>
-  <small>2026.06.12</small>
-</article>
-
-<article class="nebula-card tilt-card" data-tilt>
-  <div class="quote-text">
-          宇宙的尽头是烤棉花糖。-Outer Wilds
-          
+<div class="time-core reveal delay-1" data-tilt="">
+<div class="time-orbit"><span></span><span></span><span></span></div>
+<div class="time-main">
+<span id="coreDays">0</span>
+<small>天</small>
 </div>
-  <small>2026.06.05</small>
-</article>
-
-<article class="nebula-card tilt-card" data-tilt>
-  <div class="quote-text">
-          如果有明天，祝福你亲爱的。-老男孩
-          
+<div class="time-dials">
+<div><strong id="coreHours">0</strong><small>小时</small></div>
+<div><strong id="coreMinutes">0</strong><small>分钟</small></div>
+<div><strong id="coreSeconds">0</strong><small>秒</small></div>
 </div>
-  <small>2026.05.31</small>
-</article>
-
-<article class="nebula-card tilt-card" data-tilt>
-  <div class="quote-text">
-          我愿意安静地或在每个有你的角落。如果生活还有什么会让你难过，别怕让我留在你身边，都陪你度过。-让我留在你身边
-          
+<p id="coreSentence">我们的故事正在继续。</p>
 </div>
-  <small>2026.05.28</small>
-</article>
-
-<article class="nebula-card tilt-card" data-tilt>
-  <div class="quote-text">
-          But I warn you, I'll break your heart.<br/>
-          Already broken. -Picky blinders
-          
+</section>
+<section class="stage archive-stage snap-section" data-section="letters" id="letters">
+<div class="section-heading reveal">
+<span>Chapter 02</span>
+<h2>写给你的信件轨道</h2>
+<p>主页只留下轨迹。完整内容统一从 content.js 读取，改一次文字，缩略图和阅读页都会同步更新。</p>
 </div>
-  <small>2026.05.27</small>
-</article>
-
-<article class="nebula-card tilt-card" data-tilt>
-  <div class="quote-text">
-          To fear love is to fear life, and those who fear life are already three parts dead.<br/>
-          畏惧爱情就是畏惧生命。而畏惧生命的人，离死亡已不远了。-《Marriage and Morals》
-          
+<div class="timeline-shell reveal delay-1"><div class="timeline-line"></div><div class="timeline-preview-list" id="lettersPreview"></div></div>
+<div class="center-action reveal">
+<a class="action ghost magnetic" href="archive.html?type=letters">查看全部信件</a>
 </div>
-  <small>2026.05.26</small>
-</article>
-    </div>
-    <div class="center-action reveal">
-      <a class="action ghost magnetic" href="fragments/index.html">查看全部碎片</a>
-    </div>
-  </section>
-
-  <section class="stage reply-stage snap-section" id="replies" data-section="replies">
-    <div class="section-heading reveal">
-      <span>Chapter 04</span>
-      <h2>Incoming Transmission</h2>
-      <p>你的回信像从另一颗星球传来的讯号，我都会认真接收。</p>
-    </div>
-    <div class="transmission-grid reveal delay-1">
-      
-<a class="transmission-card tilt-card" href="replies/reply-01.html" data-tilt>
-  <span class="signal-line"></span>
-  <small>2026.05.24 / 在家</small>
-  <strong>给你写的小情书</strong>
-  <p>今天听你一直重复说说你会赚很多很多钱，会的肯定会的 我们会有的！ 但是我也想说宝宝不需要给自己那么大的压力，不用着急，慢慢来一点点的积累，也不需要你赚很多钱，够我们自己花就行，咱过好咱的好日子就好了呀，我更希望你开心幸福，每天都开心。
-                你说刚来美国那会可不适应了，我能理解，独自去到一个陌…</p>
-</a>
-
-<a class="transmission-card tilt-card" href="replies/reply-02.html" data-tilt>
-  <span class="signal-line"></span>
-  <small>2026.05.03 / 某个很安静的下午</small>
-  <strong>我爱你，我要我们永远在一起</strong>
-  <p>宝宝，你这会正在睡觉呢。我这边下午四点零四，我在看我弟钓鱼。风吹着，我突然很想给你写点什么。其实就是“我想你” 很想很想你。 首先我对我昨天的所作所为感到抱歉，不该这样的，是我自己的性格问题，导致你这么自责、是我太折磨人了，不该这样的，“我需要你”但你在忙，你要睡觉了你要打游戏我突然就不知道怎么办了。
-        …</p>
-</a>
-
-<a class="transmission-card tilt-card" href="replies/reply-03.html" data-tilt>
-  <span class="signal-line"></span>
-  <small>2026.04.28 / 在家</small>
-  <strong>给你的第一封回信</strong>
-  <p>嘻嘻我谈到博士，我真厉害啊！！！ 好了好了正经点，其实让我写点东西我还真不知道该写点什么，好久没写东西了。说实话其实我内心还是很纠结的，首先首先我很高兴啊哈哈哈哈，
-                很高兴上天赐予了宝贵的你给我，我庆幸我开心我兴奋，同时说实话我还是很忐忑，我觉得你太好了太完美了，这好的对于我来说有点不太…</p>
-</a>
-
-<a class="transmission-card tilt-card" href="replies/reply-04.html" data-tilt>
-  <span class="signal-line"></span>
-  <small>2026.03.26 / 在家</small>
-  <strong>我接受啦~</strong>
-  <p>说实话，我对谈恋爱没什么太大的信心。我不知道我能顺利的处理好这段关系，我是个很矛盾复杂的人，大多时候我遇到难解决的问题，努力一下解决不了就算了放弃。
-                很怕好好用心经营的东西被我搞砸，不知道一开始是出于什么心理去加你的哈哈。可能是因为些许好奇，没接触过，但是后来相处发现，你怪有趣的，小嘴一…</p>
-</a>
-    </div>
-    <div class="center-action reveal">
-      <a class="action ghost magnetic" href="replies/index.html">查看全部回信</a>
-    </div>
-  </section>
-
-  <section class="stage ending-stage snap-section" id="about" data-section="about">
-    <div class="ending-card reveal" data-tilt>
-      <span>Chapter 05 / Universe Edge</span>
-      <h2>这里是宇宙边缘</h2>
-      <p>宝宝，这里放着一些写给你的话。它们不一定完整，也不一定每次都有漂亮的开头和结尾。但它们都来自同一件事：我在某个时刻，很认真地想到了你。</p>
-      <strong>Wish I can be with you. Until eternity and universe edge.</strong>
-    </div>
-  </section>
+</section>
+<section class="stage nebula-stage snap-section" data-section="fragments" id="fragments">
+<div class="section-heading reveal">
+<span>Chapter 03</span>
+<h2>碎碎念</h2>
+<p>还是保留列表式的阅读感，只是让它更轻、更高级，像一行行落在宇宙里的旁白。</p>
+</div>
+<div class="nebula-grid reveal delay-1" id="fragmentsPreview"></div>
+<div class="center-action reveal">
+<a class="action ghost magnetic" href="archive.html?type=fragments">查看全部碎片</a>
+</div>
+</section>
+<section class="stage reply-stage snap-section" data-section="replies" id="replies">
+<div class="section-heading reveal">
+<span>Chapter 04</span>
+<h2>Incoming Transmission</h2>
+<p>你的回信像从另一颗星球传来的讯号，我都会认真接收。</p>
+</div>
+<div class="transmission-grid reveal delay-1" id="repliesPreview"></div>
+<div class="center-action reveal">
+<a class="action ghost magnetic" href="archive.html?type=replies">查看全部回信</a>
+</div>
+</section>
+<section class="stage ending-stage snap-section" data-section="about" id="about">
+<div class="ending-card reveal" data-tilt="">
+<span>Chapter 05 / Universe Edge</span>
+<h2>这里是宇宙边缘</h2>
+<p>宝宝，这里放着一些写给你的话。它们不一定完整，也不一定每次都有漂亮的开头和结尾。但它们都来自同一件事：我在某个时刻，很认真地想到了你。</p>
+<strong>Wish I can be with you. Until eternity and universe edge.</strong>
+</div>
+</section>
 </main>
-
-<div class="reader-modal" id="readerModal" aria-hidden="true">
-  <div class="reader-backdrop" data-reader-close></div>
-  <article class="reader-panel" role="dialog" aria-modal="true" aria-labelledby="readerTitle">
-    <button class="reader-close" type="button" data-reader-close aria-label="关闭文章">×</button>
-    <div class="reader-kicker" id="readerKicker">Archive</div>
-    <h2 id="readerTitle">正在打开</h2>
-    <p class="reader-meta" id="readerMeta"></p>
-    <div class="tag-row reader-tags" id="readerTags"></div>
-    <div class="reader-body" id="readerBody"></div>
-    <div class="reader-actions">
-      <a class="action ghost" id="readerFullLink" href="#">打开完整页面</a>
-      <button class="action primary" type="button" data-reader-close>继续听歌</button>
-    </div>
-  </article>
+<div aria-hidden="true" class="reader-modal" id="readerModal">
+<div class="reader-backdrop" data-reader-close=""></div>
+<article aria-labelledby="readerTitle" aria-modal="true" class="reader-panel" role="dialog">
+<button aria-label="关闭文章" class="reader-close" data-reader-close="" type="button">×</button>
+<div class="reader-kicker" id="readerKicker">Archive</div>
+<h2 id="readerTitle">正在打开</h2>
+<p class="reader-meta" id="readerMeta"></p>
+<div class="tag-row reader-tags" id="readerTags"></div>
+<div class="reader-body" id="readerBody"></div>
+<div class="reader-actions">
+<a class="action ghost" href="#" id="readerFullLink">打开独立阅读页</a>
+<button class="action primary" data-reader-close="" type="button">继续听歌</button>
 </div>
-
+</article>
+</div>
 <audio id="bgm" preload="auto"></audio>
-<div class="music-dock" id="musicDock" aria-label="音乐播放器">
-  <button class="disc" id="discBtn" type="button" aria-label="播放或暂停"><span></span></button>
-  <div class="music-info">
-    <strong id="trackTitle">η</strong>
-    <small id="trackNote">第 1 首 / 共 3 首</small>
-  </div>
-  <div class="music-bars" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
-  <div class="music-controls">
-    <button id="prevTrackBtn" type="button">Prev</button>
-    <button id="togglePlayBtn" type="button">Play</button>
-    <button id="nextTrackBtn" type="button">Next</button>
-  </div>
+<div aria-label="音乐播放器" class="music-dock" id="musicDock">
+<button aria-label="播放或暂停" class="disc" id="discBtn" type="button"><span></span></button>
+<div class="music-info">
+<strong id="trackTitle">η</strong>
+<small id="trackNote">第 1 首 / 共 3 首</small>
+</div>
+<div aria-hidden="true" class="music-bars"><span></span><span></span><span></span><span></span></div>
+<div class="music-controls">
+<button id="prevTrackBtn" type="button">Prev</button>
+<button id="togglePlayBtn" type="button">Play</button>
+<button id="nextTrackBtn" type="button">Next</button>
+</div>
 </div>
 
-  <script src="script.js?v=4.3-sakura-redone"></script>
+<script src="content.js?v=4.4-single-source"></script>
+<script src="script.js?v=4.4-single-source"></script>
 </body>
 </html>

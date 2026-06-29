@@ -1653,3 +1653,12 @@ body:not(.dark) .spark {
 @media (prefers-reduced-motion: reduce) {
   .day-petal { animation: none !important; }
 }
+
+
+/* ===== Single source content rendering / 单内容源渲染补充 ===== */
+.timeline-preview-list { display: contents; }
+.empty-state { color: var(--muted); padding: 24px; border: 1px solid var(--line); border-radius: 24px; background: var(--glass); }
+.archive-filter-note { color: var(--muted); margin-top: 12px; }
+.article-sub-page .tag-row:empty { display: none; }
+.reader-actions .action[hidden] { display: none; }
+@media (max-width: 760px) { .timeline-preview-list { display: grid; gap: 14px; } }

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>阅读 · VEGALTAiR</title>
+  <meta name="description" content="我们的宇宙里保存的一封信。" />
+  <link rel="stylesheet" href="style.css?v=4.4-single-source" />
+</head>
+<body class="sub-page article-sub-page article-dynamic-page">
+
+<canvas class="space-canvas" id="spaceCanvas" aria-hidden="true"></canvas>
+<div class="sakura-day-scene" aria-hidden="true">
+  <div class="sakura-day-glow"></div>
+  <div class="sakura-day-branch branch-a"></div>
+  <div class="sakura-day-branch branch-b"></div>
+  <div class="sakura-petal-layer" id="sakuraPetalLayer"></div>
+</div>
+<div class="ambient-orb orb-one" aria-hidden="true"></div>
+<div class="ambient-orb orb-two" aria-hidden="true"></div>
+<div class="ambient-orb orb-three" aria-hidden="true"></div>
+<div class="cursor-aura" id="cursorAura" aria-hidden="true"></div>
+
+
+<header class="site-header" id="siteHeader">
+  <a class="brand" href="index.html" aria-label="回到首页">
+    <span class="brand-mark">∞</span><span>VEGALTAiR</span>
+  </a>
+  <nav class="top-nav" aria-label="主导航">
+    <a href="index.html#time">时间</a>
+    <a href="index.html#letters">信件</a>
+    <a href="index.html#fragments">碎片</a>
+    <a href="index.html#replies">回信</a>
+    <button class="theme-btn" id="themeBtn" type="button">夜晚模式</button>
+  </nav>
+</header>
+
+<main class="article-page">
+  <a class="back-link" id="articleBack" href="archive.html">← 返回档案</a>
+  <article class="article-shell">
+    <div class="article-kicker" id="articleKicker">Archive</div>
+    <h1 id="articleTitle">正在打开</h1>
+    <p class="article-meta" id="articleMeta"></p>
+    <div class="tag-row" id="articleTags"></div>
+    <div class="article-body" id="articleBody"><p>正在读取内容……</p></div>
+  </article>
+</main>
+
+<audio id="bgm" preload="auto"></audio>
+<div class="music-dock" id="musicDock" aria-label="音乐播放器">
+  <button class="disc" id="discBtn" type="button" aria-label="播放或暂停"><span></span></button>
+  <div class="music-info">
+    <strong id="trackTitle">η</strong>
+    <small id="trackNote">第 1 首 / 共 3 首</small>
+  </div>
+  <div class="music-bars" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+  <div class="music-controls">
+    <button id="prevTrackBtn" type="button">Prev</button>
+    <button id="togglePlayBtn" type="button">Play</button>
+    <button id="nextTrackBtn" type="button">Next</button>
+  </div>
+</div>
+
+<script src="content.js?v=4.4-single-source"></script>
+<script src="script.js?v=4.4-single-source"></script>
+</body>
+</html>
