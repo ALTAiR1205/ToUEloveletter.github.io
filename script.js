@@ -628,3 +628,133 @@ ensureRealHeroTitle();
 window.addEventListener("load", ensureRealHeroTitle);
 setTimeout(ensureRealHeroTitle, 900);
 setTimeout(ensureRealHeroTitle, 2600);
+
+/* =========================================================
+   Love Universe V3 — cinematic scroll controller
+   ========================================================= */
+(function () {
+  const root = document.documentElement;
+  const body = document.body;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function updateScrollState() {
+    const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const y = window.scrollY || window.pageYOffset || 0;
+    root.style.setProperty('--scroll-y', String(Math.round(y)));
+    root.style.setProperty('--page-progress', Math.min(1, Math.max(0, y / max)).toFixed(4));
+
+    const hero = document.querySelector('.cinematic-hero');
+    if (hero) {
+      const heroRect = hero.getBoundingClientRect();
+      const heroProgress = Math.min(1, Math.max(0, -heroRect.top / Math.max(1, heroRect.height - window.innerHeight * 0.4)));
+      root.style.setProperty('--hero-progress', heroProgress.toFixed(4));
+    }
+  }
+
+  let ticking = false;
+  function requestScrollTick() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      updateScrollState();
+      ticking = false;
+    });
+  }
+
+  updateScrollState();
+  window.addEventListener('scroll', requestScrollTick, { passive: true });
+  window.addEventListener('resize', requestScrollTick);
+
+  // 章节进入视口：像 Apple 产品页一样逐段浮现
+  const revealTargets = Array.from(document.querySelectorAll('main > .chapter, main > .divider'));
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    revealTargets.forEach((el) => observer.observe(el));
+  } else {
+    revealTargets.forEach((el) => el.classList.add('in-view'));
+  }
+
+  // 右侧章节导航高亮
+  const navLinks = Array.from(document.querySelectorAll('.journey-rail a'));
+  const sections = navLinks
+    .map((link) => document.querySelector(link.getAttribute('href')))
+    .filter(Boolean);
+
+  if ('IntersectionObserver' in window && navLinks.length) {
+    const activeObserver = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      navLinks.forEach((link) => {
+        link.classList.toggle('active', link.getAttribute('href') === `#${visible.target.id}`);
+      });
+    }, { threshold: [0.24, 0.4, 0.58], rootMargin: '-20% 0px -42% 0px' });
+    sections.forEach((section) => activeObserver.observe(section));
+  }
+
+  // 鼠标位置变量：驱动流光、背景 blob、卡片高光
+  if (!reduceMotion && window.matchMedia('(pointer: fine)').matches) {
+    window.addEventListener('pointermove', (event) => {
+      const x = (event.clientX / window.innerWidth) * 100;
+      const y = (event.clientY / window.innerHeight) * 100;
+      root.style.setProperty('--cursor-x', `${x.toFixed(2)}%`);
+      root.style.setProperty('--cursor-y', `${y.toFixed(2)}%`);
+    }, { passive: true });
+  }
+
+  // 大卡片 cinematic spotlight，不影响原 tilt 逻辑
+  const spotlightTargets = Array.from(document.querySelectorAll('.card, .fold-summary, .quote, .reply-card'));
+  if (!reduceMotion && window.matchMedia('(pointer: fine)').matches) {
+    spotlightTargets.forEach((el) => {
+      el.addEventListener('pointermove', (event) => {
+        const rect = el.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+        el.style.setProperty('--shine-x', `${x.toFixed(1)}%`);
+        el.style.setProperty('--shine-y', `${y.toFixed(1)}%`);
+      }, { passive: true });
+    });
+  }
+
+  // Lando 式快速反馈：展开大章节时给页面一个轻微 pulse
+  document.querySelectorAll('details.fold-panel').forEach((panel) => {
+    panel.addEventListener('toggle', () => {
+      if (!panel.open || reduceMotion) return;
+      body.classList.add('section-open-pulse');
+      window.setTimeout(() => body.classList.remove('section-open-pulse'), 520);
+    });
+  });
+
+  // 让「进入信里」更有转场感：提前打开写给你面板
+  const enterLetters = document.querySelector('a[href="#letters"].primary, .btn.primary[href="#letters"]');
+  enterLetters?.addEventListener('click', () => {
+    const panel = document.querySelector('#letters details.fold-panel');
+    if (panel) panel.open = true;
+  });
+
+  // 音乐播放时页面进入 active world 状态，CSS 里会让光效更强
+  const bgm = document.getElementById('bgm');
+  function syncAudioWorldState() {
+    if (!bgm) return;
+    body.classList.toggle('audio-world-active', !bgm.paused);
+  }
+  if (bgm) {
+    bgm.addEventListener('play', syncAudioWorldState);
+    bgm.addEventListener('pause', syncAudioWorldState);
+    bgm.addEventListener('ended', syncAudioWorldState);
+    syncAudioWorldState();
+  }
+
+  // 首屏按钮有更明确的加载完成状态
+  window.addEventListener('load', () => {
+    body.classList.add('v3-ready');
+    updateScrollState();
+  });
+})();
