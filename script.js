@@ -7,6 +7,33 @@
   const isHomePage = document.body.classList.contains('home-page');
   const assetPrefix = isHomePage ? '' : '../';
 
+
+  function rebuildSakuraPetals() {
+    const layer = document.getElementById('sakuraPetalLayer');
+    if (!layer || reduced) return;
+    layer.innerHTML = '';
+    const count = isCoarsePointer ? 18 : 34;
+    for (let i = 0; i < count; i += 1) {
+      const petal = document.createElement('span');
+      petal.className = 'day-petal';
+      petal.style.setProperty('--left', `${Math.random() * 100}vw`);
+      petal.style.setProperty('--size', `${8 + Math.random() * 18}px`);
+      petal.style.setProperty('--opacity', `${0.24 + Math.random() * 0.46}`);
+      petal.style.setProperty('--rotate', `${Math.random() * 360}deg`);
+      petal.style.setProperty('--drift', `${-90 + Math.random() * 180}px`);
+      petal.style.setProperty('--fall', `${13 + Math.random() * 16}s`);
+      petal.style.setProperty('--sway', `${3.2 + Math.random() * 4.8}s`);
+      petal.style.setProperty('--delay', `${-Math.random() * 24}s`);
+      layer.appendChild(petal);
+    }
+  }
+  rebuildSakuraPetals();
+  let sakuraResizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(sakuraResizeTimer);
+    sakuraResizeTimer = setTimeout(rebuildSakuraPetals, 180);
+  }, { passive: true });
+
   const themeBtn = $('#themeBtn');
   const savedTheme = localStorage.getItem('theme');
   if (savedTheme !== 'light') document.body.classList.add('dark');
@@ -263,10 +290,16 @@
         if(dist<150*devicePixelRatio){ p.x += dx/dist*1.2; p.y += dy/dist*1.2; }
         p.x += p.vx*p.z*(active?2.1:1); p.y += p.vy*p.z*(active?2.1:1);
         if(p.x<0) p.x=w; if(p.x>w) p.x=0; if(p.y<0) p.y=h; if(p.y>h) p.y=0;
-        const a = (dark?.55:.35) + Math.sin(t*.002+p.tw)*.18;
+        const a = (dark ? .55 : .22) + Math.sin(t*.002+p.tw)*.18;
         ctx.beginPath();
-        ctx.fillStyle = dark ? `rgba(255,230,245,${a})` : `rgba(177,95,135,${a*.7})`;
-        ctx.arc(p.x,p.y,p.r*p.z*devicePixelRatio,0,Math.PI*2); ctx.fill();
+        if (dark) {
+          ctx.fillStyle = `rgba(255,230,245,${a})`;
+          ctx.arc(p.x,p.y,p.r*p.z*devicePixelRatio,0,Math.PI*2);
+        } else {
+          ctx.fillStyle = `rgba(210,118,151,${Math.max(.05, a*.46)})`;
+          ctx.ellipse(p.x,p.y,(p.r*1.9)*p.z*devicePixelRatio,(p.r*.9)*p.z*devicePixelRatio, p.tw, 0, Math.PI*2);
+        }
+        ctx.fill();
       }
       requestAnimationFrame(frame);
     }
