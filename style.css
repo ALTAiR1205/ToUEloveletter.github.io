@@ -1537,14 +1537,14 @@ body:not(.dark) .planet-label {
   gap: 8px;
 }
 body:not(.dark) .planet-label::before {
-  content: "春日";
+  content: "Love";
   color: #9f5b70;
   font-size: clamp(1.1rem, 2.5vw, 1.7rem);
   letter-spacing: .32em;
   font-weight: 700;
 }
 body:not(.dark) .planet-label::after {
-  content: "小世界";
+  content: "Universe";
   color: #6f4a4f;
   font-size: clamp(1.8rem, 5vw, 3.4rem);
   letter-spacing: .16em;
