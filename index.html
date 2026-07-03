@@ -1,37 +1,45 @@
 <!DOCTYPE html>
-
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <title>Love Universe · VEGALTAiR</title>
 <meta content="我们的宇宙里保存的一封信。" name="description"/>
-<link href="style.css?v=4.7-sakura-branch" rel="stylesheet"/>
+<link href="style.css?v=5.0-vegaltair" rel="stylesheet"/>
 </head>
 <body class="home-page">
+<script>(function(){try{if(localStorage.getItem('theme')!=='light')document.body.classList.add('dark');}catch(e){}})();</script>
+
+<div aria-hidden="true" class="scroll-progress" id="scrollProgress"><span></span></div>
 <canvas aria-hidden="true" class="space-canvas" id="spaceCanvas"></canvas>
-<div aria-hidden="true" class="sakura-day-scene">
-<div class="sakura-day-glow"></div>
-<div class="sakura-day-branch branch-a"></div>
-<div class="sakura-day-branch branch-b"></div>
+
+<div aria-hidden="true" class="nebula-field">
+<div class="nebula n-1"></div>
+<div class="nebula n-2"></div>
+<div class="nebula n-3"></div>
+</div>
+
+<div aria-hidden="true" class="day-scene">
+<div class="day-sun"></div>
+<div class="day-haze haze-a"></div>
+<div class="day-haze haze-b"></div>
 <div class="sakura-petal-layer" id="sakuraPetalLayer"></div>
 </div>
-<div aria-hidden="true" class="ambient-orb orb-one"></div>
-<div aria-hidden="true" class="ambient-orb orb-two"></div>
-<div aria-hidden="true" class="ambient-orb orb-three"></div>
-<div aria-hidden="true" class="cursor-aura" id="cursorAura"></div>
-<div class="opening-loader" id="openingLoader" aria-label="开屏动画">
+
+<div aria-hidden="true" class="cursor-dot" id="cursorDot"></div>
+<div aria-hidden="true" class="cursor-ring" id="cursorRing"></div>
+
+<div aria-label="开屏动画" class="opening-loader" id="openingLoader">
 <div aria-hidden="true" class="loader-starfield">
-<span></span><span></span><span></span><span></span><span></span><span></span>
+<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
 </div>
-<div aria-hidden="true" class="loader-portal">
-<span class="portal-orbit portal-a"></span>
-<span class="portal-orbit portal-b"></span>
-<span class="portal-orbit portal-c"></span>
-<div class="portal-core">
-<strong>VEGALTAiR</strong>
-<small>loading our universe</small>
+<div aria-hidden="true" class="loader-emblem">
+<div class="loader-star star-vega"><i></i><em>VEGA</em></div>
+<div class="loader-bridge"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+<div class="loader-star star-altair"><i></i><em>ALTAiR</em></div>
 </div>
+<div class="loader-word">
+<span>V</span><span>E</span><span>G</span><span>A</span><span>L</span><span>T</span><span>A</span><span>i</span><span>R</span>
 </div>
 <div class="loader-title">
 <span>欢迎来到</span>
@@ -39,6 +47,7 @@
 </div>
 <p class="loader-line">Welcome to our little universe</p>
 </div>
+
 <header class="site-header" id="siteHeader">
 <a aria-label="回到首页" class="brand" href="index.html">
 <span class="brand-mark">∞</span><span>VEGALTAiR</span>
@@ -51,22 +60,24 @@
 <button class="theme-btn" id="themeBtn" type="button">夜晚模式</button>
 </nav>
 </header>
+
 <aside aria-label="章节进度" class="chapter-rail">
-<a data-rail="hero" href="#hero"><span></span>入口</a>
-<a data-rail="time" href="#time"><span></span>时间</a>
-<a data-rail="letters" href="#letters"><span></span>信件</a>
-<a data-rail="fragments" href="#fragments"><span></span>碎片</a>
-<a data-rail="replies" href="#replies"><span></span>回信</a>
+<a data-rail="hero" href="#hero"><span></span><em>入口</em></a>
+<a data-rail="time" href="#time"><span></span><em>时间</em></a>
+<a data-rail="letters" href="#letters"><span></span><em>信件</em></a>
+<a data-rail="fragments" href="#fragments"><span></span><em>碎片</em></a>
+<a data-rail="replies" href="#replies"><span></span><em>回信</em></a>
 </aside>
+
 <main>
 <section class="stage hero-stage snap-section" data-section="hero" id="hero">
 <div class="hero-copy reveal">
 <p class="eyebrow">To：杜叶</p>
-<h1 class="mega-title"><span>欢迎来到</span><span>我们的小世界</span></h1>
-<p class="hero-subtitle">这里记录的是我想你的时候写下来的句子。<br />
-      想让你每次点开的时候，都能看到我的心意，我的爱意。<br />
-      时时刻刻都告诉你：<br />
-      我爱你宝宝，我爱你老婆。<br />
+<h1 class="mega-title"><span>欢迎来到</span><span class="grad-text">我们的小世界</span></h1>
+<p class="hero-subtitle" id="heroSubtitle">这里记录的是我想你的时候写下来的句子。<br/>
+      想让你每次点开的时候，都能看到我的心意，我的爱意。<br/>
+      时时刻刻都告诉你：<br/>
+      我爱你宝宝，我爱你老婆。<br/>
       我爱你杜叶。
 </p>
 <div class="hero-actions">
@@ -74,125 +85,83 @@
 <a class="action ghost magnetic" href="archive.html?type=letters">打开信件档案</a>
 </div>
 </div>
-<div class="hero-visual reveal delay-1" data-tilt="">
-<div class="planet-core">
-<span class="orbit orbit-a"></span>
-<span class="orbit orbit-b"></span>
-<span class="orbit orbit-c"></span>
-<span class="planet-label">LOVE<br/>UNIVERSE</span>
-<div aria-hidden="true" class="spring-hero-art spring-hero-branch-art">
-<svg viewBox="0 0 900 680" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-  <defs>
-    <radialGradient id="sunGlow2" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#fffdfa" stop-opacity="0.98"/>
-      <stop offset="45%" stop-color="#fff1f3" stop-opacity="0.88"/>
-      <stop offset="76%" stop-color="#ffdfe7" stop-opacity="0.28"/>
-      <stop offset="100%" stop-color="#ffdfe7" stop-opacity="0"/>
-    </radialGradient>
-    <radialGradient id="haze2" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ffdbe7" stop-opacity="0.70"/>
-      <stop offset="62%" stop-color="#f4b5c9" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#f4b5c9" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="branchGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#7b5649"/>
-      <stop offset="45%" stop-color="#b27a66"/>
-      <stop offset="100%" stop-color="#5f4138"/>
-    </linearGradient>
-    <radialGradient id="petalCore2" cx="36%" cy="28%" r="72%">
-      <stop offset="0%" stop-color="#fffefe" stop-opacity="0.98"/>
-      <stop offset="32%" stop-color="#ffe6ee" stop-opacity="0.98"/>
-      <stop offset="74%" stop-color="#f3b3c7" stop-opacity="0.96"/>
-      <stop offset="100%" stop-color="#e28aaa" stop-opacity="0.94"/>
-    </radialGradient>
-    <radialGradient id="petalSoft2" cx="40%" cy="30%" r="72%">
-      <stop offset="0%" stop-color="#fffdfd" stop-opacity="0.9"/>
-      <stop offset="42%" stop-color="#ffe8f0" stop-opacity="0.84"/>
-      <stop offset="100%" stop-color="#f4bfd0" stop-opacity="0.82"/>
-    </radialGradient>
-    <filter id="softBlur2" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="18"/>
-    </filter>
-    <filter id="branchShadow2" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#e2a1b6" flood-opacity="0.24"/>
-    </filter>
-    <g id="blossom2">
-      <ellipse cx="0" cy="-14" rx="14" ry="21" fill="url(#petalCore2)"/>
-      <ellipse cx="14" cy="-3" rx="14" ry="21" fill="url(#petalCore2)" transform="rotate(72 14 -3)"/>
-      <ellipse cx="9" cy="12" rx="14" ry="21" fill="url(#petalCore2)" transform="rotate(144 9 12)"/>
-      <ellipse cx="-9" cy="12" rx="14" ry="21" fill="url(#petalCore2)" transform="rotate(216 -9 12)"/>
-      <ellipse cx="-14" cy="-3" rx="14" ry="21" fill="url(#petalCore2)" transform="rotate(288 -14 -3)"/>
-      <circle cx="0" cy="1.5" r="5.5" fill="#f7de98" opacity="0.92"/>
-      <circle cx="0" cy="1.5" r="2.5" fill="#be7d60" opacity="0.82"/>
-    </g>
-    <g id="blossomMini2">
-      <ellipse cx="0" cy="-8" rx="8" ry="12" fill="url(#petalSoft2)"/>
-      <ellipse cx="8" cy="-2" rx="8" ry="12" fill="url(#petalSoft2)" transform="rotate(72 8 -2)"/>
-      <ellipse cx="5" cy="8" rx="8" ry="12" fill="url(#petalSoft2)" transform="rotate(144 5 8)"/>
-      <ellipse cx="-5" cy="8" rx="8" ry="12" fill="url(#petalSoft2)" transform="rotate(216 -5 8)"/>
-      <ellipse cx="-8" cy="-2" rx="8" ry="12" fill="url(#petalSoft2)" transform="rotate(288 -8 -2)"/>
-      <circle cx="0" cy="1" r="3.5" fill="#f8e2a5" opacity="0.88"/>
-    </g>
-    <g id="singlePetal2">
-      <path d="M0 0 C10 -12 22 -8 25 7 C14 17 5 15 0 0Z" fill="url(#petalSoft2)"/>
-    </g>
-  </defs>
-
-  <circle cx="248" cy="164" r="136" fill="url(#sunGlow2)"/>
-  <ellipse cx="274" cy="190" rx="185" ry="124" fill="url(#haze2)" filter="url(#softBlur2)" opacity="0.56"/>
-  <ellipse cx="650" cy="290" rx="192" ry="138" fill="url(#haze2)" filter="url(#softBlur2)" opacity="0.42"/>
-  <ellipse cx="372" cy="560" rx="228" ry="56" fill="url(#haze2)" filter="url(#softBlur2)" opacity="0.48"/>
-
-  <g filter="url(#branchShadow2)" fill="none" stroke="url(#branchGrad2)" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M915 110 C805 126 724 170 632 246 C586 284 538 318 462 356" stroke-width="16"/>
-    <path d="M690 188 C642 204 604 228 566 264" stroke-width="8" opacity="0.95"/>
-    <path d="M752 228 C696 244 652 280 616 324" stroke-width="8" opacity="0.92"/>
-    <path d="M604 230 C566 246 534 270 510 302" stroke-width="6" opacity="0.88"/>
-    <path d="M-36 466 C70 442 146 412 210 374 C248 352 276 332 322 304" stroke-width="13" opacity="0.92"/>
-    <path d="M82 430 C128 418 168 400 196 378" stroke-width="7" opacity="0.88"/>
-    <path d="M164 404 C210 390 248 366 278 336" stroke-width="7" opacity="0.88"/>
-  </g>
-
-  <g opacity="0.98">
-    <use href="#blossom2" x="656" y="214" transform="scale(1.04)"/>
-    <use href="#blossomMini2" x="612" y="242" transform="scale(1.08)"/>
-    <use href="#blossomMini2" x="704" y="248" transform="scale(.96)"/>
-    <use href="#blossom2" x="562" y="284" transform="scale(.98)"/>
-    <use href="#blossomMini2" x="514" y="310" transform="scale(1.04)"/>
-    <use href="#blossomMini2" x="602" y="314" transform="scale(.88)"/>
-    <use href="#blossom2" x="458" y="354" transform="scale(.94)"/>
-    <use href="#blossomMini2" x="404" y="378" transform="scale(.92)"/>
-
-    <use href="#blossom2" x="190" y="390" transform="scale(1.0)"/>
-    <use href="#blossomMini2" x="148" y="414" transform="scale(.96)"/>
-    <use href="#blossomMini2" x="246" y="362" transform="scale(.90)"/>
-    <use href="#blossom2" x="294" y="320" transform="scale(.92)"/>
-    <use href="#blossomMini2" x="334" y="296" transform="scale(.84)"/>
-  </g>
-
-  <g opacity="0.86">
-    <use href="#blossomMini2" x="734" y="188" transform="scale(.82)"/>
-    <use href="#blossomMini2" x="760" y="278" transform="scale(.8)"/>
-    <use href="#blossomMini2" x="534" y="236" transform="scale(.8)"/>
-    <use href="#blossomMini2" x="478" y="282" transform="scale(.78)"/>
-    <use href="#blossomMini2" x="264" y="282" transform="scale(.84)"/>
-    <use href="#blossomMini2" x="120" y="446" transform="scale(.8)"/>
-  </g>
-
-  <g opacity="0.8">
-    <use href="#singlePetal2" x="242" y="468" transform="rotate(6 242 468) scale(.9)"/>
-    <use href="#singlePetal2" x="336" y="426" transform="rotate(-12 336 426) scale(.72)"/>
-    <use href="#singlePetal2" x="462" y="448" transform="rotate(20 462 448) scale(.84)"/>
-    <use href="#singlePetal2" x="602" y="392" transform="rotate(-18 602 392) scale(.82)"/>
-    <use href="#singlePetal2" x="696" y="334" transform="rotate(10 696 334) scale(.74)"/>
-    <use href="#singlePetal2" x="538" y="510" transform="rotate(-26 538 510) scale(.68)"/>
-  </g>
-
-  <path d="M150 574 C276 558 628 558 748 574" fill="none" stroke="rgba(210,125,152,0.18)" stroke-width="2" stroke-linecap="round"/>
+<div class="hero-visual reveal delay-1">
+<div class="starbridge" data-tilt="">
+<svg aria-hidden="true" role="img" viewBox="0 0 900 640" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<radialGradient cx="50%" cy="50%" id="sbStarGlow" r="50%">
+<stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+<stop offset="35%" stop-color="#cfe6ff" stop-opacity="0.5"/>
+<stop offset="100%" stop-color="#cfe6ff" stop-opacity="0"/>
+</radialGradient>
+<radialGradient cx="50%" cy="50%" id="sbStarGlowPink" r="50%">
+<stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+<stop offset="35%" stop-color="#ffd6e8" stop-opacity="0.5"/>
+<stop offset="100%" stop-color="#ffd6e8" stop-opacity="0"/>
+</radialGradient>
+<linearGradient id="sbMilky" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#a78bfa" stop-opacity="0.16"/>
+<stop offset="50%" stop-color="#93c5fd" stop-opacity="0.26"/>
+<stop offset="100%" stop-color="#f0abfc" stop-opacity="0.14"/>
+</linearGradient>
+<linearGradient id="sbBridge" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#9fd8ff"/>
+<stop offset="50%" stop-color="#f3b3ff"/>
+<stop offset="100%" stop-color="#ffb3cf"/>
+</linearGradient>
+<filter height="160%" id="sbBlur" width="160%" x="-30%" y="-30%">
+<feGaussianBlur stdDeviation="26"/>
+</filter>
+</defs>
+<g class="sb-milkyway">
+<path d="M60 -40 C 260 120 420 260 560 400 C 660 500 760 600 900 700 L 760 700 C 620 580 500 460 380 340 C 260 220 140 100 -40 -40 Z" fill="url(#sbMilky)" filter="url(#sbBlur)"/>
+</g>
+<g class="sb-dust">
+<circle class="tw tw-1" cx="120" cy="90" r="1.6"/><circle class="tw tw-2" cx="210" cy="300" r="1.2"/>
+<circle class="tw tw-3" cx="330" cy="150" r="1.8"/><circle class="tw tw-1" cx="430" cy="80" r="1.2"/>
+<circle class="tw tw-2" cx="520" cy="200" r="1.5"/><circle class="tw tw-3" cx="640" cy="120" r="1.3"/>
+<circle class="tw tw-1" cx="760" cy="210" r="1.7"/><circle class="tw tw-2" cx="820" cy="330" r="1.2"/>
+<circle class="tw tw-3" cx="90" cy="430" r="1.4"/><circle class="tw tw-1" cx="180" cy="540" r="1.6"/>
+<circle class="tw tw-2" cx="320" cy="480" r="1.2"/><circle class="tw tw-3" cx="450" cy="560" r="1.6"/>
+<circle class="tw tw-1" cx="560" cy="500" r="1.2"/><circle class="tw tw-2" cx="700" cy="560" r="1.5"/>
+<circle class="tw tw-3" cx="800" cy="470" r="1.3"/><circle class="tw tw-1" cx="620" cy="330" r="1.2"/>
+<circle class="tw tw-2" cx="270" cy="230" r="1.1"/><circle class="tw tw-3" cx="500" cy="330" r="1.3"/>
+</g>
+<g class="sb-bridge-group">
+<path class="sb-bridge-glow" d="M215 185 C 340 260 560 380 685 465" fill="none" stroke="url(#sbBridge)" stroke-linecap="round" stroke-width="10" opacity="0.22"/>
+<path class="sb-bridge" d="M215 185 C 340 260 560 380 685 465" fill="none" stroke="url(#sbBridge)" stroke-dasharray="1 14" stroke-linecap="round" stroke-width="4"/>
+<circle class="sb-pulse p-1" cx="330" cy="252" r="2.6"/>
+<circle class="sb-pulse p-2" cx="450" cy="322" r="3.1"/>
+<circle class="sb-pulse p-3" cx="570" cy="392" r="2.6"/>
+<g class="sb-heart" transform="translate(450 322)">
+<path d="M0 6.5 C -7 0.5 -9 -4.5 -5.5 -7.5 C -3 -9.5 0 -8 0 -5 C 0 -8 3 -9.5 5.5 -7.5 C 9 -4.5 7 0.5 0 6.5 Z"/>
+</g>
+</g>
+<g class="sb-star sb-vega">
+<circle cx="215" cy="185" fill="url(#sbStarGlow)" r="72"/>
+<g class="sb-rays" transform="translate(215 185)">
+<rect height="88" rx="1.2" width="2.4" x="-1.2" y="-44"/>
+<rect height="88" rx="1.2" transform="rotate(90)" width="2.4" x="-1.2" y="-44"/>
+</g>
+<circle class="sb-core" cx="215" cy="185" r="7"/>
+<text class="sb-label" text-anchor="middle" x="215" y="102">织女星 · VEGA</text>
+</g>
+<g class="sb-star sb-altair">
+<circle cx="685" cy="465" fill="url(#sbStarGlowPink)" r="72"/>
+<g class="sb-rays" transform="translate(685 465)">
+<rect height="88" rx="1.2" width="2.4" x="-1.2" y="-44"/>
+<rect height="88" rx="1.2" transform="rotate(90)" width="2.4" x="-1.2" y="-44"/>
+</g>
+<circle class="sb-core sb-core-pink" cx="685" cy="465" r="7"/>
+<text class="sb-label" text-anchor="middle" x="685" y="560">牛郎星 · ALTAiR</text>
+</g>
 </svg>
+<p class="starbridge-caption">隔着一整条银河，也要走到你身边。</p>
 </div>
 </div>
+<div aria-hidden="true" class="scroll-hint"><span></span></div>
 </section>
+
 <section class="stage time-stage snap-section" data-section="time" id="time">
 <div class="section-heading reveal">
 <span>Chapter 01</span>
@@ -200,9 +169,10 @@
 <p>从 2026.03.20 23:22 开始，时间也开始替我记录爱你这件事。</p>
 </div>
 <div class="time-core reveal delay-1" data-tilt="">
-<div class="time-orbit"><span></span><span></span><span></span></div>
+<div aria-hidden="true" class="time-halo"></div>
+<div aria-hidden="true" class="time-orbit"><span></span><span></span><span></span></div>
 <div class="time-main">
-<span id="coreDays">0</span>
+<span class="grad-text" id="coreDays">0</span>
 <small>天</small>
 </div>
 <div class="time-dials">
@@ -211,8 +181,13 @@
 <div><strong id="coreSeconds">0</strong><small>秒</small></div>
 </div>
 <p id="coreSentence">我们的故事正在继续。</p>
+<div class="milestone">
+<div class="milestone-bar"><span id="milestoneFill"></span></div>
+<p id="milestoneText"></p>
+</div>
 </div>
 </section>
+
 <section class="stage archive-stage snap-section" data-section="letters" id="letters">
 <div class="section-heading reveal">
 <span>Chapter 02</span>
@@ -224,6 +199,7 @@
 <a class="action ghost magnetic" href="archive.html?type=letters">查看全部信件</a>
 </div>
 </section>
+
 <section class="stage nebula-stage snap-section" data-section="fragments" id="fragments">
 <div class="section-heading reveal">
 <span>Chapter 03</span>
@@ -235,6 +211,7 @@
 <a class="action ghost magnetic" href="archive.html?type=fragments">查看全部碎片</a>
 </div>
 </section>
+
 <section class="stage reply-stage snap-section" data-section="replies" id="replies">
 <div class="section-heading reveal">
 <span>Chapter 04</span>
@@ -246,15 +223,19 @@
 <a class="action ghost magnetic" href="archive.html?type=replies">查看全部回信</a>
 </div>
 </section>
+
 <section class="stage ending-stage snap-section" data-section="about" id="about">
 <div class="ending-card reveal" data-tilt="">
+<div aria-hidden="true" class="ending-infinity">∞</div>
 <span>Chapter 05 / Universe Edge</span>
 <h2>这里是宇宙边缘</h2>
 <p>宝宝，这里放着一些写给你的话。它们不一定完整，也不一定每次都有漂亮的开头和结尾。但它们都来自同一件事：我在某个时刻，很认真地想到了你。</p>
 <strong>Wish I can be with you. Until eternity and universe edge.</strong>
+<div aria-hidden="true" class="ending-signature">VEGA <i>∞</i> ALTAiR</div>
 </div>
 </section>
 </main>
+
 <div aria-hidden="true" class="reader-modal" id="readerModal">
 <div class="reader-backdrop" data-reader-close=""></div>
 <article aria-labelledby="readerTitle" aria-modal="true" class="reader-panel" role="dialog">
@@ -270,22 +251,29 @@
 </div>
 </article>
 </div>
+
 <audio id="bgm" preload="auto"></audio>
 <div aria-label="音乐播放器" class="music-dock" id="musicDock">
-<button aria-label="播放或暂停" class="disc" id="discBtn" type="button"><span></span></button>
+<button aria-label="播放或暂停" class="disc" id="discBtn" type="button">
+<svg aria-hidden="true" class="disc-ring" viewBox="0 0 48 48">
+<circle class="ring-track" cx="24" cy="24" r="21"></circle>
+<circle class="ring-fill" cx="24" cy="24" id="discProgress" r="21"></circle>
+</svg>
+<span class="disc-core"></span>
+</button>
 <div class="music-info">
 <strong id="trackTitle">η</strong>
 <small id="trackNote">第 1 首 / 共 3 首</small>
 </div>
-<div aria-hidden="true" class="music-bars"><span></span><span></span><span></span><span></span></div>
+<div aria-hidden="true" class="music-bars"><span></span><span></span><span></span><span></span><span></span></div>
 <div class="music-controls">
-<button id="prevTrackBtn" type="button">Prev</button>
-<button id="togglePlayBtn" type="button">Play</button>
-<button id="nextTrackBtn" type="button">Next</button>
+<button aria-label="上一首" id="prevTrackBtn" type="button">‹</button>
+<button aria-label="播放或暂停" id="togglePlayBtn" type="button">▶</button>
+<button aria-label="下一首" id="nextTrackBtn" type="button">›</button>
 </div>
 </div>
 
-<script src="content.js?v=4.7-sakura-branch"></script>
-<script src="script.js?v=4.7-sakura-branch"></script>
+<script src="content.js?v=5.0-vegaltair"></script>
+<script src="script.js?v=5.0-vegaltair"></script>
 </body>
 </html>
