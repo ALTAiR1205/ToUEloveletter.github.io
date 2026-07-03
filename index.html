@@ -5,7 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <title>Love Universe · VEGALTAiR</title>
 <meta content="我们的宇宙里保存的一封信。" name="description"/>
-<link href="style.css?v=5.0-vegaltair" rel="stylesheet"/>
+<link href="style.css?v=5.1-deepspace" rel="stylesheet"/>
 </head>
 <body class="home-page">
 <script>(function(){try{if(localStorage.getItem('theme')!=='light')document.body.classList.add('dark');}catch(e){}})();</script>
@@ -18,6 +18,55 @@
 <div class="nebula n-2"></div>
 <div class="nebula n-3"></div>
 </div>
+
+<div aria-hidden="true" class="planet-horizon" id="planetHorizon"></div>
+<div aria-hidden="true" class="planet-ringed" id="planetRinged">
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<radialGradient cx="35%" cy="30%" id="prSurf" r="82%">
+<stop offset="0%" stop-color="#a394e8"/>
+<stop offset="45%" stop-color="#5b46a8"/>
+<stop offset="80%" stop-color="#2a1d5e"/>
+<stop offset="100%" stop-color="#170f3a"/>
+</radialGradient>
+<radialGradient cx="72%" cy="76%" id="prShade" r="80%">
+<stop offset="0%" stop-color="#050314" stop-opacity="0.55"/>
+<stop offset="45%" stop-color="#050314" stop-opacity="0.18"/>
+<stop offset="100%" stop-color="#050314" stop-opacity="0"/>
+</radialGradient>
+<linearGradient id="prRing" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#8fd8ff" stop-opacity="0"/>
+<stop offset="30%" stop-color="#b9a6ff" stop-opacity="0.9"/>
+<stop offset="70%" stop-color="#ff9ec7" stop-opacity="0.9"/>
+<stop offset="100%" stop-color="#ff9ec7" stop-opacity="0"/>
+</linearGradient>
+<radialGradient cx="50%" cy="50%" id="prGlow" r="50%">
+<stop offset="55%" stop-color="#b9a6ff" stop-opacity="0"/>
+<stop offset="78%" stop-color="#b9a6ff" stop-opacity="0.2"/>
+<stop offset="100%" stop-color="#b9a6ff" stop-opacity="0"/>
+</radialGradient>
+<clipPath id="prPlanetClip"><circle cx="150" cy="150" r="64"/></clipPath>
+<clipPath id="prFrontClip"><rect height="150" width="300" x="0" y="150"/></clipPath>
+</defs>
+<circle cx="150" cy="150" fill="url(#prGlow)" r="132"/>
+<g transform="rotate(-20 150 150)">
+<ellipse cx="150" cy="150" fill="none" opacity="0.38" rx="120" ry="32" stroke="url(#prRing)" stroke-width="14"/>
+<circle class="pr-moon m1" cx="240" cy="116" r="5"/>
+<circle class="pr-moon m2" cx="72" cy="196" r="3.4"/>
+</g>
+<circle cx="150" cy="150" fill="url(#prSurf)" r="64"/>
+<g clip-path="url(#prPlanetClip)">
+<ellipse cx="150" cy="126" fill="#ffffff" opacity="0.1" rx="82" ry="14"/>
+<ellipse cx="150" cy="152" fill="#8fd8ff" opacity="0.1" rx="86" ry="12"/>
+<ellipse cx="150" cy="178" fill="#ff9ec7" opacity="0.1" rx="80" ry="13"/>
+<circle cx="150" cy="150" fill="url(#prShade)" r="64"/>
+</g>
+<g clip-path="url(#prFrontClip)" transform="rotate(-20 150 150)">
+<ellipse cx="150" cy="150" fill="none" opacity="0.85" rx="120" ry="32" stroke="url(#prRing)" stroke-width="14"/>
+</g>
+</svg>
+</div>
+<div aria-hidden="true" class="vignette"></div>
 
 <div aria-hidden="true" class="day-scene">
 <div class="day-sun"></div>
@@ -273,7 +322,7 @@
 </div>
 </div>
 
-<script src="content.js?v=5.0-vegaltair"></script>
-<script src="script.js?v=5.0-vegaltair"></script>
+<script src="content.js?v=5.1-deepspace"></script>
+<script src="script.js?v=5.1-deepspace"></script>
 </body>
 </html>

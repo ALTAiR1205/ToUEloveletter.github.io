@@ -1,6 +1,6 @@
 /* ==========================================================================
-   VEGALTAiR · Love Universe — v5.0 「鹊桥 · 星河」
-   内容渲染 + 交互 + 星空引擎。所有文字内容来自 content.js。
+   VEGALTAiR · Love Universe — v5.1 「鹊桥 · 星河 · 深空」
+   内容渲染 + 交互 + 3D 星空引擎。所有文字内容来自 content.js。
    ========================================================================== */
 (() => {
   const $ = (s, root = document) => root.querySelector(s);
@@ -475,41 +475,65 @@
     });
   }
 
+  /* ---------- 行星视差（鼠标轻微推动，近快远慢） ---------- */
+  const planetHorizon = $('#planetHorizon');
+  const planetRinged = $('#planetRinged');
+  if ((planetHorizon || planetRinged) && !reduced && window.matchMedia('(pointer: fine)').matches) {
+    addEventListener('pointermove', e => {
+      const px = e.clientX / innerWidth - 0.5, py = e.clientY / innerHeight - 0.5;
+      if (planetHorizon) planetHorizon.style.transform = `translate3d(${px * -20}px, ${py * -10}px, 0)`;
+      if (planetRinged) planetRinged.style.transform = `translate3d(${px * 30}px, ${py * 20}px, 0)`;
+    }, { passive: true });
+  }
+
   /* ==========================================================================
-     星空引擎 v2：三层视差星野 + 流星 + 靠近光标的星座连线（夜）
-     白天为暖色光尘。
+     星空引擎 v3：真·3D 透视星野 —— 星星带纵深缓缓向你飘来，
+     近星大而亮（带十字光芒），远星小而暗；鼠标视差近快远慢。
+     + 流星 + 靠近光标的星座连线（夜晚）；白天为暖色光尘。
      ========================================================================== */
   const canvas = $('#spaceCanvas');
   if (canvas && !reduced) {
     const ctx = canvas.getContext('2d');
     const DPR = Math.min(2, devicePixelRatio || 1);
     const finePointer = window.matchMedia('(pointer: fine)').matches;
-    let w = 0, h = 0;
-    let stars = [];
-    let meteors = [];
+    const Z_FAR = 6, Z_NEAR = 0.35;
+    let w = 0, h = 0, cx = 0, cy = 0, F = 0, extX = 0, extY = 0;
+    let stars = [], dust = [], meteors = [];
     let nextMeteorAt = 0;
     const mouse = { x: innerWidth / 2, y: innerHeight / 2 };
     addEventListener('pointermove', e => { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
 
+    function makeStar(z) {
+      return {
+        x: (Math.random() * 2 - 1) * extX,
+        y: (Math.random() * 2 - 1) * extY,
+        z,
+        r: 0.5 + Math.random() * 1.3,
+        tw: Math.random() * Math.PI * 2,
+        twSpeed: 0.0012 + Math.random() * 0.0022,
+        hue: Math.random(),
+        sx: 0, sy: 0
+      };
+    }
     function resize() {
       w = canvas.width = Math.floor(innerWidth * DPR);
       h = canvas.height = Math.floor(innerHeight * DPR);
       canvas.style.width = innerWidth + 'px';
       canvas.style.height = innerHeight + 'px';
-      const count = innerWidth < 700 ? 70 : (innerWidth < 980 ? 120 : 190);
-      stars = Array.from({ length: count }, () => {
-        const depth = 0.25 + Math.random() * 1.15; // 越大越近
-        return {
-          x: Math.random() * w, y: Math.random() * h,
-          depth,
-          vx: (Math.random() - 0.5) * 0.06 * depth,
-          vy: (Math.random() - 0.5) * 0.06 * depth,
-          r: (0.5 + Math.random() * 1.5) * depth,
-          tw: Math.random() * Math.PI * 2,
-          twSpeed: 0.0012 + Math.random() * 0.0022,
-          hue: Math.random()
-        };
-      });
+      cx = w / 2; cy = h / 2;
+      F = h * 0.9;
+      extX = (w / 2) * Z_FAR / F * 1.2;
+      extY = (h / 2) * Z_FAR / F * 1.2;
+      const count = innerWidth < 700 ? 110 : (innerWidth < 980 ? 170 : 260);
+      stars = Array.from({ length: count }, () => makeStar(Z_NEAR + Math.random() * (Z_FAR - Z_NEAR)));
+      const dustCount = innerWidth < 700 ? 40 : 90;
+      dust = Array.from({ length: dustCount }, () => ({
+        x: Math.random() * w, y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.12, vy: (Math.random() - 0.5) * 0.12,
+        r: 0.6 + Math.random() * 1.7,
+        tw: Math.random() * Math.PI * 2,
+        twSpeed: 0.0012 + Math.random() * 0.002
+      }));
     }
     resize();
     addEventListener('resize', resize, { passive: true });
@@ -518,7 +542,7 @@
       const fromX = w * (0.15 + Math.random() * 0.75);
       const fromY = h * (0.02 + Math.random() * 0.25);
       const speed = (7 + Math.random() * 7) * DPR;
-      const angle = Math.PI * (0.72 + Math.random() * 0.1); // 向左下
+      const angle = Math.PI * (0.72 + Math.random() * 0.1);
       meteors.push({
         x: fromX, y: fromY,
         vx: Math.cos(angle) * speed, vy: -Math.sin(angle) * speed,
@@ -528,8 +552,7 @@
       nextMeteorAt = now + 2800 + Math.random() * 4500;
     }
 
-    function starColor(s, alpha, dark) {
-      if (!dark) return `rgba(214, 122, 155, ${alpha * 0.5})`;
+    function starColor(s, alpha) {
       if (s.hue < 0.6) return `rgba(255, 244, 255, ${alpha})`;
       if (s.hue < 0.8) return `rgba(190, 214, 255, ${alpha})`;
       return `rgba(255, 214, 231, ${alpha})`;
@@ -546,59 +569,73 @@
       ctx.clearRect(0, 0, w, h);
       const dark = document.body.classList.contains('dark');
       const active = document.body.classList.contains('music-active');
-      const speedBoost = active ? 2 : 1;
-      const px = (mouse.x / innerWidth - 0.5), py = (mouse.y / innerHeight - 0.5);
 
-      /* 星 / 光尘 */
-      for (const s of stars) {
-        s.x += s.vx * speedBoost; s.y += s.vy * speedBoost;
-        if (s.x < -10) s.x = w + 10; if (s.x > w + 10) s.x = -10;
-        if (s.y < -10) s.y = h + 10; if (s.y > h + 10) s.y = -10;
-        const ox = -px * s.depth * 26 * DPR;
-        const oy = -py * s.depth * 26 * DPR;
-        const a = (dark ? 0.5 : 0.28) + Math.sin(t * s.twSpeed + s.tw) * (dark ? 0.32 : 0.14);
-        ctx.beginPath();
-        ctx.fillStyle = starColor(s, Math.max(0.05, a), dark);
-        if (dark) {
-          ctx.arc(s.x + ox, s.y + oy, s.r * DPR, 0, Math.PI * 2);
-        } else {
-          ctx.ellipse(s.x + ox, s.y + oy, s.r * 1.8 * DPR, s.r * 0.9 * DPR, s.tw, 0, Math.PI * 2);
-        }
-        ctx.fill();
-      }
-
-      /* 星座连线：靠近光标的星互相牵手（夜晚 + 桌面） */
-      if (dark && finePointer) {
-        const mx = mouse.x * DPR, my = mouse.y * DPR;
-        const near = [];
+      if (dark) {
+        /* --- 3D 星野 --- */
+        const zSpeed = 0.0016 * (active ? 2.2 : 1);
+        const camX = (mouse.x / innerWidth - 0.5) * 0.05;
+        const camY = (mouse.y / innerHeight - 0.5) * 0.035;
         for (const s of stars) {
-          if (s.depth < 0.8) continue;
-          const dx = s.x - mx, dy = s.y - my;
-          const d2 = dx * dx + dy * dy;
-          if (d2 < (220 * DPR) * (220 * DPR)) near.push(s);
-          if (near.length >= 14) break;
+          s.z -= zSpeed;
+          if (s.z < Z_NEAR) {
+            s.x = (Math.random() * 2 - 1) * extX;
+            s.y = (Math.random() * 2 - 1) * extY;
+            s.z = Z_FAR;
+          }
+          const k = F / s.z;
+          const sx = cx + (s.x - camX) * k;
+          const sy = cy + (s.y - camY) * k;
+          s.sx = sx; s.sy = sy;
+          if (sx < -30 || sx > w + 30 || sy < -30 || sy > h + 30) continue;
+          const depth = 1 - (s.z - Z_NEAR) / (Z_FAR - Z_NEAR);
+          let a = 0.2 + depth * 0.62 + Math.sin(t * s.twSpeed + s.tw) * 0.22;
+          if (s.z < 0.75) a *= (s.z - Z_NEAR) / (0.75 - Z_NEAR);
+          a = Math.max(0.04, Math.min(1, a));
+          const sr = Math.min(3 * DPR, s.r * DPR * (0.55 + depth * 1.35));
+          ctx.beginPath();
+          ctx.fillStyle = starColor(s, a);
+          ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+          ctx.fill();
+          if (depth > 0.82 && a > 0.5) {
+            ctx.strokeStyle = starColor(s, a * 0.28);
+            ctx.lineWidth = 1 * DPR;
+            ctx.beginPath();
+            ctx.moveTo(sx - sr * 3.2, sy); ctx.lineTo(sx + sr * 3.2, sy);
+            ctx.moveTo(sx, sy - sr * 3.2); ctx.lineTo(sx, sy + sr * 3.2);
+            ctx.stroke();
+          }
         }
-        ctx.lineWidth = 1 * DPR;
-        for (let i = 0; i < near.length; i++) {
-          for (let j = i + 1; j < near.length; j++) {
-            const a = near[i], b = near[j];
-            const dx = a.x - b.x, dy = a.y - b.y;
-            const dist = Math.hypot(dx, dy);
-            const maxD = 130 * DPR;
-            if (dist < maxD) {
-              const alpha = (1 - dist / maxD) * 0.4;
-              ctx.strokeStyle = `rgba(185, 166, 255, ${alpha})`;
-              ctx.beginPath();
-              ctx.moveTo(a.x, a.y);
-              ctx.lineTo(b.x, b.y);
-              ctx.stroke();
+
+        /* --- 星座连线：靠近光标的近景星互相牵手 --- */
+        if (finePointer) {
+          const mx = mouse.x * DPR, my = mouse.y * DPR;
+          const near = [];
+          for (const s of stars) {
+            if (s.z > 1.8) continue;
+            const dx = s.sx - mx, dy = s.sy - my;
+            if (dx * dx + dy * dy < (230 * DPR) * (230 * DPR)) near.push(s);
+            if (near.length >= 14) break;
+          }
+          ctx.lineWidth = 1 * DPR;
+          for (let i = 0; i < near.length; i++) {
+            for (let j = i + 1; j < near.length; j++) {
+              const a = near[i], b = near[j];
+              const dx = a.sx - b.sx, dy = a.sy - b.sy;
+              const dist = Math.hypot(dx, dy);
+              const maxD = 140 * DPR;
+              if (dist < maxD) {
+                const alpha = (1 - dist / maxD) * 0.38;
+                ctx.strokeStyle = `rgba(185, 166, 255, ${alpha})`;
+                ctx.beginPath();
+                ctx.moveTo(a.sx, a.sy);
+                ctx.lineTo(b.sx, b.sy);
+                ctx.stroke();
+              }
             }
           }
         }
-      }
 
-      /* 流星（夜晚） */
-      if (dark) {
+        /* --- 流星 --- */
         if (t > nextMeteorAt) spawnMeteor(t);
         for (let i = meteors.length - 1; i >= 0; i--) {
           const m = meteors[i];
@@ -623,8 +660,20 @@
           ctx.arc(m.x, m.y, 2.2 * DPR, 0, Math.PI * 2);
           ctx.fill();
         }
-      } else if (meteors.length) {
-        meteors = [];
+      } else {
+        /* --- 白天：暖色光尘 --- */
+        if (meteors.length) meteors = [];
+        const speedBoost = active ? 2 : 1;
+        for (const p of dust) {
+          p.x += p.vx * speedBoost; p.y += p.vy * speedBoost;
+          if (p.x < -10) p.x = w + 10; if (p.x > w + 10) p.x = -10;
+          if (p.y < -10) p.y = h + 10; if (p.y > h + 10) p.y = -10;
+          const a = 0.24 + Math.sin(t * p.twSpeed + p.tw) * 0.14;
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(214, 122, 155, ${Math.max(0.05, a * 0.5)})`;
+          ctx.ellipse(p.x, p.y, p.r * 1.8 * DPR, p.r * 0.9 * DPR, p.tw, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
 
       requestAnimationFrame(frame);
