@@ -1,5 +1,5 @@
 /* ==========================================================================
-   VEGALTAiR · Love Universe — v5.2 「鹊桥 · 星河 · 深空 · 花开」
+   VEGALTAiR · Love Universe — v5.3 「鹊桥 · 星河 · 深空 · 花开 · 动效」
    内容渲染 + 交互 + 3D 星空引擎。所有文字内容来自 content.js。
    ========================================================================== */
 (() => {
@@ -371,12 +371,69 @@
     });
   }
 
-  /* ---------- 入场动画 & 章节导航 ---------- */
-  const revealEls = $$('.reveal');
+  /* ---------- 入场动画：章节级双向重播 + 卡片级逐张浮现 ---------- */
   const io = new IntersectionObserver((entries) => {
-    entries.forEach(ent => { if (ent.isIntersecting) ent.target.classList.add('is-visible'); });
-  }, { threshold: 0.16 });
-  revealEls.forEach(el => io.observe(el));
+    entries.forEach(ent => {
+      if (ent.intersectionRatio >= 0.14) ent.target.classList.add('is-visible');
+      else if (!ent.isIntersecting) ent.target.classList.remove('is-visible');
+    });
+  }, { threshold: [0, 0.14] });
+  $$('.reveal').forEach(el => io.observe(el));
+
+  const itemIO = new IntersectionObserver((entries) => {
+    entries.forEach(ent => {
+      if (!ent.isIntersecting) return;
+      const el = ent.target;
+      itemIO.unobserve(el);
+      el.classList.add('is-visible');
+      const delayMs = (parseFloat(el.style.transitionDelay) || 0) * 1000;
+      setTimeout(() => {
+        el.classList.remove('reveal-item', 'is-visible');
+        el.style.transitionDelay = '';
+      }, 950 + delayMs);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -4% 0px' });
+  ['#lettersPreview', '#fragmentsPreview', '#repliesPreview', '#archiveGrid'].forEach(sel => {
+    const box = $(sel);
+    if (!box) return;
+    Array.from(box.children).forEach((el, i) => {
+      if (!el.matches('a, article')) return;
+      el.classList.add('reveal-item');
+      el.style.transitionDelay = ((i % 4) * 0.09) + 's';
+      itemIO.observe(el);
+    });
+  });
+
+  /* ---------- Hero 随滚动淡出下沉（滚回来复原） ---------- */
+  const heroStage = $('#hero');
+  if (heroStage && isHomePage && !reduced) {
+    let heroTicking = false;
+    const heroFade = () => {
+      heroTicking = false;
+      const f = Math.max(0, 1 - scrollY / (innerHeight * 0.62));
+      heroStage.style.opacity = f.toFixed(3);
+      heroStage.style.transform = `translateY(${Math.min(scrollY * 0.18, 240).toFixed(1)}px)`;
+      heroStage.style.pointerEvents = f < 0.05 ? 'none' : '';
+    };
+    addEventListener('scroll', () => {
+      if (!heroTicking) { heroTicking = true; requestAnimationFrame(heroFade); }
+    }, { passive: true });
+    heroFade();
+  }
+
+  /* ---------- 章节标题视差：滚动时轻微漂移 ---------- */
+  const parallaxHeads = $$('.section-heading h2');
+  if (parallaxHeads.length && !reduced && !isCoarsePointer) {
+    (function headTick() {
+      for (const h2 of parallaxHeads) {
+        const r = h2.parentElement.getBoundingClientRect();
+        if (r.bottom < -80 || r.top > innerHeight + 80) continue;
+        const off = (r.top + r.height / 2 - innerHeight / 2) * 0.08;
+        h2.style.transform = `translateY(${off.toFixed(1)}px)`;
+      }
+      requestAnimationFrame(headTick);
+    })();
+  }
 
   const railLinks = $$('.chapter-rail a');
   const sections = $$('[data-section]');
@@ -426,10 +483,12 @@
     return { d: Math.floor(diff / day), h: Math.floor((diff % day) / hour), m: Math.floor((diff % hour) / minute), s: Math.floor((diff % minute) / 1000) };
   }
   let lastSecond = -1;
+  let daysCountUpDone = false; /* 进场时数字从 0 滚到当前天数，完成前 updateTime 不覆盖 */
   function updateTime() {
     const p = parts(togetherStart), k = parts(knownStart);
     const set = (id, v) => { const el = $(id); if (el) el.textContent = v; };
-    set('#coreDays', p.d); set('#coreHours', p.h); set('#coreMinutes', p.m); set('#coreSeconds', p.s);
+    if (daysCountUpDone) set('#coreDays', p.d);
+    set('#coreHours', p.h); set('#coreMinutes', p.m); set('#coreSeconds', p.s);
     const secEl = $('#coreSeconds');
     if (secEl && p.s !== lastSecond) {
       lastSecond = p.s;
@@ -451,6 +510,31 @@
     }
   }
   updateTime(); setInterval(updateTime, 1000);
+
+  /* ---------- 天数滚动进场：滚到时间章节时数字从 0 跳到当前 ---------- */
+  const timeStage = document.getElementById('time');
+  if (timeStage && !reduced) {
+    const cuIO = new IntersectionObserver((ents) => {
+      ents.forEach(ent => {
+        if (!ent.isIntersecting) return;
+        cuIO.disconnect();
+        const el = $('#coreDays');
+        const target = parts(togetherStart).d;
+        const t0 = performance.now(), dur = 1400;
+        requestAnimationFrame(function cu(t) {
+          const k2 = Math.min(1, (t - t0) / dur);
+          const eased = 1 - Math.pow(1 - k2, 3);
+          if (el) el.textContent = Math.round(target * eased);
+          if (k2 < 1) requestAnimationFrame(cu);
+          else daysCountUpDone = true;
+        });
+      });
+    }, { threshold: 0.3 });
+    cuIO.observe(timeStage);
+  } else {
+    daysCountUpDone = true;
+    updateTime();
+  }
 
   /* ---------- 音乐播放器（记忆键保持不变） ---------- */
   const playlist = (DATA.playlist && DATA.playlist.length ? DATA.playlist : [
