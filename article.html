@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>阅读 · VEGALTAiR</title>
 <meta name="description" content="我们的宇宙里保存的一封信。" />
-<link rel="stylesheet" href="style.css?v=5.1-deepspace" />
+<link rel="stylesheet" href="style.css?v=5.2-bloom" />
 </head>
 <body class="sub-page article-sub-page article-dynamic-page">
-<script>(function(){try{if(localStorage.getItem('theme')!=='light')document.body.classList.add('dark');}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light')document.body.classList.add('dark');if(t==='bloom')document.body.classList.add('bloom');}catch(e){}})();</script>
 
 <div aria-hidden="true" class="scroll-progress" id="scrollProgress"><span></span></div>
 <canvas class="space-canvas" id="spaceCanvas" aria-hidden="true"></canvas>
@@ -21,6 +21,12 @@
 
 <div aria-hidden="true" class="planet-horizon" id="planetHorizon"></div>
 <div aria-hidden="true" class="vignette"></div>
+
+<div aria-hidden="true" class="bloom-scene" id="bloomScene">
+<canvas id="bloomCanvas"></canvas>
+<video id="bloomVideo" muted playsinline preload="none"></video>
+<div class="bloom-scrim"></div>
+</div>
 
 <div aria-hidden="true" class="day-scene">
 <div class="day-sun"></div>
@@ -78,7 +84,7 @@
 </div>
 </div>
 
-<script src="content.js?v=5.1-deepspace"></script>
-<script src="script.js?v=5.1-deepspace"></script>
+<script src="content.js?v=5.2-bloom"></script>
+<script src="script.js?v=5.2-bloom"></script>
 </body>
 </html>

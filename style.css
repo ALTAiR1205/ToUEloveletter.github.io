@@ -168,6 +168,32 @@ body.dark .planet-ringed { opacity: 1; }
 }
 body.dark .vignette { opacity: 1; }
 
+/* 花开模式：滚动驱动的视频背景（仅背景层，UI 不变，沿用夜晚玻璃质感） */
+.bloom-scene {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none;
+  background: #050308;
+  opacity: 0; visibility: hidden;
+  transition: opacity 1.2s ease, visibility 1.2s ease;
+}
+body.bloom .bloom-scene { opacity: 1; visibility: visible; }
+.bloom-scene canvas,
+.bloom-scene video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.bloom-scrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(3, 2, 10, 0.5), rgba(3, 2, 10, 0.22) 42%, rgba(3, 2, 10, 0.55));
+}
+body.bloom .nebula-field,
+body.bloom .planet-horizon,
+body.bloom .planet-ringed,
+body.bloom .vignette,
+body.bloom .day-scene,
+body.bloom .space-canvas { opacity: 0 !important; }
+
 .day-scene { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; opacity: 1; transition: opacity 1.2s ease; }
 body.dark .day-scene { opacity: 0; }
 .day-sun {

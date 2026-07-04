@@ -1,5 +1,5 @@
 /* ==========================================================================
-   VEGALTAiR · Love Universe — v5.1 「鹊桥 · 星河 · 深空」
+   VEGALTAiR · Love Universe — v5.2 「鹊桥 · 星河 · 深空 · 花开」
    内容渲染 + 交互 + 3D 星空引擎。所有文字内容来自 content.js。
    ========================================================================== */
 (() => {
@@ -150,16 +150,110 @@
   renderArchivePage();
   renderArticlePage();
 
-  /* ---------- 主题切换（记忆保持不变：localStorage.theme） ---------- */
+  /* ---------- 花开模式引擎：滚动驱动视频背景（懒加载，切到花开模式才下载） ---------- */
+  const BLOOM_SRC = 'media/bloom.mp4';
+  let bloomStarted = false;
+  function startBloom() {
+    if (bloomStarted) return;
+    const bCanvas = $('#bloomCanvas');
+    const bVideo = $('#bloomVideo');
+    if (!bCanvas || !bVideo) return;
+    bloomStarted = true;
+    const bCtx = bCanvas.getContext('2d');
+    let frames = [], ready = false, lastIdx = -1, seeking = false;
+
+    bVideo.preload = 'auto';
+    bVideo.src = BLOOM_SRC;
+    bVideo.load();
+    bVideo.addEventListener('loadeddata', () => { try { bVideo.currentTime = 0; } catch (e) {} });
+    bVideo.addEventListener('seeked', () => { seeking = false; });
+    bVideo.addEventListener('stalled', () => { seeking = false; });
+    bCanvas.style.visibility = 'hidden';
+
+    function resizeBloom() {
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      const bw = Math.round(innerWidth * dpr), bh = Math.round(innerHeight * dpr);
+      if (bCanvas.width !== bw || bCanvas.height !== bh) { bCanvas.width = bw; bCanvas.height = bh; }
+      lastIdx = -1;
+    }
+    resizeBloom();
+    addEventListener('resize', resizeBloom, { passive: true });
+
+    /* 预抽帧：比直接拖 video.currentTime 顺滑得多；按设备自适应帧数与尺寸 */
+    async function extractBloomFrames() {
+      try {
+        const res = await fetch(BLOOM_SRC);
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const v = document.createElement('video');
+        v.muted = true; v.playsInline = true; v.preload = 'auto'; v.src = url;
+        await new Promise((ok, no) => { v.onloadedmetadata = () => ok(); v.onerror = () => no(); setTimeout(no, 15000); });
+        const isMobile = innerWidth < 768;
+        const mem = navigator.deviceMemory || 4;
+        const maxW = isMobile ? 720 : 1280;
+        const maxFrames = (isMobile || mem <= 4) ? 72 : 120;
+        const scale = Math.min(1, maxW / v.videoWidth);
+        const fw = Math.round(v.videoWidth * scale), fh = Math.round(v.videoHeight * scale);
+        const n = Math.max(30, Math.min(maxFrames, Math.round(v.duration * 24)));
+        for (let i = 0; i < n; i++) {
+          v.currentTime = (i / (n - 1)) * (v.duration - 0.05);
+          await new Promise((ok, no) => {
+            const done = () => { v.removeEventListener('seeked', done); ok(); };
+            v.addEventListener('seeked', done);
+            setTimeout(() => { v.removeEventListener('seeked', done); no(); }, 3000);
+          });
+          frames.push(await createImageBitmap(v, { resizeWidth: fw, resizeHeight: fh }));
+        }
+        if (frames.length) {
+          ready = true;
+          bCanvas.style.visibility = 'visible';
+          bVideo.style.display = 'none';
+        }
+        URL.revokeObjectURL(url);
+      } catch (e) { /* 抽帧失败则退回拖动 video.currentTime */ }
+    }
+    extractBloomFrames();
+
+    function drawBloom(frame) {
+      const cw = bCanvas.width, ch = bCanvas.height;
+      const s = Math.max(cw / frame.width, ch / frame.height);
+      const dw = frame.width * s, dh = frame.height * s;
+      bCtx.drawImage(frame, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+    }
+    function bloomTick() {
+      if (document.body.classList.contains('bloom')) {
+        const max = document.documentElement.scrollHeight - innerHeight;
+        const progress = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+        if (ready && frames.length) {
+          const idx = Math.round(progress * (frames.length - 1));
+          if (idx !== lastIdx && frames[idx]) { lastIdx = idx; drawBloom(frames[idx]); }
+        } else if (bVideo.duration && isFinite(bVideo.duration) && bVideo.readyState >= 1) {
+          const t = progress * bVideo.duration;
+          if (!seeking && Math.abs(bVideo.currentTime - t) > 0.001) { seeking = true; bVideo.currentTime = t; }
+        }
+      }
+      requestAnimationFrame(bloomTick);
+    }
+    requestAnimationFrame(bloomTick);
+  }
+
+  /* ---------- 主题切换：夜晚 → 白天 → 花开（localStorage.theme，兼容旧值） ---------- */
   const themeBtn = $('#themeBtn');
-  const savedTheme = localStorage.getItem('theme');
-  document.body.classList.toggle('dark', savedTheme !== 'light');
-  if (themeBtn) themeBtn.textContent = document.body.classList.contains('dark') ? '白天模式' : '夜晚模式';
+  const THEME_ORDER = ['dark', 'light', 'bloom'];
+  let themeMode = localStorage.getItem('theme');
+  if (!THEME_ORDER.includes(themeMode)) themeMode = 'dark';
+  function applyTheme(mode) {
+    themeMode = mode;
+    document.body.classList.toggle('dark', mode !== 'light');
+    document.body.classList.toggle('bloom', mode === 'bloom');
+    if (themeBtn) themeBtn.textContent = mode === 'dark' ? '白天模式' : mode === 'light' ? '花开模式' : '夜晚模式';
+    if (mode === 'bloom') startBloom();
+  }
+  applyTheme(themeMode);
   themeBtn?.addEventListener('click', () => {
-    document.body.classList.toggle('dark');
-    const isDark = document.body.classList.contains('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    themeBtn.textContent = isDark ? '白天模式' : '夜晚模式';
+    const next = THEME_ORDER[(THEME_ORDER.indexOf(themeMode) + 1) % THEME_ORDER.length];
+    localStorage.setItem('theme', next);
+    applyTheme(next);
   });
 
   /* ---------- 开屏动画 ---------- */
@@ -567,6 +661,7 @@
     function frame(t) {
       if (!running) return;
       ctx.clearRect(0, 0, w, h);
+      if (document.body.classList.contains('bloom')) { requestAnimationFrame(frame); return; }
       const dark = document.body.classList.contains('dark');
       const active = document.body.classList.contains('music-active');
 
