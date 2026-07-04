@@ -1,5 +1,5 @@
 /* ==========================================================================
-   VEGALTAiR · Love Universe — v5.3 「鹊桥 · 星河 · 深空 · 花开 · 动效」
+   VEGALTAiR · Love Universe — v6.0 「鹊桥 · 星河 · 深空 · 花开 · Lumora 白天」
    内容渲染 + 交互 + 3D 星空引擎。所有文字内容来自 content.js。
    ========================================================================== */
 (() => {
@@ -253,6 +253,76 @@
     requestAnimationFrame(bloomTick);
   }
 
+  /* ---------- 白天模式引擎（Lumora）：分章节视频背景，懒加载 ---------- */
+  const DAYVIDS = ['media/day-golden.mp4', 'media/day-water.mp4', 'media/day-woods.mp4', 'media/day-dawn.mp4'];
+  const dayScene = $('#dayvidScene');
+  let dayStarted = false, dayEls = [], dayActive = -1, dayCooldownUntil = 0, dayReqId = 0, dayPending = -1;
+  function setDayVideo(i, force) {
+    if (!dayStarted || i === dayActive || !dayEls[i]) return;
+    const now = performance.now();
+    if (!force && now < dayCooldownUntil) {
+      /* 冷却期内的请求排队，冷却结束后自动执行最后一个 */
+      if (dayPending !== i) {
+        dayPending = i;
+        setTimeout(() => {
+          const p = dayPending; dayPending = -1;
+          if (p >= 0 && p !== dayActive) setDayVideo(p, true);
+        }, dayCooldownUntil - now + 60);
+      }
+      return;
+    }
+    dayCooldownUntil = now + 1000;
+    const req = ++dayReqId;
+    const v = dayEls[i];
+    if (!v.src) { v.src = DAYVIDS[i]; v.load(); }
+    const doFade = () => {
+      if (req !== dayReqId) return; /* 已被更新的切换请求取代 */
+      dayActive = i;
+      dayEls.forEach((el, j) => el.classList.toggle('active', j === i));
+      if (!reduced) v.play().catch(() => {});
+      setTimeout(() => dayEls.forEach((el, j) => { if (j !== i && el.src) el.pause(); }), 1100);
+      $$('.dayvid-switcher button').forEach(b => b.classList.toggle('active', Number(b.dataset.vid) === i));
+      /* 深林视频偏亮：正文切换为深色（Lumora 规范） */
+      document.body.classList.toggle('vid-bright', i === 2);
+    };
+    if (v.readyState >= 2) doFade();
+    else v.addEventListener('canplay', doFade, { once: true });
+  }
+  function startDayVideos() {
+    if (!dayScene) return;
+    if (dayStarted) {
+      if (dayActive >= 0 && !reduced) dayEls[dayActive].play().catch(() => {});
+      return;
+    }
+    dayStarted = true;
+    const scrim = dayScene.querySelector('.dayvid-scrim');
+    dayEls = DAYVIDS.map(() => {
+      const v = document.createElement('video');
+      v.muted = true; v.loop = true; v.playsInline = true;
+      v.setAttribute('playsinline', ''); v.setAttribute('muted', '');
+      v.preload = 'none';
+      dayScene.insertBefore(v, scrim);
+      return v;
+    });
+    const fixed = dayScene.dataset.fixed;
+    if (fixed !== undefined && fixed !== '') { setDayVideo(Number(fixed), true); return; }
+    /* 章节 ↔ 视频：章节进入视口中线时交叉淡入对应视频
+       （用 rootMargin 中央带触发，高于一屏的长章节也能命中） */
+    const vio = new IntersectionObserver((ents) => {
+      ents.forEach(ent => {
+        if (!ent.isIntersecting) return;
+        if (!document.body.classList.contains('daylight')) return;
+        const idx = Number(ent.target.dataset.vid);
+        if (Number.isInteger(idx) && idx >= 0 && idx < DAYVIDS.length) setDayVideo(idx);
+      });
+    }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+    $$('section[data-vid]').forEach(s => vio.observe(s));
+    $$('.dayvid-switcher button').forEach(b => {
+      b.addEventListener('click', () => setDayVideo(Number(b.dataset.vid), true));
+    });
+    setDayVideo(0, true);
+  }
+
   /* ---------- 主题切换：夜晚 → 白天 → 花开（localStorage.theme，兼容旧值） ---------- */
   const themeBtn = $('#themeBtn');
   const THEME_ORDER = ['dark', 'light', 'bloom'];
@@ -262,8 +332,11 @@
     themeMode = mode;
     document.body.classList.toggle('dark', mode !== 'light');
     document.body.classList.toggle('bloom', mode === 'bloom');
+    document.body.classList.toggle('daylight', mode === 'light');
     if (themeBtn) themeBtn.textContent = mode === 'dark' ? '白天模式' : mode === 'light' ? '花开模式' : '夜晚模式';
     if (mode === 'bloom') startBloom();
+    if (mode === 'light') startDayVideos();
+    else if (dayStarted) dayEls.forEach(v => { if (v.src) v.pause(); });
   }
   applyTheme(themeMode);
   themeBtn?.addEventListener('click', () => {
@@ -552,6 +625,16 @@
     updateTime();
   }
 
+  /* ---------- 白天模式底部数据条：数字来自真实内容 ---------- */
+  const dsDays = $('#dsDays');
+  if (dsDays) {
+    dsDays.textContent = `在一起 ${parts(togetherStart).d} 天`;
+    const dsL = $('#dsLetters'), dsF = $('#dsFrags'), dsR = $('#dsReplies');
+    if (dsL) dsL.textContent = `${(DATA.letters || []).length} 封信件`;
+    if (dsF) dsF.textContent = `${(DATA.fragments || []).length} 条碎碎念`;
+    if (dsR) dsR.textContent = `${(DATA.replies || []).length} 封回信`;
+  }
+
   /* ---------- 音乐播放器（记忆键保持不变） ---------- */
   const playlist = (DATA.playlist && DATA.playlist.length ? DATA.playlist : [
     { title: 'η', note: 'by α·Pav', src: 'music/bgm.mp3' }
@@ -761,7 +844,7 @@
     function frame(t) {
       if (!running) return;
       ctx.clearRect(0, 0, w, h);
-      if (document.body.classList.contains('bloom')) { requestAnimationFrame(frame); return; }
+      if (document.body.classList.contains('bloom') || document.body.classList.contains('daylight')) { requestAnimationFrame(frame); return; }
       const dark = document.body.classList.contains('dark');
       const active = document.body.classList.contains('music-active');
 

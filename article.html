@@ -5,10 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>阅读 · VEGALTAiR</title>
 <meta name="description" content="我们的宇宙里保存的一封信。" />
-<link rel="stylesheet" href="style.css?v=5.4-sharp" />
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css?v=6.3-lumora" />
 </head>
 <body class="sub-page article-sub-page article-dynamic-page">
-<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light')document.body.classList.add('dark');if(t==='bloom')document.body.classList.add('bloom');}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light')document.body.classList.add('dark');if(t==='bloom')document.body.classList.add('bloom');if(t==='light')document.body.classList.add('daylight');}catch(e){}})();</script>
 
 <div aria-hidden="true" class="scroll-progress" id="scrollProgress"><span></span></div>
 <canvas class="space-canvas" id="spaceCanvas" aria-hidden="true"></canvas>
@@ -26,6 +29,10 @@
 <canvas id="bloomCanvas"></canvas>
 <video id="bloomVideo" muted playsinline preload="none"></video>
 <div class="bloom-scrim"></div>
+</div>
+
+<div aria-hidden="true" class="dayvid-scene" data-fixed="1" id="dayvidScene">
+<div class="dayvid-scrim"></div>
 </div>
 
 <div aria-hidden="true" class="day-scene">
@@ -84,7 +91,7 @@
 </div>
 </div>
 
-<script src="content.js?v=5.4-sharp"></script>
-<script src="script.js?v=5.4-sharp"></script>
+<script src="content.js?v=6.3-lumora"></script>
+<script src="script.js?v=6.3-lumora"></script>
 </body>
 </html>

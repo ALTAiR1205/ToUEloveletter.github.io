@@ -5,10 +5,13 @@
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <title>Love Universe · VEGALTAiR</title>
 <meta content="我们的宇宙里保存的一封信。" name="description"/>
-<link href="style.css?v=5.4-sharp" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet"/>
+<link href="style.css?v=6.3-lumora" rel="stylesheet"/>
 </head>
 <body class="home-page">
-<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light')document.body.classList.add('dark');if(t==='bloom')document.body.classList.add('bloom');}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light')document.body.classList.add('dark');if(t==='bloom')document.body.classList.add('bloom');if(t==='light')document.body.classList.add('daylight');}catch(e){}})();</script>
 
 <div aria-hidden="true" class="scroll-progress" id="scrollProgress"><span></span></div>
 <canvas aria-hidden="true" class="space-canvas" id="spaceCanvas"></canvas>
@@ -74,6 +77,10 @@
 <div class="bloom-scrim"></div>
 </div>
 
+<div aria-hidden="true" class="dayvid-scene" id="dayvidScene">
+<div class="dayvid-scrim"></div>
+</div>
+
 <div aria-hidden="true" class="day-scene">
 <div class="day-sun"></div>
 <div class="day-haze haze-a"></div>
@@ -125,7 +132,7 @@
 </aside>
 
 <main>
-<section class="stage hero-stage snap-section" data-section="hero" id="hero">
+<section class="stage hero-stage snap-section" data-section="hero" data-vid="0" id="hero">
 <div class="hero-copy reveal">
 <p class="eyebrow">To：杜叶</p>
 <h1 class="mega-title"><span>欢迎来到</span><span class="grad-text">我们的小世界</span></h1>
@@ -215,9 +222,18 @@
 </div>
 </div>
 <div aria-hidden="true" class="scroll-hint"><span></span></div>
+<div class="dayvid-switcher" id="dayvidSwitcher">
+<button data-vid="0" type="button">金色时刻</button>
+<button data-vid="1" type="button">静水</button>
+<button data-vid="2" type="button">深林</button>
+<button data-vid="3" type="button">晨曦</button>
+</div>
+<div class="hero-daystats" id="heroDaystats">
+<span id="dsDays">在一起的每一天</span><i>|</i><span id="dsLetters">写给你的信</span><i>|</i><span id="dsFrags">碎碎念</span><i>|</i><span id="dsReplies">你的回信</span>
+</div>
 </section>
 
-<section class="stage time-stage snap-section" data-section="time" id="time">
+<section class="stage time-stage snap-section" data-section="time" data-vid="1" id="time">
 <div class="section-heading reveal">
 <span>Chapter 01</span>
 <h2>我们的时间</h2>
@@ -243,7 +259,7 @@
 </div>
 </section>
 
-<section class="stage archive-stage snap-section" data-section="letters" id="letters">
+<section class="stage archive-stage snap-section" data-section="letters" data-vid="2" id="letters">
 <div class="section-heading reveal">
 <span>Chapter 02</span>
 <h2>写给你</h2>
@@ -255,7 +271,7 @@
 </div>
 </section>
 
-<section class="stage nebula-stage snap-section" data-section="fragments" id="fragments">
+<section class="stage nebula-stage snap-section" data-section="fragments" data-vid="3" id="fragments">
 <div class="section-heading reveal">
 <span>Chapter 03</span>
 <h2>碎碎念</h2>
@@ -267,7 +283,7 @@
 </div>
 </section>
 
-<section class="stage reply-stage snap-section" data-section="replies" id="replies">
+<section class="stage reply-stage snap-section" data-section="replies" data-vid="1" id="replies">
 <div class="section-heading reveal">
 <span>Chapter 04</span>
 <h2>你的回信</h2>
@@ -279,7 +295,7 @@
 </div>
 </section>
 
-<section class="stage ending-stage snap-section" data-section="about" id="about">
+<section class="stage ending-stage snap-section" data-section="about" data-vid="0" id="about">
 <div class="ending-card reveal" data-tilt="">
 <div aria-hidden="true" class="ending-infinity">∞</div>
 <span>Chapter 05 / Universe Edge</span>
@@ -328,7 +344,7 @@
 </div>
 </div>
 
-<script src="content.js?v=5.4-sharp"></script>
-<script src="script.js?v=5.4-sharp"></script>
+<script src="content.js?v=6.3-lumora"></script>
+<script src="script.js?v=6.3-lumora"></script>
 </body>
 </html>

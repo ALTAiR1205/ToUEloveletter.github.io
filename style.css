@@ -1159,6 +1159,230 @@ body:not(.dark) .disc-core {
   .planet-ringed { width: 116px; right: 4vw; top: 10vh; }
 }
 
+/* ============================================================
+   白天模式 v6 · 「Lumora」电影感
+   分章节视频背景 + 液态玻璃 + 衬线排版。
+   仅 body.daylight 生效；夜晚模式与花开模式不受影响。
+   ============================================================ */
+body.daylight {
+  --ink: #ffffff;
+  --ink-dim: rgba(255, 255, 255, 0.84);
+  --ink-faint: rgba(255, 255, 255, 0.58);
+  --pink: #ffdcae;
+  --violet: #ffc9d8;
+  --cyan: #cfe6ff;
+  --gold: #ffe3b0;
+  --grad: linear-gradient(115deg, #fff3d6 0%, #ffd9e0 50%, #cfe6ff 100%);
+  --glass: rgba(15, 17, 27, 0.34);
+  --glass-strong: rgba(13, 15, 24, 0.62);
+  --line: rgba(255, 255, 255, 0.2);
+  --line-strong: rgba(255, 255, 255, 0.42);
+  --glow: rgba(255, 227, 176, 0.22);
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.38);
+  --header-bg: transparent;
+  background: #0b0b0f;
+}
+body.daylight .day-scene { display: none; }
+body.daylight .nebula-field,
+body.daylight .planet-horizon,
+body.daylight .planet-ringed,
+body.daylight .vignette,
+body.daylight .space-canvas { opacity: 0 !important; }
+
+/* --- 分章节视频背景 --- */
+.dayvid-scene {
+  position: fixed; inset: 0; z-index: 0;
+  overflow: hidden; pointer-events: none;
+  background: #0b0b0f;
+  opacity: 0; visibility: hidden;
+  transition: opacity 1s ease, visibility 1s ease;
+}
+body.daylight .dayvid-scene { opacity: 1; visibility: visible; }
+.dayvid-scene video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+.dayvid-scene video.active { opacity: 1; }
+.dayvid-scrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(5, 5, 10, 0.52), rgba(5, 5, 10, 0.14) 30%, rgba(5, 5, 10, 0.14) 62%, rgba(5, 5, 10, 0.6));
+}
+
+/* --- 液态玻璃 --- */
+body.daylight .top-nav,
+body.daylight .eyebrow,
+body.daylight .action.ghost,
+body.daylight .time-core,
+body.daylight .ending-card,
+body.daylight .music-dock,
+body.daylight .back-link,
+body.daylight .reader-panel,
+body.daylight .article-shell,
+body.daylight .timeline-node,
+body.daylight .nebula-card,
+body.daylight .transmission-card,
+body.daylight .library-card {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(12px) saturate(1.25);
+  backdrop-filter: blur(12px) saturate(1.25);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.14), 0 18px 46px rgba(0, 0, 0, 0.32);
+}
+body.daylight .top-nav { position: relative; padding: 8px 12px 8px 24px; border-radius: 99px; border: 1px solid transparent; overflow: hidden; }
+body.daylight .action.ghost { position: relative; overflow: hidden; }
+body.daylight .top-nav::before,
+body.daylight .action.ghost::before,
+body.daylight .time-core::before,
+body.daylight .ending-card::before,
+body.daylight .music-dock::before,
+body.daylight .back-link::before {
+  content: ""; position: absolute; inset: 0;
+  border-radius: inherit; padding: 1.4px;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 20%,
+    rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.15) 80%, rgba(255, 255, 255, 0.45) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+body.daylight .back-link { position: relative; overflow: hidden; }
+
+/* --- 导航 · Lumora 式 --- */
+body.daylight .site-header {
+  background: transparent;
+  border-bottom: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+body.daylight .brand {
+  font-family: 'Instrument Serif', var(--font-display);
+  font-style: italic; font-weight: 400;
+  font-size: 20px; letter-spacing: 1px;
+}
+body.daylight .brand-mark { color: #2a2118; }
+body.daylight .theme-btn {
+  background: #fff; color: #14161f;
+  border: 1px solid transparent; font-weight: 600;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+}
+
+/* --- 文字：白色衬线，去渐变 --- */
+body.daylight .grad-text,
+body.daylight .section-heading h2,
+body.daylight .ending-card h2,
+body.daylight .library-hero h1 {
+  background: none;
+  -webkit-background-clip: initial; background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: #fff;
+  animation: none;
+  text-shadow: 0 4px 38px rgba(0, 0, 0, 0.42);
+}
+body.daylight .time-dials strong {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: #fff;
+}
+
+/* --- Hero · 居中电影式 --- */
+body.daylight .hero-stage {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding-bottom: 170px;
+}
+body.daylight .hero-visual { display: none; }
+body.daylight .hero-copy { display: flex; flex-direction: column; align-items: center; }
+body.daylight .eyebrow {
+  padding: 9px 20px; border-radius: 99px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--ink-dim); letter-spacing: 3px;
+}
+body.daylight .eyebrow::before { display: none; }
+body.daylight .hero-subtitle { border-left: none; padding-left: 0; }
+body.daylight .action.primary {
+  background: #fff; color: #14161f;
+  animation: none; font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+body.daylight .scroll-hint { display: none; }
+body.daylight .node-date { color: #2a2118; }
+
+/* --- 视频切换器 + 数据条（仅白天模式显示） --- */
+.dayvid-switcher, .hero-daystats { display: none; }
+body.daylight .dayvid-switcher {
+  display: flex; flex-wrap: wrap; gap: clamp(14px, 3vw, 34px);
+  justify-content: center;
+  position: absolute; left: 16px; right: 16px; bottom: 88px;
+  font-family: system-ui, sans-serif;
+}
+body.daylight .dayvid-switcher button {
+  font-size: 13px; letter-spacing: 3px;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 6px 2px;
+  border-bottom: 2px solid transparent; border-radius: 0;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+body.daylight .dayvid-switcher button:hover { color: rgba(255, 255, 255, 0.8); }
+body.daylight .dayvid-switcher button.active { color: #fff; border-bottom-color: #fff; }
+body.daylight .hero-daystats {
+  display: flex; flex-wrap: wrap; gap: 10px 14px;
+  justify-content: center; align-items: center;
+  position: absolute; left: 16px; right: 16px; bottom: 32px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12.5px; letter-spacing: 1.5px;
+  font-family: system-ui, sans-serif;
+}
+body.daylight .hero-daystats i { font-style: normal; opacity: 0.35; }
+
+/* --- 亮色视频（深林）时正文转深色，仿 Lumora 规范 #182C41，700ms 过渡 --- */
+body.daylight .mega-title span,
+body.daylight .hero-subtitle,
+body.daylight .eyebrow,
+body.daylight .section-heading h2,
+body.daylight .section-heading p,
+body.daylight .section-heading span,
+body.daylight .dayvid-switcher button,
+body.daylight .starbridge-caption {
+  transition: color 0.7s ease, text-shadow 0.7s ease, border-color 0.7s ease;
+}
+body.daylight.vid-bright .mega-title span,
+body.daylight.vid-bright .mega-title .grad-text,
+body.daylight.vid-bright .section-heading h2 {
+  color: #182c41; text-shadow: none;
+}
+body.daylight.vid-bright .hero-subtitle,
+body.daylight.vid-bright .section-heading p { color: rgba(24, 44, 65, 0.82); }
+body.daylight.vid-bright .section-heading span { color: rgba(24, 44, 65, 0.6); }
+body.daylight.vid-bright .hero-subtitle .type-caret { background: #182c41; }
+body.daylight.vid-bright .eyebrow {
+  color: rgba(24, 44, 65, 0.85);
+  border-color: rgba(24, 44, 65, 0.35);
+  background: rgba(255, 255, 255, 0.28);
+}
+body.daylight.vid-bright .dayvid-switcher button { color: rgba(24, 44, 65, 0.5); }
+body.daylight.vid-bright .dayvid-switcher button:hover { color: rgba(24, 44, 65, 0.8); }
+body.daylight.vid-bright .dayvid-switcher button.active { color: #182c41; border-bottom-color: #182c41; }
+
+/* --- 杂项适配 --- */
+body.daylight .reader-backdrop { background: rgba(3, 4, 8, 0.6); }
+body.daylight .disc-core {
+  background:
+    radial-gradient(circle at 50% 50%, #0b0b0f 0 17%, transparent 17.5%),
+    repeating-radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.14) 0 2px, transparent 2px 5px),
+    conic-gradient(from 0deg, #2b2a33, #4a4656, #2b2a33, #565064, #2b2a33);
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4);
+}
+@media (max-width: 640px) {
+  body.daylight .dayvid-switcher { bottom: 92px; gap: 12px 20px; }
+  body.daylight .hero-daystats { font-size: 11px; gap: 6px 10px; }
+  body.daylight .hero-stage { padding-bottom: 185px; }
+}
+
 /* ---------- 无障碍：减少动态 ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
