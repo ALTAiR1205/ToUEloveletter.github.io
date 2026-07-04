@@ -207,7 +207,7 @@
         if (frames.length) {
           ready = true;
           bCanvas.style.visibility = 'visible';
-          bVideo.style.display = 'none';
+          /* 真视频保留在画布下层：停止滚动时显示原片全分辨率画面 */
         }
         URL.revokeObjectURL(url);
       } catch (e) { /* 抽帧失败则退回拖动 video.currentTime */ }
@@ -220,13 +220,29 @@
       const dw = frame.width * s, dh = frame.height * s;
       bCtx.drawImage(frame, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
     }
+    /* 滚动中：画抽帧（顺滑）；停止滚动 220ms 后：把真视频定位到当前进度，
+       淡出画布露出原片（全分辨率清晰画面）。 */
+    let lastProgress = -1, lastMoveAt = 0, parked = false, parkPending = false;
+    bVideo.addEventListener('seeked', () => {
+      if (parkPending) { parkPending = false; parked = true; bCanvas.style.opacity = '0'; }
+    });
     function bloomTick() {
       if (document.body.classList.contains('bloom')) {
         const max = document.documentElement.scrollHeight - innerHeight;
         const progress = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+        const now = performance.now();
         if (ready && frames.length) {
-          const idx = Math.round(progress * (frames.length - 1));
-          if (idx !== lastIdx && frames[idx]) { lastIdx = idx; drawBloom(frames[idx]); }
+          if (Math.abs(progress - lastProgress) > 0.0005) {
+            lastProgress = progress;
+            lastMoveAt = now;
+            if (parked || parkPending) { parked = false; parkPending = false; bCanvas.style.opacity = '1'; }
+            const idx = Math.round(progress * (frames.length - 1));
+            if (idx !== lastIdx && frames[idx]) { lastIdx = idx; drawBloom(frames[idx]); }
+          } else if (!parked && !parkPending && now - lastMoveAt > 220 && bVideo.duration && isFinite(bVideo.duration)) {
+            parkPending = true;
+            seeking = true;
+            try { bVideo.currentTime = progress * bVideo.duration; } catch (e) { parkPending = false; }
+          }
         } else if (bVideo.duration && isFinite(bVideo.duration) && bVideo.readyState >= 1) {
           const t = progress * bVideo.duration;
           if (!seeking && Math.abs(bVideo.currentTime - t) > 0.001) { seeking = true; bVideo.currentTime = t; }

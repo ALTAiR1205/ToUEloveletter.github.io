@@ -183,6 +183,7 @@ body.bloom .bloom-scene { opacity: 1; visibility: visible; }
   width: 100%; height: 100%;
   object-fit: cover;
 }
+.bloom-scene canvas { transition: opacity 0.25s ease; }
 .bloom-scrim {
   position: absolute; inset: 0;
   background: linear-gradient(to bottom, rgba(3, 2, 10, 0.5), rgba(3, 2, 10, 0.22) 42%, rgba(3, 2, 10, 0.55));
