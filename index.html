@@ -8,10 +8,10 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=6.4-bloomcover" rel="stylesheet"/>
+<link href="style.css?v=7.0-asme" rel="stylesheet"/>
 </head>
 <body class="home-page">
-<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light')document.body.classList.add('dark');if(t==='bloom')document.body.classList.add('bloom');if(t==='light')document.body.classList.add('daylight');}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light')document.body.classList.add('dark');if(t==='bloom')document.body.classList.add('bloom');if(t==='light')document.body.classList.add('daylight');if(t!=='light'&&t!=='bloom')document.body.classList.add('night');}catch(e){}})();</script>
 
 <div aria-hidden="true" class="scroll-progress" id="scrollProgress"><span></span></div>
 <canvas aria-hidden="true" class="space-canvas" id="spaceCanvas"></canvas>
@@ -133,6 +133,10 @@
 
 <main>
 <section class="stage hero-stage snap-section" data-section="hero" data-vid="0" id="hero">
+<div aria-hidden="true" class="asme-hero-bg" id="asmeHeroBg">
+<video data-night-src="media/night-hero.mp4" id="nightHeroVideo" muted playsinline preload="none"></video>
+<div class="asme-hero-grad"></div>
+</div>
 <div class="hero-copy reveal">
 <p class="eyebrow">To：杜叶</p>
 <h1 class="mega-title"><span>欢迎来到</span><span class="grad-text">我们的小世界</span></h1>
@@ -265,6 +269,17 @@
 <h2>写给你</h2>
 <p>Across the Pacific, but still close to my heart. 即使被重山和大洋阻隔，我的心仍然在你那。</p>
 </div>
+<div class="feature-video-card reveal" id="lettersFeature">
+<video data-night-src="media/night-letters.mp4" loop muted playsinline preload="none"></video>
+<div aria-hidden="true" class="fvc-grad"></div>
+<div class="fvc-overlay">
+<div class="fvc-glass">
+<span>Our Letters</span>
+<p>每一次想你，都被收进这里。往下，是我在每个时刻里认真想你的证据。</p>
+</div>
+<a class="action ghost magnetic fvc-btn" href="archive.html?type=letters">查看全部信件</a>
+</div>
+</div>
 <div class="timeline-shell reveal delay-1"><div class="timeline-line"></div><div class="timeline-preview-list" id="lettersPreview"></div></div>
 <div class="center-action reveal">
 <a class="action ghost magnetic" href="archive.html?type=letters">查看全部信件</a>
@@ -296,6 +311,9 @@
 </section>
 
 <section class="stage ending-stage snap-section" data-section="about" data-vid="0" id="about">
+<div aria-hidden="true" class="ending-video-card reveal">
+<video data-night-src="media/night-vision.mp4" loop muted playsinline preload="none"></video>
+</div>
 <div class="ending-card reveal" data-tilt="">
 <div aria-hidden="true" class="ending-infinity">∞</div>
 <span>Chapter 05 / Universe Edge</span>
@@ -344,7 +362,7 @@
 </div>
 </div>
 
-<script src="content.js?v=6.4-bloomcover"></script>
-<script src="script.js?v=6.4-bloomcover"></script>
+<script src="content.js?v=7.0-asme"></script>
+<script src="script.js?v=7.0-asme"></script>
 </body>
 </html>

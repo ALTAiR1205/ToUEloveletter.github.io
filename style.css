@@ -1431,6 +1431,220 @@ body.daylight .disc-core {
   body.daylight .hero-stage { padding-bottom: 185px; }
 }
 
+/* ============================================================
+   夜晚模式 v7 · 「Asme」纯黑液态玻璃
+   仅 body.night（夜晚模式）生效；花开/白天模式不受影响。
+   ============================================================ */
+body.night {
+  --bg-0: #010101; --bg-1: #050508;
+  --ink: #ffffff;
+  --ink-dim: rgba(255, 255, 255, 0.72);
+  --ink-faint: rgba(255, 255, 255, 0.42);
+  --pink: #ffffff; --violet: #d6d6e6; --cyan: #e9e9f4; --gold: #f2ead8;
+  --grad: linear-gradient(115deg, #ffffff 0%, #d9d9e8 100%);
+  --glass: rgba(255, 255, 255, 0.03);
+  --glass-strong: rgba(10, 10, 14, 0.82);
+  --line: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.28);
+  --glow: rgba(255, 255, 255, 0.12);
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+  --header-bg: transparent;
+  background: #010101;
+}
+body.night .nebula-field,
+body.night .planet-horizon,
+body.night .planet-ringed { opacity: 0 !important; }
+body.night .space-canvas { opacity: 0.5; }
+
+/* --- 玻璃胶囊导航 --- */
+body.night .site-header {
+  left: 50%; right: auto; transform: translateX(-50%);
+  top: 14px; width: min(1000px, calc(100% - 28px));
+  border-radius: 99px;
+  padding: 10px 12px 10px 24px;
+  background: rgba(255, 255, 255, 0.01);
+  border-bottom: none;
+  -webkit-backdrop-filter: blur(6px) saturate(1.2); backdrop-filter: blur(6px) saturate(1.2);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+body.night .site-header::before {
+  content: ""; position: absolute; inset: 0;
+  border-radius: inherit; padding: 1.4px;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 20%,
+    rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.15) 80%, rgba(255, 255, 255, 0.45) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+body.night .brand { font-family: 'Instrument Serif', var(--font-display); font-style: italic; font-weight: 400; }
+body.night .brand-mark { background: #fff; color: #000; box-shadow: none; animation: none; }
+body.night .theme-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+/* --- Hero：全屏视频 + 居中巨型衬线标题 --- */
+.asme-hero-bg { display: none; }
+body.night .hero-stage {
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  max-width: none;
+}
+body.night .asme-hero-bg { display: block; position: absolute; inset: 0; pointer-events: none; }
+.asme-hero-bg video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: bottom;
+  opacity: 0;
+}
+.asme-hero-grad {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(1, 1, 1, 0.92), rgba(1, 1, 1, 0.25) 30%, rgba(1, 1, 1, 0.15) 60%, rgba(1, 1, 1, 0.55));
+}
+body.night .hero-visual { display: none; }
+body.night .hero-copy { display: flex; flex-direction: column; align-items: center; transform: translateY(-4%); }
+body.night .mega-title {
+  font-size: clamp(46px, 9vw, 116px);
+  letter-spacing: 1px; line-height: 1.08;
+  margin: 20px 0 26px;
+}
+body.night .mega-title span { display: inline; }
+body.night .mega-title span:first-child { font-size: 1em; color: #fff; letter-spacing: inherit; margin-right: 0.22em; }
+body.night .mega-title .grad-text {
+  background: none;
+  -webkit-background-clip: initial; background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: #fff; animation: none;
+  font-style: italic;
+}
+body.night .eyebrow { color: rgba(255, 255, 255, 0.55); letter-spacing: 0.3em; }
+body.night .eyebrow::before { display: none; }
+body.night .hero-subtitle { border-left: none; padding-left: 0; min-height: 0; font-size: 14.5px; }
+body.night .action.primary { background: #fff; color: #050505; animation: none; font-weight: 600; box-shadow: 0 10px 34px rgba(0, 0, 0, 0.4); }
+body.night .action.primary::after { display: none; }
+body.night .action.ghost { background: rgba(255, 255, 255, 0.02); border-color: rgba(255, 255, 255, 0.22); }
+
+/* --- 章节标题：小标签 + 纯白大标题 --- */
+body.night .section-heading span { color: rgba(255, 255, 255, 0.38); letter-spacing: 0.32em; }
+body.night .section-heading h2 {
+  background: none;
+  -webkit-background-clip: initial; background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: #fff; animation: none;
+  letter-spacing: 1px;
+}
+body.night .section-heading p { color: rgba(255, 255, 255, 0.55); }
+body.night .time-stage { background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.035) 0%, transparent 70%); }
+body.night .reply-stage { background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.025) 0%, transparent 60%); }
+
+/* --- 卡片：极简 Asme 玻璃 --- */
+body.night .timeline-node,
+body.night .nebula-card,
+body.night .transmission-card,
+body.night .time-core,
+body.night .library-card,
+body.night .article-shell,
+body.night .reader-panel {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 24px;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08), 0 20px 50px rgba(0, 0, 0, 0.35);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+}
+body.night .timeline-node:hover,
+body.night .nebula-card:hover,
+body.night .transmission-card:hover,
+body.night .library-card:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+body.night .node-date { background: #fff; color: #050505; box-shadow: none; }
+body.night .signal-line { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent); background-size: 200% 100%; }
+@keyframes radarPingWhite {
+  0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+  80% { box-shadow: 0 0 0 14px rgba(255, 255, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+body.night .transmission-card::after { background: #fff; animation: radarPingWhite 2.4s ease-out infinite; }
+body.night .time-halo { opacity: 0.5; }
+
+/* --- 信件区特色视频卡（模板 Featured Video） --- */
+.feature-video-card { display: none; }
+body.night .feature-video-card {
+  display: block; position: relative;
+  max-width: 1120px; width: 100%;
+  margin: 0 auto clamp(30px, 5vh, 54px);
+  border-radius: 28px; overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: #0a0a0c;
+}
+.feature-video-card video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.fvc-grad { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.62), transparent 55%); }
+.fvc-overlay {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 20px;
+  padding: clamp(18px, 3vw, 40px);
+}
+.fvc-glass {
+  max-width: 440px;
+  border-radius: 20px;
+  padding: clamp(18px, 2.6vw, 30px);
+  background: rgba(255, 255, 255, 0.01);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.fvc-glass span { display: block; font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255, 255, 255, 0.5); margin-bottom: 10px; }
+.fvc-glass p { font-size: 14.5px; line-height: 1.9; color: #fff; }
+.fvc-btn { flex: none; }
+body.night #letters .center-action { display: none; }
+@media (max-width: 760px) {
+  .fvc-overlay { flex-direction: column; align-items: flex-start; }
+}
+
+/* --- 宇宙边缘：左视频右文字（模板 Philosophy） --- */
+.ending-video-card { display: none; }
+body.night .ending-stage {
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(24px, 4vw, 56px);
+}
+body.night .ending-video-card {
+  display: block; position: relative;
+  border-radius: 28px; overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: #0a0a0c;
+}
+.ending-video-card video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+body.night .ending-card {
+  max-width: none; text-align: left;
+  background: transparent; border: none; box-shadow: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+  padding: 0; overflow: visible;
+}
+body.night .ending-infinity { display: none; }
+body.night .ending-card h2 {
+  background: none;
+  -webkit-background-clip: initial; background-clip: initial;
+  -webkit-text-fill-color: currentColor;
+  color: #fff; animation: none;
+}
+body.night .ending-card strong {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 22px;
+}
+body.night .ending-signature { letter-spacing: 10px; }
+@media (max-width: 900px) {
+  body.night .ending-stage { grid-template-columns: 1fr; }
+}
+
 /* ---------- 无障碍：减少动态 ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

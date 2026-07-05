@@ -1,5 +1,5 @@
 /* ==========================================================================
-   VEGALTAiR · Love Universe — v6.0 「鹊桥 · 星河 · 深空 · 花开 · Lumora 白天」
+   VEGALTAiR · Love Universe — v7.0 「Asme 夜晚 · Lumora 白天 · 花开」
    内容渲染 + 交互 + 3D 星空引擎。所有文字内容来自 content.js。
    ========================================================================== */
 (() => {
@@ -323,6 +323,65 @@
     setDayVideo(0, true);
   }
 
+  /* ---------- 夜晚模式引擎（Asme）：hero 无缝黑场循环 + 分区视频懒加载 ---------- */
+  let nightStarted = false, nightVids = [];
+  function startNight() {
+    if (nightStarted) {
+      if (!reduced) nightVids.forEach(v => { if (v.src && v.paused) v.play().catch(() => {}); });
+      return;
+    }
+    nightStarted = true;
+    nightVids = $$('video[data-night-src]');
+    if (!nightVids.length) return;
+    const heroV = document.getElementById('nightHeroVideo');
+
+    /* 分区视频：接近视口时才加载（省流量），加载后循环播放 */
+    const lazyIO = new IntersectionObserver((ents) => {
+      ents.forEach(ent => {
+        if (!ent.isIntersecting) return;
+        const v = ent.target;
+        lazyIO.unobserve(v);
+        if (v.src) return;
+        v.src = v.dataset.nightSrc;
+        v.load();
+        v.addEventListener('canplay', () => {
+          if (!reduced && document.body.classList.contains('night')) v.play().catch(() => {});
+        }, { once: true });
+      });
+    }, { rootMargin: '240px 0px' });
+    nightVids.forEach(v => { if (v !== heroV) lazyIO.observe(v); });
+
+    /* Hero：淡入 → 结尾前 0.55s 淡出到黑 → 100ms 黑场 → 回开头再淡入（无缝循环） */
+    if (heroV) {
+      heroV.style.transition = 'opacity 0.5s ease';
+      let fadingOut = false;
+      heroV.src = heroV.dataset.nightSrc;
+      heroV.load();
+      heroV.addEventListener('canplay', () => {
+        if (reduced) { heroV.style.opacity = '0.85'; return; }
+        heroV.play().catch(() => {});
+        heroV.style.opacity = '1';
+      }, { once: true });
+      heroV.addEventListener('timeupdate', () => {
+        if (!fadingOut && heroV.duration && heroV.duration - heroV.currentTime <= 0.55) {
+          fadingOut = true;
+          heroV.style.opacity = '0';
+        }
+      });
+      heroV.addEventListener('ended', () => {
+        setTimeout(() => {
+          heroV.currentTime = 0;
+          if (!reduced && document.body.classList.contains('night')) heroV.play().catch(() => {});
+          fadingOut = false;
+          heroV.style.opacity = reduced ? '0.85' : '1';
+        }, 100);
+      });
+    }
+  }
+  function stopNight() {
+    nightVids.forEach(v => { if (v.src) v.pause(); });
+  }
+
   /* ---------- 主题切换：夜晚 → 白天 → 花开（localStorage.theme，兼容旧值） ---------- */
   const themeBtn = $('#themeBtn');
   const THEME_ORDER = ['dark', 'light', 'bloom'];
@@ -333,10 +392,12 @@
     document.body.classList.toggle('dark', mode !== 'light');
     document.body.classList.toggle('bloom', mode === 'bloom');
     document.body.classList.toggle('daylight', mode === 'light');
+    document.body.classList.toggle('night', mode === 'dark');
     if (themeBtn) themeBtn.textContent = mode === 'dark' ? '白天模式' : mode === 'light' ? '花开模式' : '夜晚模式';
     if (mode === 'bloom') startBloom();
     if (mode === 'light') startDayVideos();
     else if (dayStarted) dayEls.forEach(v => { if (v.src) v.pause(); });
+    if (mode === 'dark') startNight(); else stopNight();
   }
   applyTheme(themeMode);
   themeBtn?.addEventListener('click', () => {
