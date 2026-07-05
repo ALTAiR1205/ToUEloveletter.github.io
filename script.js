@@ -355,7 +355,9 @@
     if (heroV) {
       heroV.style.transition = 'opacity 0.5s ease';
       let fadingOut = false;
-      heroV.src = heroV.dataset.nightSrc;
+      /* 电脑横屏用横屏高清源，手机竖屏用竖屏高清源 */
+      const landscape = innerWidth >= innerHeight;
+      heroV.src = (landscape && heroV.dataset.nightSrcLandscape) ? heroV.dataset.nightSrcLandscape : heroV.dataset.nightSrc;
       heroV.load();
       heroV.addEventListener('canplay', () => {
         if (reduced) { heroV.style.opacity = '0.85'; return; }
