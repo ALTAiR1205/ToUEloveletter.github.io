@@ -42,6 +42,30 @@
     return type === 'letters' ? 'Letter Archive' : type === 'replies' ? 'Incoming Transmission' : 'Fragment Archive';
   }
 
+  /* ---------- 内容规范化：新增内容不用再手写 id / kicker / 排序 ----------
+     在 content.js 里新增信件/回信/碎碎念时，只需要 date、title、body（tags 可选），
+     放在数组的任何位置都可以：这里会按日期自动排序（新→旧）、自动补全 id 和编号。
+     已经写了 id 的旧条目保持原样，历史链接不会失效。 */
+  function normalizeCollection(list, prefix, label) {
+    if (!Array.isArray(list)) return;
+    list.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+    const used = new Set(list.map(x => x.id).filter(Boolean));
+    const n = list.length;
+    list.forEach((item, i) => {
+      if (!item.id) {
+        const base = prefix + '-' + (String(item.date || '').replace(/\D/g, '') || 'n' + (n - i));
+        let id = base, k = 2;
+        while (used.has(id)) id = base + '-' + (k++);
+        used.add(id);
+        item.id = id;
+      }
+      if (!item.kicker && label) item.kicker = label + ' ' + String(n - i).padStart(2, '0');
+    });
+  }
+  normalizeCollection(DATA.letters, 'letter', 'Letter');
+  normalizeCollection(DATA.replies, 'reply', 'Reply');
+  normalizeCollection(DATA.fragments, 'fragment', '');
+
   /* ---------- 内容渲染 ---------- */
   function renderHomeContent() {
     const lettersBox = $('#lettersPreview');
