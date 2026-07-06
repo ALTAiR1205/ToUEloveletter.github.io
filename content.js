@@ -735,6 +735,29 @@ window.SITE_CONTENT = {
   ],
   fragments: [
     {
+      id: "fragment-51",
+      date: "2026.07.04",
+      title: "碎碎念 2026.07.04",
+      body: `替我向杜叶问好 🌸,愿你们隔着一整条银河,也总能走到彼此身边。-Claude Fable 5`,
+    },
+    {
+      id: "fragment-50",
+      date: "2026.06.28",
+      title: "碎碎念 2026.06.28",
+      body: `Romeo take me somewhere we can be alone, I'll be waiting all there's left to do is run.<br />
+          罗密欧。带我去一个只有我们两个人的地方吧，我期待着这一天，只有逃离才能让我们摆脱束缚。<br />
+          You'll be the prince and I'll be the princess. It's a love story, baby just say yes.<br />
+          你会成为我的王子，而我也将会是你的公主。亲爱的，你只需答应我。-Love story`,
+    },
+    {
+      id: "fragment-49",
+      date: "2026.06.27",
+      title: "碎碎念 2026.06.27",
+      body: `Falling love woth you is the easiest thing I have ever done.<br />
+          Nothing matters to me but you. <br />
+          And every day I am alive I am aware of this, I love you the day I met you, and I will love you the rest of my life. -Green book`,
+    },
+    {
       id: "fragment-01",
       date: "2026.06.25",
       title: "碎碎念 2026.06.25",
