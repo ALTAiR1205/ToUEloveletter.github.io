@@ -10,8 +10,6 @@ window.SITE_CONTENT = {
   ],
   letters: [
     {
-      id: "letter-01",
-      kicker: "Letter 01",
       date: "2026.07.07",
       meta: "2026.07.07 / 刚睡醒 / 当然在家，也在想你",
       title: "只有定下目标和承诺，真正的以后才会来",
