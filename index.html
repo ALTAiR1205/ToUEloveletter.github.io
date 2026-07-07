@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=7.3-easyedit" rel="stylesheet"/>
+<link href="style.css?v=7.4-loader" rel="stylesheet"/>
 </head>
 <body class="home-page">
 <script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light')document.body.classList.add('dark');if(t==='bloom')document.body.classList.add('bloom');if(t==='light')document.body.classList.add('daylight');if(t!=='light'&&t!=='bloom')document.body.classList.add('night');}catch(e){}})();</script>
@@ -92,22 +92,13 @@
 <div aria-hidden="true" class="cursor-ring" id="cursorRing"></div>
 
 <div aria-label="开屏动画" class="opening-loader" id="openingLoader">
-<div aria-hidden="true" class="loader-starfield">
-<span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+<div class="loader-top">VEGALTAiR <i>∞</i> LOVE UNIVERSE</div>
+<div class="loader-center">
+<span class="loader-word swap" id="loaderWord">遇见你</span>
 </div>
-<div aria-hidden="true" class="loader-emblem">
-<div class="loader-star star-vega"><i></i><em>VEGA</em></div>
-<div class="loader-bridge"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-<div class="loader-star star-altair"><i></i><em>ALTAiR</em></div>
-</div>
-<div class="loader-word">
-<span>V</span><span>E</span><span>G</span><span>A</span><span>L</span><span>T</span><span>A</span><span>i</span><span>R</span>
-</div>
-<div class="loader-title">
-<span>欢迎来到</span>
-<span>我们的小世界</span>
-</div>
-<p class="loader-line">Welcome to our little universe</p>
+<p class="loader-sub">To：杜叶 · welcome to our little universe</p>
+<div aria-hidden="true" class="loader-count" id="loaderCount">000</div>
+<div aria-hidden="true" class="loader-track"><span id="loaderBar"></span></div>
 </div>
 
 <header class="site-header" id="siteHeader">
@@ -362,7 +353,7 @@
 </div>
 </div>
 
-<script src="content.js?v=7.3-easyedit"></script>
-<script src="script.js?v=7.3-easyedit"></script>
+<script src="content.js?v=7.4-loader"></script>
+<script src="script.js?v=7.4-loader"></script>
 </body>
 </html>

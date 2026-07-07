@@ -432,12 +432,37 @@
     applyTheme(next);
   });
 
-  /* ---------- 开屏动画 ---------- */
+  /* ---------- 开屏动画：000→100 计数 + 衬线轮播词，点击可跳过 ---------- */
   const loader = $('#openingLoader');
   if (loader) {
-    const hideLoader = () => loader.classList.add('is-hidden');
-    setTimeout(hideLoader, reduced ? 300 : (isCoarsePointer ? 2100 : 2600));
+    let loaderDone = false;
+    const hideLoader = () => { loaderDone = true; loader.classList.add('is-hidden'); };
     loader.addEventListener('click', hideLoader, { once: true });
+    if (reduced) {
+      setTimeout(hideLoader, 300);
+    } else {
+      const nEl = $('#loaderCount'), barEl = $('#loaderBar'), wordEl = $('#loaderWord');
+      const words = ['遇见你', '爱上你', '奔向你'];
+      let wi = 0;
+      const wordTimer = setInterval(() => {
+        if (loaderDone || !wordEl) return;
+        if (wi >= words.length - 1) { clearInterval(wordTimer); return; } /* 停在「奔向你」 */
+        wi += 1;
+        wordEl.textContent = words[wi];
+        wordEl.classList.remove('swap');
+        void wordEl.offsetWidth;
+        wordEl.classList.add('swap');
+      }, 850);
+      const t0 = performance.now(), dur = isCoarsePointer ? 2200 : 2600;
+      requestAnimationFrame(function tick(t) {
+        if (loaderDone) { clearInterval(wordTimer); return; }
+        const k = Math.min(1, (t - t0) / dur);
+        if (nEl) nEl.textContent = String(Math.round(k * 100)).padStart(3, '0');
+        if (barEl) barEl.style.transform = `scaleX(${k})`;
+        if (k < 1) requestAnimationFrame(tick);
+        else { clearInterval(wordTimer); setTimeout(hideLoader, 350); }
+      });
+    }
   }
 
   /* ---------- 滚动进度条 ---------- */
