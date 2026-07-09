@@ -880,6 +880,11 @@
      近星大而亮（带十字光芒），远星小而暗；鼠标视差近快远慢。
      + 流星 + 靠近光标的星座连线（夜晚）；白天为暖色光尘。
      ========================================================================== */
+  /* ---------- PWA：注册透传型 Service Worker（不缓存内容） ---------- */
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+
   const canvas = $('#spaceCanvas');
   if (canvas && !reduced) {
     const ctx = canvas.getContext('2d');
