@@ -1622,6 +1622,22 @@ body.night .ending-signature { letter-spacing: 10px; }
   body.night .ending-stage { grid-template-columns: 1fr; }
 }
 
+/* ============================================================
+   安全区适配：刘海屏浏览器 + 安装为 App（standalone）后的状态栏
+   ============================================================ */
+.site-header { padding-top: calc(14px + env(safe-area-inset-top, 0px)); }
+@media (display-mode: standalone) {
+  .site-header { padding-top: calc(14px + max(env(safe-area-inset-top, 0px), 30px)); }
+  body.night .site-header {
+    top: calc(14px + max(env(safe-area-inset-top, 0px), 30px));
+    padding-top: 10px;
+  }
+  .loader-top { top: calc(26px + max(env(safe-area-inset-top, 0px), 30px)); }
+  .music-dock { bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
+  body.daylight .hero-daystats { bottom: calc(32px + env(safe-area-inset-bottom, 0px)); }
+  body.daylight .dayvid-switcher { bottom: calc(88px + env(safe-area-inset-bottom, 0px)); }
+}
+
 /* ---------- 无障碍：减少动态 ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
