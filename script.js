@@ -1075,4 +1075,116 @@
     }
     requestAnimationFrame(frame);
   }
+
+  /* ==========================================================================
+     Chapter 05 · 我们说过的话：数字滚动 + 24h 曲线 + 进度条 + 高光解密
+     ========================================================================== */
+  const wordsStage = $('#words');
+  if (wordsStage) {
+    /* 24 小时消息分布（更新数据时改这一行即可） */
+    const HOURLY = [6926,6654,3779,1382,831,440,484,467,1232,2460,5908,9786,8482,4362,2461,1265,557,568,447,1712,5489,4828,4849,7006];
+
+    function wtCount(el) {
+      const target = Number(el.dataset.target) || 0;
+      if (reduced) { el.textContent = target.toLocaleString(); return; }
+      const t0 = performance.now(), dur = 1500;
+      requestAnimationFrame(function s(t) {
+        const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+        el.textContent = Math.round(target * e).toLocaleString();
+        if (k < 1) requestAnimationFrame(s);
+      });
+    }
+
+    const wtChart = $('#wtDayChart');
+    let wtCurveStarted = false, wtProg = reduced ? 1 : 0;
+    function wtRender() {
+      if (!wtChart) return;
+      const ctx = wtChart.getContext('2d');
+      const dpr = Math.min(2, devicePixelRatio || 1);
+      const W = wtChart.clientWidth, H = Math.max(150, Math.min(230, W * 0.42));
+      wtChart.style.height = H + 'px'; wtChart.width = W * dpr; wtChart.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+      const padB = 24, padT = 14, max = Math.max.apply(null, HOURLY), n = HOURLY.length;
+      const X = i => i / (n - 1) * W, Y = v => padT + (1 - v / max) * (H - padT - padB);
+      ctx.strokeStyle = 'rgba(150,150,160,.16)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(0, H - padB); ctx.lineTo(W, H - padB); ctx.stroke();
+      const band = ctx.createLinearGradient(0, 0, 0, H);
+      band.addColorStop(0, 'rgba(255,158,199,.16)'); band.addColorStop(1, 'rgba(255,158,199,0)');
+      ctx.fillStyle = band; ctx.fillRect(X(0) - 1, padT, X(4) - X(0) + 2, H - padT - padB);
+      const path = () => {
+        ctx.beginPath(); ctx.moveTo(X(0), Y(HOURLY[0]));
+        for (let i = 0; i < n - 1; i++) { const xc = (X(i) + X(i + 1)) / 2, yc = (Y(HOURLY[i]) + Y(HOURLY[i + 1])) / 2; ctx.quadraticCurveTo(X(i), Y(HOURLY[i]), xc, yc); }
+        ctx.lineTo(X(n - 1), Y(HOURLY[n - 1]));
+      };
+      ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W * wtProg, H); ctx.clip();
+      path(); ctx.lineTo(X(n - 1), H - padB); ctx.lineTo(X(0), H - padB); ctx.closePath();
+      const fill = ctx.createLinearGradient(0, padT, 0, H - padB);
+      fill.addColorStop(0, 'rgba(143,216,255,.32)'); fill.addColorStop(.5, 'rgba(185,166,255,.16)'); fill.addColorStop(1, 'rgba(185,166,255,0)');
+      ctx.fillStyle = fill; ctx.fill();
+      path();
+      const st = ctx.createLinearGradient(0, 0, W, 0);
+      st.addColorStop(0, '#8fd8ff'); st.addColorStop(.5, '#b9a6ff'); st.addColorStop(1, '#ff9ec7');
+      ctx.strokeStyle = st; ctx.lineWidth = 2.2; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+      ctx.shadowColor = 'rgba(185,166,255,.55)'; ctx.shadowBlur = 12; ctx.stroke(); ctx.shadowBlur = 0; ctx.restore();
+      if (wtProg > .06) { ctx.beginPath(); ctx.fillStyle = '#fff'; ctx.shadowColor = '#ff9ec7'; ctx.shadowBlur = 16; ctx.arc(X(0), Y(HOURLY[0]), 3.2, 0, 7); ctx.fill(); ctx.shadowBlur = 0; }
+      ctx.fillStyle = 'rgba(150,150,160,.6)'; ctx.font = '10px system-ui'; ctx.textAlign = 'center';
+      [0, 6, 12, 18, 23].forEach(hh => ctx.fillText(hh + '点', X(hh), H - 8));
+    }
+    function wtDrawCurve() {
+      wtRender(); if (reduced || wtCurveStarted) return; wtCurveStarted = true;
+      const t0 = performance.now();
+      requestAnimationFrame(function s(t) { wtProg = Math.min(1, (t - t0) / 1300); wtProg = 1 - Math.pow(1 - wtProg, 3); wtRender(); if (wtProg < 1) requestAnimationFrame(s); });
+    }
+    addEventListener('resize', () => { if (wtCurveStarted || reduced) wtRender(); }, { passive: true });
+
+    /* 进入视野时逐块触发 */
+    const wtIO = new IntersectionObserver((ents) => {
+      ents.forEach(ent => {
+        if (!ent.isIntersecting) return; const el = ent.target; wtIO.unobserve(el);
+        el.querySelectorAll('.wt-count').forEach(wtCount);
+        el.querySelectorAll('.wt-bar span, .wt-track i').forEach(s => { s.style.width = (s.dataset.w || 100) + '%'; });
+        if (el.querySelector('#wtDayChart')) wtDrawCurve();
+      });
+    }, { threshold: 0.2 });
+    $$('.wt-head, .wt-bento, .wt-card').forEach(el => wtIO.observe(el));
+
+    /* --- 高光解密（AES-GCM，密码在你俩心里）--- */
+    const wtUnlock = $('#wtUnlock'), wtPw = $('#wtPw'), wtHint = $('#wtHint'), wtBox = $('#wtHighlights'), wtLock = $('#wtLock');
+    function b64ToBytes(s) { return Uint8Array.from(atob(s), c => c.charCodeAt(0)); }
+    async function tryUnlock() {
+      const enc = window.HIGHLIGHTS_ENC;
+      if (!enc || !wtPw) return;
+      const pass = wtPw.value;
+      if (!pass) { wtHint.textContent = '先输入暗号哦'; wtHint.classList.add('err'); return; }
+      wtHint.textContent = '正在解锁…'; wtHint.classList.remove('err');
+      try {
+        const km = await crypto.subtle.importKey('raw', new TextEncoder().encode(pass), 'PBKDF2', false, ['deriveKey']);
+        const key = await crypto.subtle.deriveKey(
+          { name: 'PBKDF2', salt: b64ToBytes(enc.salt), iterations: enc.iter, hash: 'SHA-256' },
+          km, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+        const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64ToBytes(enc.iv) }, key, b64ToBytes(enc.data));
+        const list = JSON.parse(new TextDecoder().decode(plain));
+        renderHighlights(list);
+      } catch (e) {
+        wtHint.textContent = '暗号不对，再想想我们之间的那几个词～'; wtHint.classList.add('err');
+      }
+    }
+    function esc2(s) { return String(s ?? '').replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch])); }
+    function renderHighlights(list) {
+      wtBox.innerHTML = list.map((h, i) => `
+        <div class="wt-hl">
+          <div class="wt-hl-title">
+            <span class="k">Highlight ${String(i + 1).padStart(2, '0')}</span>
+            <h4>${esc2(h.title)}</h4>
+            <div class="d">${esc2(h.date || '')}</div>
+          </div>
+          ${h.note ? `<p class="wt-hl-note">${esc2(h.note)}</p>` : ''}
+          <div class="wt-chat">${(h.msgs || []).map(m => `<div class="wt-row ${m.s === 'me' ? 'me' : 'her'}"><div class="wt-bubble">${esc2(m.t)}</div></div>`).join('')}</div>
+        </div>`).join('');
+      if (wtLock) wtLock.style.display = 'none';
+      wtBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    wtUnlock?.addEventListener('click', tryUnlock);
+    wtPw?.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+  }
 })();

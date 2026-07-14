@@ -16,7 +16,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=7.7-safearea" rel="stylesheet"/>
+<link href="style.css?v=8.0-words" rel="stylesheet"/>
 </head>
 <body class="home-page">
 <script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light')document.body.classList.add('dark');if(t==='bloom')document.body.classList.add('bloom');if(t==='light')document.body.classList.add('daylight');if(t!=='light'&&t!=='bloom')document.body.classList.add('night');}catch(e){}})();</script>
@@ -128,6 +128,7 @@
 <a data-rail="letters" href="#letters"><span></span><em>信件</em></a>
 <a data-rail="fragments" href="#fragments"><span></span><em>碎片</em></a>
 <a data-rail="replies" href="#replies"><span></span><em>回信</em></a>
+<a data-rail="words" href="#words"><span></span><em>数据</em></a>
 </aside>
 
 <main>
@@ -309,13 +310,117 @@
 </div>
 </section>
 
+<section class="stage words-stage snap-section" data-section="words" data-vid="3" id="words">
+<div class="wt-wrap">
+<div class="section-heading reveal">
+<span>Chapter 05</span>
+<h2>我们说过的话</h2>
+<p>有一天，我把我们说过的话，一句一句数了下来。</p>
+</div>
+
+<div class="wt-head reveal">
+<div class="wt-headline"><span class="wt-big wt-count" data-target="82375">0</span><span class="wt-u">句话 · 121 天</span></div>
+<p class="wt-sub">在一起的 121 天里，<b>没有一天</b>没说话。八万句，几乎一人一半——我说了 41,011 句，你说了 40,800 句。</p>
+</div>
+
+<div class="wt-bento reveal delay-1">
+
+<div class="wt-card wt-c-curve">
+<div class="wt-curve-head">
+<div class="wt-ct">我们的一天 · 24 小时消息分布</div>
+<div class="wt-curve-callout"><div class="wt-cn wt-count" data-target="19572">0</div><div class="wt-cl">个深夜 · 0–4 点</div></div>
+</div>
+<canvas id="wtDayChart" aria-label="24小时消息分布"></canvas>
+<p class="wt-curve-cap">你那边天亮时，我这边还没舍得睡；我的深夜正是你的白天。十几个小时的时差，被我们熬成了同一个「现在」。</p>
+</div>
+
+<div class="wt-card wt-c-calls">
+<div class="wt-ct">我们的通话 · 声音里的陪伴</div>
+<div class="wt-calls-big"><span class="wt-cnum wt-count" data-target="194">0</span><span class="wt-cu">小时 17 分</span></div>
+<p class="wt-calls-sub">相当于整整 <b>8 天</b>，我们都在听着对方的声音。</p>
+<div class="wt-calls-mini">
+<div class="wt-mi"><b class="wt-count" data-target="178">0</b><span>次接通</span></div>
+<div class="wt-mi"><b>65 分</b><span>平均每次</span></div>
+<div class="wt-mi"><b class="wt-count" data-target="79">0</b><span>天有通话</span></div>
+<div class="wt-mi"><b class="wt-count" data-target="65">0</b><span>次超 1 小时</span></div>
+</div>
+<p class="wt-calls-note">最长的一次，我们打了整整 <b>12 个小时</b>——那天是 6 月 21 日，你写下了《我真的差一点失去你》。</p>
+</div>
+
+<div class="wt-card wt-c-balance">
+<div class="wt-ct">一人一半</div>
+<div class="wt-bar-row"><div class="wt-bar-top"><span>我说的</span><b>41,011 句</b></div><div class="wt-bar me"><span data-w="100"></span></div></div>
+<div class="wt-bar-row"><div class="wt-bar-top"><span>你说的</span><b>40,800 句</b></div><div class="wt-bar her"><span data-w="99.5"></span></div></div>
+<div class="wt-bar-top" style="margin-top:4px; opacity:.6; font-size:11px"><span>24.2 万字</span><span>17.9 万字</span></div>
+</div>
+
+<div class="wt-card wt-c-words">
+<div class="wt-ct">我们的口头禅</div>
+<div class="wt-words-list">
+<div class="wt-wl"><span class="wt-kw">宝宝</span><div class="wt-track"><i data-w="100"></i></div><span class="wt-wc">4651</span></div>
+<div class="wt-wl"><span class="wt-kw">想你</span><div class="wt-track"><i data-w="25"></i></div><span class="wt-wc">1173</span></div>
+<div class="wt-wl"><span class="wt-kw">我爱你</span><div class="wt-track"><i data-w="15"></i></div><span class="wt-wc">697</span></div>
+<div class="wt-wl"><span class="wt-kw">晚安</span><div class="wt-track"><i data-w="9"></i></div><span class="wt-wc">429</span></div>
+</div>
+</div>
+
+<div class="wt-card wt-c-love">
+<p class="wt-kick">第一次说「我爱你」</p>
+<p class="wt-meta">2026.03.21 · 04:19 · 她先说的</p>
+<span class="wt-mark">“</span>
+<p class="wt-q">闭眼 <em>我爱你</em> 等你醒</p>
+</div>
+
+<div class="wt-card wt-c-first">
+<div class="wt-ct" style="text-align:center">谁先开口</div>
+<div class="wt-vs">
+<div class="wt-col"><span class="wt-vn wt-count" data-target="62">0</span><span class="wt-vl">天我先找你</span></div>
+<span class="wt-mid">/</span>
+<div class="wt-col"><span class="wt-vn wt-count" data-target="59">0</span><span class="wt-vl">天你先找我</span></div>
+</div>
+</div>
+
+<div class="wt-card wt-c-media">
+<div class="wt-media3">
+<div class="wt-m"><div class="wt-mn wt-count" data-target="3222">0</div><div class="wt-ml">张照片</div></div>
+<div class="wt-m"><div class="wt-mn wt-count" data-target="1056">0</div><div class="wt-ml">条语音</div></div>
+<div class="wt-m"><div class="wt-mn wt-count" data-target="7146">0</div><div class="wt-ml">个表情</div></div>
+</div>
+</div>
+
+</div>
+
+<p class="wt-closing reveal">这些数字每天都还在变大。<br/>等我们说到第十万句、第一千个深夜，我再回来，把它们重新数给你听。</p>
+
+<div class="wt-divider reveal">
+<div class="wt-ln"></div>
+<h3>高光</h3>
+<p>那些我最舍不得删的片段</p>
+</div>
+
+<div class="wt-card wt-lock reveal" id="wtLock">
+<div class="wt-lk">🔒</div>
+<h3>输入我们的暗号</h3>
+<p>下面这些是只属于我们的对话，只有你才解得开。</p>
+<div class="wt-lockform">
+<input id="wtPw" type="password" placeholder="我们的暗号" autocomplete="off" aria-label="暗号"/>
+<button id="wtUnlock" type="button">解锁</button>
+</div>
+<p class="wt-hint" id="wtHint"></p>
+</div>
+
+<div class="wt-highlights" id="wtHighlights"></div>
+
+</div>
+</section>
+
 <section class="stage ending-stage snap-section" data-section="about" data-vid="0" id="about">
 <div aria-hidden="true" class="ending-video-card reveal">
 <video data-night-src="media/night-vision.mp4" loop muted playsinline preload="none"></video>
 </div>
 <div class="ending-card reveal" data-tilt="">
 <div aria-hidden="true" class="ending-infinity">∞</div>
-<span>Chapter 05 / Universe Edge</span>
+<span>Chapter 06 / Universe Edge</span>
 <h2>这里是宇宙边缘</h2>
 <p>宝宝，这里放着一些写给你的话。它们不一定完整，也不一定每次都有漂亮的开头和结尾。但它们都来自同一件事：我在某个时刻，很认真地想到了你。</p>
 <strong>Wish I can be with you. Until eternity and universe edge.</strong>
@@ -361,7 +466,8 @@
 </div>
 </div>
 
-<script src="content.js?v=7.7-safearea"></script>
-<script src="script.js?v=7.7-safearea"></script>
+<script src="content.js?v=8.0-words"></script>
+<script src="highlights.enc.js?v=8.0-words"></script>
+<script src="script.js?v=8.0-words"></script>
 </body>
 </html>
