@@ -1170,6 +1170,16 @@
       }
     }
     function esc2(s) { return String(s ?? '').replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch])); }
+    function nl2br(s) { return esc2(s).replace(/\n/g, '<br>'); }
+    function hlBody(h) {
+      if (h.type === 'letter') {
+        return `<div class="wt-letter"><p>${nl2br(h.text || '')}</p>${h.foot ? `<div class="wt-letter-foot">${esc2(h.foot)}</div>` : ''}</div>`;
+      }
+      if (h.type === 'quotes') {
+        return `<div class="wt-quotes">${(h.quotes || []).map(q => `<blockquote class="wt-quote"><span>${esc2(q.t)}</span><em>— ${q.by === 'me' ? '我' : '她'}</em></blockquote>`).join('')}</div>`;
+      }
+      return `<div class="wt-chat">${(h.msgs || []).map(m => `<div class="wt-row ${m.s === 'me' ? 'me' : 'her'}"><div class="wt-bubble">${esc2(m.t)}</div></div>`).join('')}</div>`;
+    }
     function renderHighlights(list) {
       wtBox.innerHTML = list.map((h, i) => `
         <div class="wt-hl">
@@ -1179,7 +1189,7 @@
             <div class="d">${esc2(h.date || '')}</div>
           </div>
           ${h.note ? `<p class="wt-hl-note">${esc2(h.note)}</p>` : ''}
-          <div class="wt-chat">${(h.msgs || []).map(m => `<div class="wt-row ${m.s === 'me' ? 'me' : 'her'}"><div class="wt-bubble">${esc2(m.t)}</div></div>`).join('')}</div>
+          ${hlBody(h)}
         </div>`).join('');
       if (wtLock) wtLock.style.display = 'none';
       wtBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
