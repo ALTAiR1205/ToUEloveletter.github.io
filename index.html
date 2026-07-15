@@ -16,7 +16,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=8.1-highlights" rel="stylesheet"/>
+<link href="style.css?v=8.2-sky" rel="stylesheet"/>
 </head>
 <body class="home-page">
 <script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light')document.body.classList.add('dark');if(t==='bloom')document.body.classList.add('bloom');if(t==='light')document.body.classList.add('daylight');if(t!=='light'&&t!=='bloom')document.body.classList.add('night');}catch(e){}})();</script>
@@ -414,6 +414,33 @@
 </div>
 </section>
 
+<section class="stage sky-stage snap-section" data-section="sky" data-vid="0" id="sky">
+<div class="section-heading reveal">
+<span>Interlude / The Sky When We Began</span>
+<h2>那一刻的星空</h2>
+<p>2026 年 3 月 20 日 23:22——我们在一起的那一分钟，哥伦布头顶真实的天空。这张图上的 1414 颗星，每一颗都画在它当时真实的位置上。</p>
+</div>
+<div class="sky-grid">
+<div class="sky-dome-card reveal">
+<div class="sky-dome-wrap">
+<canvas aria-label="2026年3月20日23点22分哥伦布上空的星图" id="skyDome"></canvas>
+<div class="sky-tag sky-tag-vega" id="skyTagVega"><b>织女星 · VEGA</b><i>你的星 · 正在升起</i></div>
+<div class="sky-tag sky-tag-altair" id="skyTagAltair"><b>牛郎星 · ALTAIR</b><i>我的星 · 还在地平线下</i></div>
+</div>
+<div class="sky-dome-cap">39.96°N · 82.99°W · 躺在草地上看，头朝北</div>
+</div>
+<div class="sky-notes">
+<div class="sky-note reveal"><b>23:20 <span>你先来了</span></b>
+<p>我们在一起的前两分钟，织女星——你的星——恰好爬上了东北方的地平线。23:22 那一刻，它刚探出地平线 0.2°。整片天空里，最新亮起的那颗星是你。</p></div>
+<div class="sky-note reveal"><b>02:54 <span>我在赶来的路上</span></b>
+<p>牛郎星那时还在地平线下 34.5° 的深处——和你的星同一个方位，一条竖线上，只隔着一道地平线。它爬了三个半小时，凌晨 02:54 才升上来。</p></div>
+<div class="sky-note reveal"><b>04:19 <span>我爱你</span></b>
+<p>那天凌晨 04:19，你说了第一句「闭眼 我爱你 等你醒」。那一刻抬头看，织女星和牛郎星已经一起挂在东边的天上了。从那晚起，一直是。</p></div>
+<p class="sky-ps reveal">而你那边是 3 月 21 日上午 11:22，阳光把所有星星都藏了起来。所以我把这片夜空存在这里——替你，也替那两分钟。</p>
+</div>
+</div>
+</section>
+
 <section class="stage ending-stage snap-section" data-section="about" data-vid="0" id="about">
 <div aria-hidden="true" class="ending-video-card reveal">
 <video data-night-src="media/night-vision.mp4" loop muted playsinline preload="none"></video>
@@ -469,5 +496,7 @@
 <script src="content.js?v=8.1-highlights"></script>
 <script src="highlights.enc.js?v=8.1-highlights"></script>
 <script src="script.js?v=8.1-highlights"></script>
+<script defer="" src="starmap-data.js?v=8.2-sky"></script>
+<script defer="" src="starmap.js?v=8.2-sky"></script>
 </body>
 </html>
