@@ -647,20 +647,37 @@
   }, { threshold: 0.45 });
   sections.forEach(s => sio.observe(s));
 
-  /* ---------- 3D 倾斜 & 磁性按钮 ---------- */
+  /* ---------- 3D 倾斜（全息质感）& 磁性按钮 ---------- */
   function setupTiltAndMagnetics(root = document) {
-    if (reduced || isCoarsePointer) return;
-    $$('[data-tilt]', root).forEach(card => {
-      if (card.dataset.tiltReady === 'yes') return;
+    $$('[data-tilt]', root).forEach((card, i) => {
+      /* 光泽层对所有设备注入：颗粒常驻；触屏靠 CSS 周期性扫光 */
+      if (card.dataset.holoReady !== 'yes') {
+        card.dataset.holoReady = 'yes';
+        if (getComputedStyle(card).position === 'static') card.style.position = 'relative';
+        card.style.setProperty('--holo-i', i % 5);
+        const layer = document.createElement('i');
+        layer.className = 'holo-layer';
+        layer.setAttribute('aria-hidden', 'true');
+        card.appendChild(layer);
+      }
+      if (reduced || isCoarsePointer || card.dataset.tiltReady === 'yes') return;
       card.dataset.tiltReady = 'yes';
       card.addEventListener('pointermove', (e) => {
         const r = card.getBoundingClientRect();
         const x = (e.clientX - r.left) / r.width - 0.5;
         const y = (e.clientY - r.top) / r.height - 0.5;
-        card.style.transform = `perspective(900px) rotateX(${-y * 6}deg) rotateY(${x * 8}deg) translateY(-3px)`;
+        card.classList.add('holo-on');
+        card.style.transform = `perspective(900px) rotateX(${-y * 7}deg) rotateY(${x * 9}deg) translateY(-4px)`;
+        card.style.setProperty('--mx', ((x + 0.5) * 100).toFixed(1) + '%');
+        card.style.setProperty('--my', ((y + 0.5) * 100).toFixed(1) + '%');
+        card.style.setProperty('--gp', (50 + (x + y) * 90).toFixed(1) + '%');
       });
-      card.addEventListener('pointerleave', () => { card.style.transform = ''; });
+      card.addEventListener('pointerleave', () => {
+        card.classList.remove('holo-on');
+        card.style.transform = '';
+      });
     });
+    if (reduced || isCoarsePointer) return;
     $$('.magnetic', root).forEach(btn => {
       if (btn.dataset.magneticReady === 'yes') return;
       btn.dataset.magneticReady = 'yes';

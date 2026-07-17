@@ -1866,3 +1866,80 @@ body:not(.night) .sky-stage { display: none; }
   .sky-grid { grid-template-columns: 1fr; gap: 26px; }
   .sky-dome-card { max-width: 480px; margin: 0 auto; width: 100%; }
 }
+
+/* ==========================================================================
+   全息卡片质感：颗粒 + 跟手眩光 + 虹彩箔条（.holo-layer 由 JS 注入 data-tilt 卡片）
+   ========================================================================== */
+:root {
+  --holo-a: rgba(185, 166, 255, 0.20);
+  --holo-b: rgba(255, 158, 199, 0.24);
+  --holo-c: rgba(143, 216, 255, 0.20);
+  --holo-glare: rgba(255, 255, 255, 0.16);
+  --holo-grain-op: 0.06;
+  --holo-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+body.daylight {
+  --holo-a: rgba(255, 214, 170, 0.20);
+  --holo-b: rgba(255, 255, 255, 0.32);
+  --holo-c: rgba(224, 112, 154, 0.14);
+  --holo-glare: rgba(255, 255, 255, 0.34);
+  --holo-grain-op: 0.035;
+}
+body.bloom {
+  --holo-a: rgba(255, 220, 174, 0.18);
+  --holo-b: rgba(255, 158, 199, 0.22);
+  --holo-c: rgba(185, 166, 255, 0.18);
+}
+
+[data-tilt] {
+  transition: transform 0.55s cubic-bezier(0.22, 0.9, 0.3, 1),
+              opacity 0.9s cubic-bezier(0.2, 0.8, 0.2, 1),
+              filter 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+[data-tilt].holo-on { transition-duration: 0.09s, 0.9s, 0.9s; }
+
+.holo-layer {
+  position: absolute; inset: 0; border-radius: inherit;
+  overflow: hidden; pointer-events: none; z-index: 3;
+}
+.holo-layer::before,
+.holo-layer::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+}
+.holo-layer::before {
+  background-image: var(--holo-grain);
+  background-size: 160px 160px;
+  mix-blend-mode: overlay;
+  opacity: var(--holo-grain-op);
+}
+.holo-layer::after {
+  background-image:
+    radial-gradient(480px circle at var(--mx, 50%) var(--my, 42%), var(--holo-glare), transparent 58%),
+    linear-gradient(115deg, transparent 30%, var(--holo-a) 42%, var(--holo-b) 50%, var(--holo-c) 58%, transparent 70%);
+  background-size: 100% 100%, 240% 240%;
+  background-position: 0 0, var(--gp, 50%) 0;
+  background-repeat: no-repeat;
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+[data-tilt].holo-on .holo-layer::after { opacity: 1; }
+
+/* 触屏：无指针跟随，改为周期性的箔光扫过（错峰） */
+@media (pointer: coarse) {
+  .holo-layer::after {
+    background-image: linear-gradient(115deg, transparent 30%, var(--holo-a) 42%, var(--holo-b) 50%, var(--holo-c) 58%, transparent 70%);
+    background-size: 240% 240%;
+    opacity: 0.55;
+    animation: holoSweep 9s ease-in-out infinite;
+    animation-delay: calc(var(--holo-i, 0) * -1.7s);
+  }
+}
+@keyframes holoSweep {
+  0% { background-position: -30% 0; }
+  38% { background-position: 130% 0; }
+  100% { background-position: 130% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .holo-layer::after { animation: none; opacity: 0; }
+}
