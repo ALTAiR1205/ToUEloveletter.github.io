@@ -758,6 +758,42 @@ window.SITE_CONTENT = {
   ],
   fragments: [
     {
+      date: "2026.07.21",
+      title: "碎碎念 2026.07.21",
+      body: `金风玉露一相逢，便胜却人间无数。<br/>
+          两情若是久长时，又岂在朝朝暮暮。-秦观《鹊桥仙》`,
+    },
+    {
+      date: "2026.07.18",
+      title: "碎碎念 2026.07.18",
+      body: `Despite knowing the journey and where it leads, I embrace it, and I welcome every moment of it.<br/>
+          纵然已经知道这趟旅程通向何处，我依然拥抱它，并欢迎它的每一刻。-Arrival 降临`,
+    },
+    {
+      date: "2026.07.15",
+      title: "碎碎念 2026.07.15",
+      body: `For small creatures such as we, the vastness is bearable only through love.<br/>
+          对我们这样渺小的生物而言，唯有爱，能让这浩瀚变得可以承受。-Carl Sagan《Contact》`,
+    },
+    {
+      date: "2026.07.12",
+      title: "碎碎念 2026.07.12",
+      body: `Liebe besteht darin, daß zwei Einsamkeiten einander schützen, grenzen und grüßen.<br/>
+          爱，是两个孤独彼此守护、彼此接壤、彼此致意。-Rilke《给青年诗人的信》`,
+    },
+    {
+      date: "2026.07.09",
+      title: "碎碎念 2026.07.09",
+      body: `「愛してる」を知りたいのです。<br/>
+          我想知道“我爱你”，究竟是什么意思。-《紫罗兰永恒花园》`,
+    },
+    {
+      date: "2026.07.06",
+      title: "碎碎念 2026.07.06",
+      body: `Despite everything, it's still you.<br/>
+          纵使万般变故，你依然是你。-Undertale`,
+    },
+    {
       id: "fragment-51",
       date: "2026.07.04",
       title: "碎碎念 2026.07.04",
