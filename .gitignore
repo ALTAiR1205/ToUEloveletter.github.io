@@ -1,0 +1,10 @@
+# 本地试验品：不参与部署（照片龙卷、信件螺旋、早期 unseen 复刻等）
+/demo/*
+!/demo/mars-exact/
+
+# 草原模式（Mars）源码的构建依赖与本地日志
+/tools/mars-exact/node_modules/
+/tools/mars-exact/.vite/
+/tools/mars-exact/.vite-temp/
+/tools/mars-exact/.dev-server.*.log
+/tools/mars-exact/dist/

@@ -408,9 +408,42 @@
     nightVids.forEach(v => { if (v.src) v.pause(); });
   }
 
-  /* ---------- 主题切换：夜晚 → 白天 → 花开（localStorage.theme，兼容旧值） ---------- */
+  /* ---------- 草原模式：Mars 3D 草场（独立体验，懒加载 iframe） ----------
+     它自带一整套 V9 界面（悬浮标题 / 信件流 / 碎碎念），所以进入这个模式时
+     主站界面整体让位。资源约 13MB，只有真正切过去才开始下载。
+     场景来自 Christian Ortiz 的 stylized-components（MIT），见 demo/mars-exact/。 */
+  /* 版本号：Mars 重新构建后要跟着升，否则浏览器会拿缓存的旧 index.html
+     （里面的 JS/CSS 带内容哈希，只有这个入口页需要手动破缓存） */
+  const MARS_SRC = 'demo/mars-exact/index.html?look=legacy-ui&v=9.1';
+  let marsFrame = null;
+  function startMars() {
+    if (marsFrame) { marsFrame.classList.add('is-on'); return; }
+    marsFrame = document.createElement('iframe');
+    marsFrame.className = 'mars-stage';
+    marsFrame.title = 'Mars 草场 · 信件与碎碎念';
+    marsFrame.src = MARS_SRC;
+    marsFrame.addEventListener('load', () => {
+      /* 同源：让里面的文章链接接管整个窗口，而不是在 iframe 里套一层；
+         并隐藏它开发期的「返回场景版」角标（整合后由主题按钮负责切换）。 */
+      try {
+        const d = marsFrame.contentDocument;
+        const b = d.createElement('base');
+        b.target = '_top';
+        d.head.appendChild(b);
+        const s = d.createElement('style');
+        s.textContent = '.legacy-demo-badge{display:none!important}';
+        d.head.appendChild(s);
+      } catch (e) { /* 跨域时静默降级 */ }
+      marsFrame.classList.add('is-on');
+    });
+    document.body.appendChild(marsFrame);
+  }
+  function stopMars() { if (marsFrame) marsFrame.classList.remove('is-on'); }
+
+  /* ---------- 主题切换：夜晚 → 白天 → 花开 → 草原（localStorage.theme，兼容旧值） ---------- */
   const themeBtn = $('#themeBtn');
-  const THEME_ORDER = ['dark', 'light', 'bloom'];
+  const THEME_ORDER = ['dark', 'light', 'bloom', 'mars'];
+  const THEME_LABEL = { dark: '白天模式', light: '花开模式', bloom: '草原模式', mars: '夜晚模式' };
   let themeMode = localStorage.getItem('theme');
   if (!THEME_ORDER.includes(themeMode)) themeMode = 'dark';
   function applyTheme(mode) {
@@ -419,12 +452,20 @@
     document.body.classList.toggle('bloom', mode === 'bloom');
     document.body.classList.toggle('daylight', mode === 'light');
     document.body.classList.toggle('night', mode === 'dark');
-    if (themeBtn) themeBtn.textContent = mode === 'dark' ? '白天模式' : mode === 'light' ? '花开模式' : '夜晚模式';
+    document.body.classList.toggle('mars', mode === 'mars');
+    if (themeBtn) themeBtn.textContent = THEME_LABEL[mode] || '夜晚模式';
     if (mode === 'bloom') startBloom();
     if (mode === 'light') startDayVideos();
     else if (dayStarted) dayEls.forEach(v => { if (v.src) v.pause(); });
     if (mode === 'dark') startNight(); else stopNight();
+    if (mode === 'mars') startMars(); else stopMars();
   }
+
+  /* 供草原模式（iframe 内的 V9 顶栏）调用，退回夜晚模式 */
+  window.__marsExit = () => {
+    localStorage.setItem('theme', 'dark');
+    applyTheme('dark');
+  };
   applyTheme(themeMode);
   themeBtn?.addEventListener('click', () => {
     const next = THEME_ORDER[(THEME_ORDER.indexOf(themeMode) + 1) % THEME_ORDER.length];
@@ -1193,7 +1234,7 @@
         return `<div class="wt-letter"><p>${nl2br(h.text || '')}</p>${h.foot ? `<div class="wt-letter-foot">${esc2(h.foot)}</div>` : ''}</div>`;
       }
       if (h.type === 'quotes') {
-        return `<div class="wt-quotes">${(h.quotes || []).map(q => `<blockquote class="wt-quote"><span>${esc2(q.t)}</span><em>— ${q.by === 'me' ? '我' : '她'}</em></blockquote>`).join('')}</div>`;
+        return `<div class="wt-quotes">${(h.quotes || []).map(q => `<blockquote class="wt-quote"><span>${esc2(q.t)}</span><em>— ${q.by === 'me' ? '我' : '你'}</em></blockquote>`).join('')}</div>`;
       }
       return `<div class="wt-chat">${(h.msgs || []).map(m => `<div class="wt-row ${m.s === 'me' ? 'me' : 'her'}"><div class="wt-bubble">${esc2(m.t)}</div></div>`).join('')}</div>`;
     }

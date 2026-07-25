@@ -1,0 +1,1225 @@
+:root {
+  color: white;
+  background: #0d1a10;
+  font-family:
+    Inter, "SF Pro Display", "PingFang SC", "Microsoft YaHei UI", sans-serif;
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root,
+.exact-mars {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+html:has(.exact-mars.is-legacy-ui),
+body:has(.exact-mars.is-legacy-ui),
+#root:has(.exact-mars.is-legacy-ui) {
+  height: auto;
+  min-height: 100%;
+  overflow: visible;
+}
+
+.exact-mars.is-legacy-ui {
+  height: auto;
+  min-height: 100vh;
+  overflow: visible;
+  background: #b27d9c;
+}
+
+canvas {
+  display: block;
+  touch-action: none;
+  cursor: default;
+}
+
+.exact-mars.is-legacy-ui .scene-canvas,
+.exact-mars.is-legacy-ui .scene-canvas canvas {
+  pointer-events: none;
+}
+
+.sr-only {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.sky-filter {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  mix-blend-mode: color;
+}
+
+.exact-mars > header,
+.exact-mars > footer {
+  position: fixed;
+  z-index: 4;
+  right: 26px;
+  left: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-shadow: 0 1px 18px rgba(27, 15, 23, 0.35);
+}
+
+.exact-mars > header {
+  top: 24px;
+}
+
+.exact-mars > header > div {
+  display: flex;
+  align-items: baseline;
+  gap: 13px;
+}
+
+.exact-mars > header strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+}
+
+.exact-mars > header span {
+  opacity: 0.72;
+}
+
+.look-switch {
+  color: inherit;
+  text-decoration: none;
+  pointer-events: auto;
+  opacity: 0.72;
+  transition: opacity 160ms ease;
+}
+
+.look-switch:hover {
+  opacity: 1;
+}
+
+.exact-mars > footer {
+  bottom: 22px;
+}
+
+.exact-mars > footer a {
+  color: inherit;
+  text-decoration: none;
+  pointer-events: auto;
+  opacity: 0.68;
+  transition: opacity 160ms ease;
+}
+
+.exact-mars > footer a:hover {
+  opacity: 1;
+}
+
+.loading {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 14px;
+  background: #654865;
+  transition:
+    opacity 700ms ease 250ms,
+    visibility 0s linear 950ms;
+}
+
+.loading.is-ready {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.loading p,
+.loading span {
+  margin: 0;
+  font-size: 9px;
+  letter-spacing: 0.26em;
+}
+
+.loading span {
+  opacity: 0.62;
+}
+
+.loading > div:not(.legacy-loading-number):not(.legacy-loading-label) {
+  width: min(230px, 60vw);
+  height: 1px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.loading i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #f879e7;
+  transform-origin: left;
+  transition: transform 180ms ease;
+}
+
+/* Initial V9 UI, adapted to sit over the accepted pink Mars scene. */
+.legacy-v9-ui {
+  --legacy-ink: #fff4f0;
+  --legacy-dim: rgba(255, 244, 240, 0.68);
+  --legacy-line: rgba(255, 244, 240, 0.22);
+  --legacy-dark: #2b1724;
+  position: relative;
+  z-index: 3;
+  color: var(--legacy-ink);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+.legacy-topbar {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 26px 4vw;
+  color: var(--legacy-ink);
+  text-shadow: 0 1px 20px rgba(35, 16, 31, 0.45);
+}
+
+.legacy-topbar a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.legacy-logo {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+}
+
+.legacy-topbar nav {
+  display: flex;
+  gap: 34px;
+}
+
+/* 顶栏导航：链接与按钮共用同一种纯文字样式，保持一条协调的栏 */
+.legacy-topbar nav a,
+.legacy-viewtoggle {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  line-height: 1;
+  opacity: 0.75;
+  transition: opacity 300ms ease;
+}
+
+.legacy-viewtoggle {
+  cursor: pointer;
+}
+
+.legacy-topbar nav a:hover,
+.legacy-viewtoggle:hover {
+  opacity: 1;
+}
+
+.legacy-demo-badge {
+  position: fixed;
+  z-index: 11;
+  top: 70px;
+  right: 14px;
+  padding: 6px 12px;
+  border: 1px solid var(--legacy-line);
+  border-radius: 999px;
+  background: rgba(43, 23, 36, 0.28);
+  color: var(--legacy-ink);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease;
+}
+
+.legacy-demo-badge:hover {
+  border-color: rgba(255, 244, 240, 0.5);
+  background: rgba(43, 23, 36, 0.48);
+}
+
+.legacy-page {
+  position: relative;
+}
+
+.legacy-pad {
+  padding-right: 4vw;
+  padding-left: 4vw;
+}
+
+.legacy-hero {
+  position: relative;
+  display: flex;
+  min-height: 100vh;
+  min-height: 100svh;
+  align-items: flex-end;
+  padding-bottom: 6vh;
+}
+
+.legacy-hero::after {
+  position: absolute;
+  z-index: -1;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 42vh;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(47, 20, 40, 0.28)
+  );
+  content: "";
+  pointer-events: none;
+}
+
+.legacy-tag {
+  max-width: 480px;
+  margin: 0;
+  color: var(--legacy-dim);
+  font-size: clamp(13px, 1.15vw, 16px);
+  line-height: 1.75;
+  text-shadow: 0 1px 16px rgba(28, 11, 24, 0.6);
+}
+
+.legacy-tag b {
+  color: var(--legacy-ink);
+  font-weight: 400;
+}
+
+.legacy-scroll-cue {
+  position: absolute;
+  right: 4vw;
+  bottom: 6vh;
+  color: var(--legacy-dim);
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  writing-mode: vertical-rl;
+}
+
+.legacy-manifesto {
+  display: flex;
+  min-height: 72vh;
+  align-items: center;
+  background: linear-gradient(
+    180deg,
+    rgba(47, 20, 40, 0.28),
+    rgba(47, 20, 40, 0.74)
+  );
+}
+
+.legacy-manifesto p {
+  max-width: 20ch;
+  margin: 0;
+  font-family: Georgia, "Times New Roman", "Songti SC", serif;
+  font-size: clamp(30px, 4.6vw, 74px);
+  font-weight: 400;
+  line-height: 1.22;
+}
+
+.legacy-manifesto em {
+  color: var(--legacy-dim);
+  font-weight: 400;
+}
+
+.legacy-work {
+  padding-top: 8vh;
+  padding-bottom: 10vh;
+  background: rgba(47, 20, 40, 0.78);
+  backdrop-filter: blur(2px);
+}
+
+.legacy-work-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 5vh;
+}
+
+.legacy-work-head h2,
+.legacy-work-head span {
+  margin: 0;
+  color: var(--legacy-dim);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.28em;
+}
+
+.legacy-flow {
+  position: relative;
+  display: grid;
+  height: 120vh;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.2vw;
+  overflow: hidden;
+}
+
+.legacy-flow::before,
+.legacy-flow::after {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  left: 0;
+  height: 12vh;
+  content: "";
+  pointer-events: none;
+}
+
+.legacy-flow::before {
+  top: 0;
+  background: linear-gradient(180deg, rgb(47 20 40 / 0.95), transparent);
+}
+
+.legacy-flow::after {
+  bottom: 0;
+  background: linear-gradient(0deg, rgb(47 20 40 / 0.95), transparent);
+}
+
+.legacy-flow-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2.2vw;
+  animation: legacy-flow-up var(--flow-duration) linear infinite;
+  animation-delay: var(--flow-delay);
+  will-change: transform;
+}
+
+.legacy-card {
+  flex: none;
+  margin: 0;
+}
+
+.legacy-card-art {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 72% 24%,
+      rgba(255, 255, 255, 0.68) 0 3.5%,
+      transparent 4%
+    ),
+    radial-gradient(
+      circle at 25% 78%,
+      color-mix(in srgb, var(--art-a), transparent 6%) 0 17%,
+      transparent 17.5%
+    ),
+    linear-gradient(145deg, var(--art-a), var(--art-b) 56%, var(--art-c));
+  transform: scale(1.01);
+  transition:
+    transform 800ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 800ms ease;
+}
+
+.legacy-card:hover .legacy-card-art {
+  filter: saturate(1.08) contrast(1.03);
+  transform: scale(1.055);
+}
+
+.legacy-art-orbit {
+  position: absolute;
+  top: 12%;
+  left: -28%;
+  width: 150%;
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 50%;
+  transform: rotate(-18deg) scaleY(0.48);
+}
+
+.legacy-art-window {
+  position: absolute;
+  inset: 22% 17% 15%;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: linear-gradient(
+    150deg,
+    rgba(255, 255, 255, 0.12),
+    rgba(28, 16, 37, 0.34)
+  );
+  box-shadow: 0 20px 50px rgba(30, 14, 35, 0.22);
+  transform: rotate(7deg);
+  backdrop-filter: blur(5px);
+}
+
+.legacy-card-art:not(.poster) b {
+  position: absolute;
+  right: 7%;
+  bottom: 3%;
+  color: rgba(255, 247, 244, 0.52);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(54px, 7.4vw, 138px);
+  font-weight: 400;
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+
+.legacy-card figcaption {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  color: var(--legacy-dim);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+
+/* 卡片承载真实信件：整张卡可点，跳到该信的阅读页 */
+.legacy-card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ============================================================
+   每封信 = 一张排版海报
+   六种版式 × 五套色板；字号用容器查询跟随卡片宽度缩放。
+   ============================================================ */
+.legacy-card-art.poster {
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  padding: 7cqw 6.5cqw;
+  background: var(--p-bg);
+  color: var(--p-ink);
+  font-family:
+    "Neue Haas Grotesk Display", "Inter Tight", "Helvetica Neue",
+    -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* 有手绘背景图的卡片：图铺满，油墨纯色底让位；深底卡切白字 */
+.legacy-card-art.poster.has-bg {
+  background-size: cover;
+  background-position: center;
+}
+.legacy-card-art.poster.has-bg.is-dark {
+  --p-ink: #fdf3f4;
+  --p-rule: rgba(253, 243, 244, 0.14);
+}
+/* 压在图上的正文加一层极淡对比投影，防中间调发飘 */
+.has-bg .p-eyebrow,
+.has-bg .p-foot,
+.has-bg .p-topline,
+.has-bg .p-baseline,
+.has-bg .p-line {
+  text-shadow: 0 1px 10px rgba(250, 240, 236, 0.45);
+}
+.has-bg.is-dark .p-eyebrow,
+.has-bg.is-dark .p-foot,
+.has-bg.is-dark .p-topline,
+.has-bg.is-dark .p-baseline,
+.has-bg.is-dark .p-line {
+  text-shadow: 0 1px 12px rgba(10, 4, 8, 0.55);
+}
+
+/* 海报是文字，悬停放大收敛一点 */
+.legacy-card:hover .legacy-card-art.poster {
+  transform: scale(1.02);
+}
+
+/* 细网格：参考图里那层若隐若现的方格 */
+.poster-grid {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(var(--p-rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--p-rule) 1px, transparent 1px);
+  background-size: 12.5% 9%;
+  pointer-events: none;
+}
+
+.poster > *:not(.poster-grid) {
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------- 油墨色板（印刷四色的味道） ---------- */
+.pal--magenta {
+  --p-bg: #e8496b;
+  --p-ink: #16090d;
+  --p-c: #12b8d6;
+  --p-m: #ffd2dd;
+  --p-rule: rgba(22, 9, 13, 0.1);
+}
+.pal--cyan {
+  --p-bg: #35b7cf;
+  --p-ink: #06232a;
+  --p-c: #d8f4f8;
+  --p-m: #ff6d94;
+  --p-rule: rgba(6, 35, 42, 0.1);
+}
+.pal--ink {
+  --p-bg: #14100f;
+  --p-ink: #f6f0e6;
+  --p-c: #2ac3d8;
+  --p-m: #ff5f86;
+  --p-rule: rgba(246, 240, 230, 0.08);
+}
+.pal--cream {
+  --p-bg: #efe6d2;
+  --p-ink: #14100f;
+  --p-c: #1aa9c4;
+  --p-m: #ef5077;
+  --p-rule: rgba(20, 16, 15, 0.08);
+}
+.pal--orange {
+  --p-bg: #f0653a;
+  --p-ink: #1a0a06;
+  --p-c: #17b3c9;
+  --p-m: #ffd9bf;
+  --p-rule: rgba(26, 10, 6, 0.1);
+}
+
+/* 纸张颗粒：整张封套压一层噪点，印刷味的关键 */
+.legacy-card-art.poster::after {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  opacity: 0.32;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+  content: "";
+  pointer-events: none;
+}
+
+/* ---------- 通用零件 ---------- */
+.p-eyebrow {
+  font-size: clamp(7px, 3.1cqw, 13px);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+
+.p-foot {
+  margin-top: auto;
+  font-size: clamp(7px, 3cqw, 12px);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+
+.p-topline,
+.p-baseline {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1em;
+  font-size: clamp(6px, 2.8cqw, 11px);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+.p-baseline {
+  margin-top: auto;
+  padding-top: 3cqw;
+  border-top: 1px solid currentColor;
+}
+.p-topline {
+  padding-bottom: 3cqw;
+  border-bottom: 1px solid currentColor;
+}
+.p-mark i {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-style: italic;
+  padding: 0 0.15em;
+}
+
+/* ---------- 套印错位：青、品两层偏移叠印 ---------- */
+.p-title {
+  position: relative;
+  margin: 4cqw 0;
+  font-size: clamp(12px, 9.5cqw, 34px);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.005em;
+}
+.p-title--lg {
+  font-size: clamp(13px, 11.5cqw, 42px);
+  line-height: 0.99;
+}
+.p-title--sm {
+  font-size: clamp(10px, 6.4cqw, 22px);
+  margin: 3cqw 0 0;
+}
+.p-title::before,
+.p-title::after {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: multiply;
+  content: attr(data-text);
+  pointer-events: none;
+}
+.p-title::before {
+  color: var(--p-c);
+  transform: translate(-0.045em, 0.028em);
+}
+.p-title::after {
+  color: var(--p-m);
+  transform: translate(0.038em, -0.022em);
+}
+/* 深底上改用滤色，错位层才看得见 */
+.pal--ink .p-title::before,
+.pal--ink .p-title::after,
+.is-dark .p-title::before,
+.is-dark .p-title::after {
+  mix-blend-mode: screen;
+}
+
+/* ---------- minimal：几乎只剩一个编号 ---------- */
+.p-numeral {
+  position: relative;
+  margin: auto 0 -6cqw -1.5cqw;
+  font-size: 68cqw;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 0.72;
+  letter-spacing: -0.07em;
+}
+.p-numeral::before,
+.p-numeral::after {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: multiply;
+  content: attr(data-text);
+}
+.p-numeral::before {
+  color: var(--p-c);
+  transform: translate(-0.02em, 0.012em);
+}
+.p-numeral::after {
+  color: var(--p-m);
+  transform: translate(0.016em, -0.01em);
+}
+.pal--ink .p-numeral::before,
+.pal--ink .p-numeral::after,
+.is-dark .p-numeral::before,
+.is-dark .p-numeral::after {
+  mix-blend-mode: screen;
+}
+
+/* ---------- label：唱片中心标 ---------- */
+.p-disc {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 52cqw;
+  height: 52cqw;
+  margin: auto auto 0;
+  border-radius: 50%;
+  background: var(--p-ink);
+  color: var(--p-bg);
+}
+.p-disc-ring {
+  position: absolute;
+  inset: 12%;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  opacity: 0.55;
+}
+.p-disc b {
+  position: static;
+  font-size: 17cqw;
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: -0.04em;
+}
+
+/* ---------- stripe：横向油墨条 ---------- */
+.p-stripes {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+.p-stripes i {
+  flex: 1;
+}
+.p-stripes i:nth-child(1) { background: var(--p-c); opacity: 0.85; }
+.p-stripes i:nth-child(2) { background: transparent; }
+.p-stripes i:nth-child(3) { background: var(--p-m); opacity: 0.7; }
+.p-stripes i:nth-child(4) { background: transparent; }
+
+/* ---------- duotone：满版网点 ---------- */
+.p-halftone {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background-image: radial-gradient(
+    var(--p-ink) 28%,
+    transparent 29%
+  );
+  background-size: 4.5cqw 4.5cqw;
+  opacity: 0.4;
+  mask-image: linear-gradient(200deg, #000 8%, transparent 62%);
+  -webkit-mask-image: linear-gradient(200deg, #000 8%, transparent 62%);
+}
+
+/* ---------- overprint：两块油墨叠印 ---------- */
+.p-blot {
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  mix-blend-mode: multiply;
+  filter: blur(0.4cqw);
+}
+.p-blot--a {
+  top: -12%;
+  right: -18%;
+  width: 78%;
+  aspect-ratio: 1;
+  background: var(--p-c);
+  opacity: 0.9;
+}
+.p-blot--b {
+  bottom: -20%;
+  left: -14%;
+  width: 66%;
+  aspect-ratio: 1;
+  background: var(--p-m);
+  opacity: 0.85;
+}
+.p-line {
+  position: relative;
+  margin: auto 0;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(12px, 8cqw, 29px);
+  font-weight: 400;
+  line-height: 1.26;
+}
+
+/* ============================================================
+   碎碎念专属版面：比信件短、更紧凑，引文即主角，出处作署名
+   ============================================================ */
+.poster.is-fragment {
+  padding: 6cqw 5.5cqw;
+}
+
+/* note：便签 —— 引文占主体，出处压右下 */
+.f-note {
+  margin: 4cqw 0 0;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(12px, 8.2cqw, 30px);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+.f-note-sub {
+  margin: 2.5cqw 0 0;
+  font-size: clamp(8px, 3.6cqw, 14px);
+  font-weight: 500;
+  line-height: 1.65;
+  opacity: 0.82;
+}
+.f-sign {
+  margin-top: auto;
+  align-self: flex-end;
+  font-size: clamp(7px, 3cqw, 12px);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+/* whisper：一句话居中，四周大留白 */
+.poster--whisper {
+  justify-content: space-between;
+}
+.f-whisper {
+  margin: auto 0;
+  padding: 0 2cqw;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(13px, 9.5cqw, 34px);
+  font-weight: 400;
+  line-height: 1.26;
+  text-align: center;
+}
+
+/* bilingual：英文小字压中文大字，像唱片内页译注 */
+.f-bi {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5cqw;
+  margin: auto 0;
+}
+.f-bi-en {
+  margin: 0;
+  font-size: clamp(7px, 3.2cqw, 13px);
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  opacity: 0.72;
+}
+.f-bi-cn {
+  margin: 0;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(11px, 6.6cqw, 24px);
+  font-weight: 400;
+  line-height: 1.34;
+}
+
+/* ticket / stub：票根存根 */
+.f-perf {
+  position: absolute;
+  z-index: 1;
+  top: 4.5cqw;
+  right: 0;
+  left: 0;
+  border-top: 1.5px dashed currentColor;
+  opacity: 0.4;
+}
+.f-stubtop {
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+  padding-top: 3cqw;
+  font-size: clamp(6px, 2.7cqw, 11px);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+.f-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2cqw;
+  margin: auto 0;
+}
+.f-row {
+  margin: 0;
+  font-size: clamp(7px, 3.4cqw, 13px);
+  font-weight: 500;
+  line-height: 1.62;
+  opacity: 0.86;
+}
+.f-row--cn {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(10px, 5.4cqw, 20px);
+  font-weight: 400;
+  line-height: 1.38;
+  opacity: 1;
+}
+.f-stubnum {
+  position: relative;
+  margin: auto 0 -2cqw -1cqw;
+  font-size: 46cqw;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 0.74;
+  letter-spacing: -0.06em;
+}
+.f-stubnum::before,
+.f-stubnum::after {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: multiply;
+  content: attr(data-text);
+}
+.f-stubnum::before {
+  color: var(--p-c);
+  transform: translate(-0.02em, 0.012em);
+}
+.f-stubnum::after {
+  color: var(--p-m);
+  transform: translate(0.016em, -0.01em);
+}
+.is-dark .f-stubnum::before,
+.is-dark .f-stubnum::after {
+  mix-blend-mode: screen;
+}
+.f-stubline {
+  margin: 2cqw 0 0;
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: clamp(7px, 3.2cqw, 12px);
+  font-weight: 500;
+  line-height: 1.6;
+  opacity: 0.85;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* 压在背景图上的碎碎念文字，同样加极淡对比投影 */
+.has-bg .f-note,
+.has-bg .f-whisper,
+.has-bg .f-bi-cn,
+.has-bg .f-row--cn {
+  text-shadow: 0 1px 12px rgba(250, 240, 236, 0.4);
+}
+.has-bg.is-dark .f-note,
+.has-bg.is-dark .f-whisper,
+.has-bg.is-dark .f-bi-cn,
+.has-bg.is-dark .f-row--cn {
+  text-shadow: 0 1px 14px rgba(10, 4, 8, 0.6);
+}
+
+/* ---------- 版式微调 ---------- */
+.poster--minimal,
+.poster--label {
+  justify-content: space-between;
+}
+.poster--label .p-title--sm {
+  margin-top: 3cqw;
+}
+
+.legacy-flow-empty {
+  color: var(--legacy-dim);
+  font-size: 13px;
+  letter-spacing: 0.16em;
+}
+
+.legacy-marquee {
+  overflow: hidden;
+  border-top: 1px solid var(--legacy-line);
+  border-bottom: 1px solid var(--legacy-line);
+  background: rgba(47, 20, 40, 0.9);
+  padding: 3.2vh 0;
+}
+
+.legacy-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 6vw;
+  animation: legacy-marquee-left 28s linear infinite;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.legacy-marquee span {
+  font-size: clamp(40px, 7vw, 110px);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+}
+
+.legacy-marquee i,
+.legacy-footer-big i {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+}
+
+.legacy-footer {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+  padding: 12vh 4vw 6vh;
+  background: rgba(239, 222, 217, 0.96);
+  color: var(--legacy-dark);
+}
+
+.legacy-footer-big {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(34px, 5vw, 80px);
+  line-height: 1.1;
+}
+
+.legacy-footer ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legacy-footer a,
+.legacy-footer span {
+  color: rgba(43, 23, 36, 0.62);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-decoration: none;
+  transition: color 200ms ease;
+}
+
+.legacy-footer a:hover {
+  color: var(--legacy-dark);
+}
+
+.legacy-footer li::before {
+  content: "↗  ";
+}
+
+.legacy-credit {
+  padding: 0 4vw 4vh;
+  background: rgba(239, 222, 217, 0.96);
+  color: rgba(43, 23, 36, 0.42);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+}
+
+.legacy-loading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 4vh 4vw;
+  background: #efded9;
+  color: #212121;
+  transform: translateY(0);
+  transition:
+    transform 900ms cubic-bezier(0.76, 0, 0.24, 1),
+    visibility 0s linear 900ms;
+}
+
+.legacy-loading.is-ready {
+  visibility: hidden;
+  opacity: 1;
+  transform: translateY(-100%);
+}
+
+.legacy-loading-number {
+  font-size: clamp(60px, 12vw, 150px);
+  font-variant-numeric: tabular-nums;
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 0.8;
+}
+
+.legacy-loading-label {
+  margin-bottom: 0.25em;
+  color: #8a7570;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+}
+
+@keyframes legacy-flow-up {
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes legacy-marquee-left {
+  to {
+    transform: translateX(calc(-100% / 3));
+  }
+}
+
+@media (max-width: 760px) {
+  .exact-mars > header,
+  .exact-mars > footer {
+    right: 18px;
+    left: 18px;
+  }
+
+  .exact-mars > header {
+    top: 17px;
+  }
+
+  .exact-mars > header span {
+    display: none;
+  }
+
+  .look-switch {
+    font-size: 8px;
+  }
+
+  .exact-mars > footer {
+    bottom: 17px;
+  }
+
+  .exact-mars > footer a:first-child {
+    display: none;
+  }
+
+  .exact-mars > footer a:last-child {
+    margin-left: auto;
+  }
+
+  .legacy-topbar {
+    padding: 20px 4vw;
+  }
+
+  .legacy-logo {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    white-space: nowrap;
+  }
+
+  .legacy-topbar nav {
+    gap: 10px;
+  }
+
+  .legacy-topbar nav a,
+  .legacy-viewtoggle {
+    font-size: 8px;
+    letter-spacing: 0.11em;
+  }
+
+  .legacy-demo-badge {
+    top: 57px;
+  }
+
+  .legacy-tag {
+    max-width: 76vw;
+    font-size: 11px;
+    line-height: 1.55;
+  }
+
+  .legacy-scroll-cue {
+    display: none;
+  }
+
+  .legacy-flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .legacy-flow-column:nth-child(3) {
+    display: none;
+  }
+
+  .legacy-card figcaption {
+    display: block;
+    font-size: 8px;
+    line-height: 1.55;
+  }
+
+  .legacy-card figcaption span {
+    display: block;
+  }
+
+  .legacy-footer {
+    grid-template-columns: 1fr;
+  }
+
+  .legacy-loading {
+    display: grid;
+    align-content: end;
+    justify-items: start;
+    gap: 24px;
+  }
+
+  .legacy-loading-label {
+    font-size: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .legacy-flow-column,
+  .legacy-marquee-track {
+    animation-play-state: paused;
+    will-change: auto;
+  }
+
+  .legacy-card-art {
+    transition-duration: 1ms;
+  }
+}

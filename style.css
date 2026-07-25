@@ -1943,3 +1943,52 @@ body.bloom {
 @media (prefers-reduced-motion: reduce) {
   .holo-layer::after { animation: none; opacity: 0; }
 }
+
+/* ============================================================
+   草原模式（Mars Field）：第四主题
+   自带完整 V9 界面的独立体验，铺满视口；主站界面整体让位，
+   只留主题按钮浮在上层用于切回。
+   场景来自 Christian Ortiz 的 stylized-components（MIT）。
+   ============================================================ */
+.mars-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 45;              /* 低于 .site-header(50)，按钮始终可点 */
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #0d1a10;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+.mars-stage.is-on { opacity: 1; }
+/* 离开草原模式：淡出并交还鼠标事件 */
+body:not(.mars) .mars-stage {
+  opacity: 0;
+  pointer-events: none;
+}
+
+body.mars {
+  background: #0d1a10;
+  overflow: hidden;         /* 滚动交给 iframe 内部的 V9 页面 */
+}
+
+/* 主站界面整体让位：草原模式只保留 iframe 内那一条 V9 顶栏，
+   退出入口做在它的导航里（见 script.js 的 __marsExit），避免两条顶栏打架。 */
+body.mars .site-header,
+body.mars .chapter-rail,
+body.mars main,
+body.mars .music-dock,
+body.mars .scroll-progress,
+body.mars .day-scene,
+body.mars .dayvid-scene,
+body.mars .bloom-scene,
+body.mars .nebula-field,
+body.mars .planet-horizon,
+body.mars .planet-ringed,
+body.mars .vignette,
+body.mars .asme-hero-bg,
+body.mars .cursor-dot,
+body.mars .cursor-ring { display: none !important; }
+
