@@ -67,20 +67,29 @@ export default function BoundedCamera({ view = "letters" }) {
     targetPosition.current.copy(start.position);
     targetQuaternion.current.copy(start.quaternion);
 
+    /* 鼠标与手指共用同一套视差：指针位置驱动镜头。
+       触摸时手指滑到哪镜头看向哪，抬手后平滑回到初始构图。 */
     const handlePointerMove = (event) => {
-      if (event.pointerType && event.pointerType !== "mouse") return;
       pointer.current.set(
         MathUtils.clamp((event.clientX / window.innerWidth) * 2 - 1, -1, 1),
         MathUtils.clamp(1 - (event.clientY / window.innerHeight) * 2, -1, 1),
       );
     };
     const resetPointer = () => pointer.current.set(0, 0);
+    /* 鼠标松开不该回中（光标还在原处）；手指离屏才回中 */
+    const handlePointerEnd = (event) => {
+      if (!event.pointerType || event.pointerType !== "mouse") resetPointer();
+    };
 
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    window.addEventListener("pointerup", handlePointerEnd, { passive: true });
+    window.addEventListener("pointercancel", handlePointerEnd, { passive: true });
     window.addEventListener("blur", resetPointer);
     document.documentElement.addEventListener("pointerleave", resetPointer);
     return () => {
       window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerEnd);
+      window.removeEventListener("pointercancel", handlePointerEnd);
       window.removeEventListener("blur", resetPointer);
       document.documentElement.removeEventListener("pointerleave", resetPointer);
     };

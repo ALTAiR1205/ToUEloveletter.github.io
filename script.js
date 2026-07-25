@@ -414,8 +414,36 @@
      场景来自 Christian Ortiz 的 stylized-components（MIT），见 demo/mars-exact/。 */
   /* 版本号：Mars 重新构建后要跟着升，否则浏览器会拿缓存的旧 index.html
      （里面的 JS/CSS 带内容哈希，只有这个入口页需要手动破缓存） */
-  const MARS_SRC = 'demo/mars-exact/index.html?look=legacy-ui&v=9.1';
+  const MARS_SRC = 'demo/mars-exact/index.html?look=legacy-ui&v=9.2';
   let marsFrame = null;
+
+  /* iframe 内 env(safe-area-inset-*) 恒为 0（安全区只对顶层视口生效），
+     所以由主站量好数值再注入进去，否则装成 App 后草原模式的顶栏会顶到摄像头。 */
+  function measureInset(side) {
+    const probe = document.createElement('div');
+    probe.style.cssText =
+      'position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;pointer-events:none;' +
+      'padding-' + side + ':env(safe-area-inset-' + side + ',0px)';
+    document.body.appendChild(probe);
+    const prop = side === 'top' ? 'paddingTop' : 'paddingBottom';
+    const v = parseFloat(getComputedStyle(probe)[prop]) || 0;
+    probe.remove();
+    return v;
+  }
+  function syncMarsSafeArea() {
+    if (!marsFrame) return;
+    try {
+      const root = marsFrame.contentDocument.documentElement;
+      let top = measureInset('top');
+      /* 装成 App（standalone）后状态栏不一定上报 inset，沿用主站的 30px 兜底 */
+      if (matchMedia('(display-mode: standalone)').matches) top = Math.max(top, 30);
+      root.style.setProperty('--safe-top', top + 'px');
+      root.style.setProperty('--safe-bottom', measureInset('bottom') + 'px');
+    } catch (e) { /* 跨域时静默降级 */ }
+  }
+  addEventListener('resize', syncMarsSafeArea);
+  addEventListener('orientationchange', () => setTimeout(syncMarsSafeArea, 120));
+
   function startMars() {
     if (marsFrame) { marsFrame.classList.add('is-on'); return; }
     marsFrame = document.createElement('iframe');
@@ -434,6 +462,7 @@
         s.textContent = '.legacy-demo-badge{display:none!important}';
         d.head.appendChild(s);
       } catch (e) { /* 跨域时静默降级 */ }
+      syncMarsSafeArea();
       marsFrame.classList.add('is-on');
     });
     document.body.appendChild(marsFrame);
