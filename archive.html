@@ -16,10 +16,10 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="style.css?v=9.1-data" />
+<link rel="stylesheet" href="style.css?v=10.0" />
 </head>
 <body class="sub-page archive-dynamic-page">
-<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light')document.body.classList.add('dark');if(t==='bloom')document.body.classList.add('bloom');if(t==='light')document.body.classList.add('daylight');if(t!=='light'&&t!=='bloom')document.body.classList.add('night');}catch(e){}})();</script>
+<script>(function(){var c=document.body.classList,t='light';try{if(localStorage.getItem('themeV')!=='10'){localStorage.setItem('theme','light');localStorage.setItem('themeV','10');}t=localStorage.getItem('theme')||'light';}catch(e){}if(t!=='dark'&&t!=='bloom'&&t!=='mars')t='light';if(t==='light')c.add('daylight');else c.add('dark');if(t==='bloom')c.add('bloom');if(t==='dark'||t==='mars')c.add('night');})();</script>
 
 <div aria-hidden="true" class="scroll-progress" id="scrollProgress"><span></span></div>
 <canvas class="space-canvas" id="spaceCanvas" aria-hidden="true"></canvas>
@@ -97,7 +97,7 @@
 </div>
 </div>
 
-<script src="content.js?v=9.2-letter"></script>
-<script src="script.js?v=9.1-data"></script>
+<script src="content.js?v=10.0"></script>
+<script src="script.js?v=10.0"></script>
 </body>
 </html>

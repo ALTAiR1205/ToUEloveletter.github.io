@@ -41,6 +41,16 @@
   function labelFor(type) {
     return type === 'letters' ? 'Letter Archive' : type === 'replies' ? 'Incoming Transmission' : 'Fragment Archive';
   }
+  /* 生日信末尾附上「二十一个愿望」（content.js 的 birthday.wishes；兑现了的带日期） */
+  function letterExtras(type, item) {
+    const B = DATA.birthday;
+    if (type !== 'letters' || !B || !item || item.date !== B.letter || !(B.wishes || []).length) return '';
+    return `<div class="letter-wishes">
+      <h3>${esc(B.wishesTitle || '愿望')}</h3>
+      ${B.wishesLead ? `<p>${esc(B.wishesLead)}</p>` : ''}
+      <ol>${B.wishes.map(w => `<li${w.done ? ' class="is-done"' : ''}>${esc(w.t)}${w.done ? `<em>已兑现 · ${esc(w.done)}</em>` : ''}</li>`).join('')}</ol>
+    </div>`;
+  }
 
   /* ---------- 内容规范化：新增内容不用再手写 id / kicker / 排序 ----------
      在 content.js 里新增信件/回信/碎碎念时，只需要 date、title、body（tags 可选），
@@ -167,7 +177,7 @@
     $('#articleMeta').textContent = item.meta || item.date || '';
     const tagRow = $('#articleTags');
     if (tagRow) tagRow.innerHTML = (item.tags || []).map(t => `<span>${esc(t)}</span>`).join('');
-    $('#articleBody').innerHTML = type === 'fragments' ? `<div class="quote-text">${item.body || ''}</div>` : (item.body || '<p>这里还没有正文。</p>');
+    $('#articleBody').innerHTML = type === 'fragments' ? `<div class="quote-text">${item.body || ''}</div>` : (item.body || '<p>这里还没有正文。</p>') + letterExtras(type, item);
   }
 
   renderHomeContent();
@@ -279,10 +289,23 @@
 
   /* ---------- 白天模式引擎（Lumora）：分章节视频背景，懒加载 ---------- */
   const DAYVIDS = ['media/day-golden.mp4', 'media/day-water.mp4', 'media/day-woods.mp4', 'media/day-dawn.mp4'];
+  /* 每段视频的第一帧（120–220KB）：先当背景铺上，视频能播了再淡入，网慢时也不会是一片黑。
+     v10 白天成了主模式：手机上的档案页/文章页只用封面图，不再为了读一封信下载 20MB 视频。 */
+  const DAYPOSTERS = DAYVIDS.map(src => src.replace(/\.mp4$/, '.jpg'));
+  const dayPosterOnly = !isHomePage && (isCoarsePointer || !!(navigator.connection && navigator.connection.saveData));
   const dayScene = $('#dayvidScene');
   let dayStarted = false, dayEls = [], dayActive = -1, dayCooldownUntil = 0, dayReqId = 0, dayPending = -1;
+  function setDayPoster(i) {
+    if (dayScene) dayScene.style.background = `#0b0b0f url("${DAYPOSTERS[i]}") center / cover no-repeat`;
+  }
   function setDayVideo(i, force) {
     if (!dayStarted || i === dayActive || !dayEls[i]) return;
+    if (dayPosterOnly) {
+      dayActive = i;
+      setDayPoster(i);
+      document.body.classList.toggle('vid-bright', i === 2);
+      return;
+    }
     const now = performance.now();
     if (!force && now < dayCooldownUntil) {
       /* 冷却期内的请求排队，冷却结束后自动执行最后一个 */
@@ -298,6 +321,7 @@
     dayCooldownUntil = now + 1000;
     const req = ++dayReqId;
     const v = dayEls[i];
+    setDayPoster(i); /* 在正在播的视频下面先换好封面，新视频淡入时下面就是它自己的第一帧 */
     if (!v.src) { v.src = DAYVIDS[i]; v.load(); }
     const doFade = () => {
       if (req !== dayReqId) return; /* 已被更新的切换请求取代 */
@@ -469,40 +493,46 @@
   }
   function stopMars() { if (marsFrame) marsFrame.classList.remove('is-on'); }
 
-  /* ---------- 主题切换：夜晚 → 白天 → 花开 → 草原（localStorage.theme，兼容旧值） ---------- */
+  /* ---------- 主题切换：白天 → 夜晚 → 花开 → 草原（localStorage.theme，兼容旧值） ----------
+     v10 起主模式是白天：每个页面 <body> 里的内联脚本会把老访客的选择重置一次（themeV=10），之后照常记忆。 */
   const themeBtn = $('#themeBtn');
-  const THEME_ORDER = ['dark', 'light', 'bloom', 'mars'];
-  const THEME_LABEL = { dark: '白天模式', light: '花开模式', bloom: '草原模式', mars: '夜晚模式' };
-  let themeMode = localStorage.getItem('theme');
-  if (!THEME_ORDER.includes(themeMode)) themeMode = 'dark';
+  const THEME_ORDER = ['light', 'dark', 'bloom', 'mars'];
+  const THEME_LABEL = { light: '夜晚模式', dark: '花开模式', bloom: '草原模式', mars: '白天模式' };
+  let themeMode = null;
+  try { themeMode = localStorage.getItem('theme'); } catch (e) { /* 隐私模式 */ }
+  if (!THEME_ORDER.includes(themeMode)) themeMode = 'light';
   function applyTheme(mode) {
     themeMode = mode;
-    document.body.classList.toggle('dark', mode !== 'light');
-    document.body.classList.toggle('bloom', mode === 'bloom');
-    document.body.classList.toggle('daylight', mode === 'light');
-    document.body.classList.toggle('night', mode === 'dark');
-    document.body.classList.toggle('mars', mode === 'mars');
-    if (themeBtn) themeBtn.textContent = THEME_LABEL[mode] || '夜晚模式';
-    if (mode === 'bloom') startBloom();
-    if (mode === 'light') startDayVideos();
+    /* 草原模式只在首页铺 Mars 场景；从草原里点开的信（article.html）和档案页按夜晚模式显示，
+       否则信会被又一层草原盖住，根本看不到。 */
+    const view = mode === 'mars' && !isHomePage ? 'dark' : mode;
+    document.body.classList.toggle('dark', view !== 'light');
+    document.body.classList.toggle('bloom', view === 'bloom');
+    document.body.classList.toggle('daylight', view === 'light');
+    document.body.classList.toggle('night', view === 'dark');
+    document.body.classList.toggle('mars', view === 'mars');
+    if (themeBtn) themeBtn.textContent = THEME_LABEL[mode] || '白天模式';
+    if (view === 'bloom') startBloom();
+    if (view === 'light') startDayVideos();
     else if (dayStarted) dayEls.forEach(v => { if (v.src) v.pause(); });
-    if (mode === 'dark') startNight(); else stopNight();
-    if (mode === 'mars') startMars(); else stopMars();
+    if (view === 'dark') startNight(); else stopNight();
+    if (view === 'mars') startMars(); else stopMars();
   }
 
-  /* 供草原模式（iframe 内的 V9 顶栏）调用，退回夜晚模式 */
+  /* 供草原模式（iframe 内的 V9 顶栏）调用，退回主模式（白天） */
   window.__marsExit = () => {
-    localStorage.setItem('theme', 'dark');
-    applyTheme('dark');
+    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+    applyTheme('light');
   };
   applyTheme(themeMode);
   themeBtn?.addEventListener('click', () => {
     const next = THEME_ORDER[(THEME_ORDER.indexOf(themeMode) + 1) % THEME_ORDER.length];
-    localStorage.setItem('theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
     applyTheme(next);
   });
 
-  /* ---------- 开屏动画：000→100 计数 + 衬线轮播词，点击可跳过 ---------- */
+  /* ---------- 开屏动画：000→100 计数 + 衬线轮播词，点击可跳过 ----------
+     生日当天 birthday.js 会换词（data-words）并把计数改成 00→21（data-count-to）。 */
   const loader = $('#openingLoader');
   if (loader) {
     let loaderDone = false;
@@ -512,11 +542,13 @@
       setTimeout(hideLoader, 300);
     } else {
       const nEl = $('#loaderCount'), barEl = $('#loaderBar'), wordEl = $('#loaderWord');
-      const words = ['遇见你', '爱上你', '奔向你'];
+      const words = (loader.dataset.words || '遇见你|爱上你|奔向你').split('|');
+      const countTo = Number(loader.dataset.countTo) || 100;
+      const digits = Math.max(2, String(countTo).length);
       let wi = 0;
       const wordTimer = setInterval(() => {
         if (loaderDone || !wordEl) return;
-        if (wi >= words.length - 1) { clearInterval(wordTimer); return; } /* 停在「奔向你」 */
+        if (wi >= words.length - 1) { clearInterval(wordTimer); return; } /* 停在最后一个词（「奔向你」） */
         wi += 1;
         wordEl.textContent = words[wi];
         wordEl.classList.remove('swap');
@@ -527,7 +559,7 @@
       requestAnimationFrame(function tick(t) {
         if (loaderDone) { clearInterval(wordTimer); return; }
         const k = Math.min(1, (t - t0) / dur);
-        if (nEl) nEl.textContent = String(Math.round(k * 100)).padStart(3, '0');
+        if (nEl) nEl.textContent = String(Math.round(k * countTo)).padStart(digits, '0');
         if (barEl) barEl.style.transform = `scaleX(${k})`;
         if (k < 1) requestAnimationFrame(tick);
         else { clearInterval(wordTimer); setTimeout(hideLoader, 350); }
@@ -763,7 +795,8 @@
   setupTiltAndMagnetics();
 
   /* ---------- 时间计数 & 里程碑 ---------- */
-  const togetherStart = new Date('2026-03-20T23:22:00-05:00');
+  /* 3 月 20 日哥伦布已是夏令时（EDT，3 月 8 日开始），所以是 -04:00；v10 之前写成 -05:00，计时少算了 1 小时 */
+  const togetherStart = new Date('2026-03-20T23:22:00-04:00');
   const knownStart = new Date('2026-03-05T00:00:00-05:00');
   const day = 86400000, hour = 3600000, minute = 60000;
   function parts(from) {
@@ -786,6 +819,20 @@
     }
     const sentence = $('#coreSentence');
     if (sentence) sentence.textContent = `从认识起已经 ${k.d} 天；从正式在一起起，我们已经一起走过 ${p.d} 天 ${p.h} 小时 ${p.m} 分钟 ${p.s} 秒。`;
+    /* 见面倒计时（content.js 的 meet）：见面之前倒数，见面之后变成一句纪念 */
+    const meetEl = $('#meetText');
+    const meetAt = DATA.meet && Date.parse(DATA.meet.at);
+    if (meetEl && meetAt) {
+      const left = meetAt - Date.now();
+      const label = DATA.meet.label || '';
+      if (left > 0) {
+        const md = Math.floor(left / day), mh = Math.floor((left % day) / hour), mm = Math.floor((left % hour) / minute);
+        meetEl.textContent = `${label} · 还有 ${md} 天 ${mh} 小时 ${mm} 分`;
+      } else {
+        meetEl.textContent = DATA.meet.after || '';
+      }
+      meetEl.hidden = !meetEl.textContent;
+    }
     const fill = $('#milestoneFill');
     const msText = $('#milestoneText');
     if (fill && msText) {
@@ -924,7 +971,7 @@
     if (readerMeta) readerMeta.textContent = item.meta || item.date || '';
     if (readerKicker) readerKicker.textContent = item.kicker || labelFor(type);
     if (readerTags) readerTags.innerHTML = (item.tags || []).map(t => `<span>${esc(t)}</span>`).join('');
-    if (readerBody) { readerBody.innerHTML = type === 'fragments' ? `<div class="quote-text">${item.body || ''}</div>` : (item.body || '<p>这里还没有正文。</p>'); }
+    if (readerBody) { readerBody.innerHTML = type === 'fragments' ? `<div class="quote-text">${item.body || ''}</div>` : (item.body || '<p>这里还没有正文。</p>') + letterExtras(type, item); }
     if (readerFullLink) readerFullLink.href = articleHref(type, id);
     openReader();
     return true;

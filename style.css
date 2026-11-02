@@ -1406,6 +1406,14 @@ body.daylight .disc-core {
   body.daylight .dayvid-switcher { bottom: 92px; gap: 12px 20px; }
   body.daylight .hero-daystats { font-size: 11px; gap: 6px 10px; }
   body.daylight .hero-stage { padding-bottom: 185px; }
+  /* 白天成为主模式后：窄屏顶栏收紧，否则 360px 宽的手机上主题按钮会被挤出屏幕 */
+  body.daylight .brand { font-size: 16px; letter-spacing: 0.5px; }
+  body.daylight .top-nav { padding: 6px 6px 6px 14px; }
+}
+@media (max-width: 370px) {
+  .top-nav { gap: 6px; }
+  .top-nav a { letter-spacing: 0; }
+  body.daylight .brand { font-size: 15px; }
 }
 
 /* ============================================================
@@ -1811,9 +1819,9 @@ body.night .ending-signature { letter-spacing: 10px; }
 }
 
 /* ==========================================================================
-   那一刻的星空（Interlude · 仅夜晚主题可见）
+   那一刻的星空（Interlude · 夜晚与白天主题可见；v10 白天成为主模式后不再只给夜晚）
    ========================================================================== */
-body:not(.night) .sky-stage { display: none; }
+body:not(.night):not(.daylight) .sky-stage { display: none; }
 
 .sky-grid {
   display: grid;
@@ -1992,3 +2000,31 @@ body.mars .asme-hero-bg,
 body.mars .cursor-dot,
 body.mars .cursor-ring { display: none !important; }
 
+
+/* ============================================================
+   生日信末尾的「二十一个愿望」（文章页 / 阅读弹窗；首页生日章里写在信纸上，见 birthday.css）
+   ============================================================ */
+.letter-wishes { margin-top: 34px; padding-top: 26px; border-top: 1px dashed var(--line-strong); }
+.letter-wishes h3 { font-family: var(--font-display); font-size: 20px; letter-spacing: 3px; margin-bottom: 8px; color: var(--ink); }
+.letter-wishes > p { font-size: 14px; line-height: 1.9; color: var(--ink-dim); margin-bottom: 14px; }
+.letter-wishes ol { padding-left: 2.2em; display: grid; gap: 6px; }
+.letter-wishes li { line-height: 1.95; color: var(--ink); }
+.letter-wishes li::marker { color: var(--gold); font-family: 'Instrument Serif', var(--font-display); }
+.letter-wishes em { display: inline-block; margin-left: 8px; font-style: normal; font-size: 12px; letter-spacing: 1px; color: var(--gold); }
+
+/* 信件落款：手写签名（media/signature.png，蓝黑墨水）。信纸上用原色；深色的阅读弹窗/文章页里反成米白 */
+.letter-sign { display: block; width: min(300px, 72%); height: auto; margin: 8px 0 18px -4px; transform: rotate(-2.5deg); transform-origin: left center; }
+body.dark .letter-sign, body.daylight .letter-sign { filter: invert(1) sepia(0.12); opacity: 0.95; }
+.bday-paper .letter-sign { filter: none !important; opacity: 1; }
+
+/* 第一章：见面倒计时（content.js 的 meet） */
+.meet-line {
+  margin: 14px auto 0; width: fit-content; max-width: 100%;
+  padding: 7px 16px; border-radius: 99px;
+  font-size: 12.5px; letter-spacing: 1.5px; line-height: 1.6;
+  color: var(--ink-dim);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  font-variant-numeric: tabular-nums;
+}
+.meet-line[hidden] { display: none; }

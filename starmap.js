@@ -181,9 +181,12 @@
     drawVega(t);
   }
 
+  /* 这一章在夜晚和白天主题显示（花开主题隐藏），见 style.css */
+  const skyShown = () => document.body.classList.contains('night') || document.body.classList.contains('daylight');
+
   function frame(t) {
     rafId = 0;
-    if (!active || !document.body.classList.contains('night')) return;
+    if (!active || !skyShown()) return;
     draw(t);
     if (!reduced) rafId = requestAnimationFrame(frame);
   }
@@ -226,9 +229,9 @@
     if (document.hidden && rafId) { cancelAnimationFrame(rafId); rafId = 0; }
     else if (!document.hidden && active) start();
   });
-  /* 主题切回夜晚时，若正停在本节则重新点亮 */
+  /* 主题切回夜晚/白天时，若正停在本节则重新点亮 */
   document.getElementById('themeBtn')?.addEventListener('click', () => {
-    setTimeout(() => { if (active && document.body.classList.contains('night')) { resize(); start(); } }, 60);
+    setTimeout(() => { if (active && skyShown()) { resize(); start(); } }, 60);
   });
 
   resize();

@@ -16,10 +16,11 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=9.1-data" rel="stylesheet"/>
+<link href="style.css?v=10.0" rel="stylesheet"/>
+<link href="birthday.css?v=10.0" rel="stylesheet"/>
 </head>
 <body class="home-page">
-<script>(function(){try{var t=localStorage.getItem('theme');if(t!=='light')document.body.classList.add('dark');if(t==='bloom')document.body.classList.add('bloom');if(t==='light')document.body.classList.add('daylight');if(t!=='light'&&t!=='bloom')document.body.classList.add('night');}catch(e){}})();</script>
+<script>(function(){var c=document.body.classList,t='light';try{if(localStorage.getItem('themeV')!=='10'){localStorage.setItem('theme','light');localStorage.setItem('themeV','10');}t=localStorage.getItem('theme')||'light';}catch(e){}if(t!=='dark'&&t!=='bloom'&&t!=='mars')t='light';if(t==='light')c.add('daylight');else c.add('dark');if(t==='bloom')c.add('bloom');if(t==='dark'||t==='mars')c.add('night');})();</script>
 
 <div aria-hidden="true" class="scroll-progress" id="scrollProgress"><span></span></div>
 <canvas aria-hidden="true" class="space-canvas" id="spaceCanvas"></canvas>
@@ -237,6 +238,9 @@
 </div>
 </section>
 
+<!-- 11.04 生日章：内容由 birthday.js 按时间渲染（零点前封信倒计时 / 生日 37 小时 / 之后永久保留） -->
+<section aria-label="生日" class="stage bday-stage" data-section="birthday" data-vid="0" id="birthday"></section>
+
 <section class="stage time-stage snap-section" data-section="time" data-vid="1" id="time">
 <div class="section-heading reveal">
 <span>Chapter 01</span>
@@ -260,6 +264,7 @@
 <div class="milestone-bar"><span id="milestoneFill"></span></div>
 <p id="milestoneText"></p>
 </div>
+<p class="meet-line" hidden="" id="meetText"></p>
 </div>
 </section>
 
@@ -493,10 +498,11 @@
 </div>
 </div>
 
-<script src="content.js?v=9.2-letter"></script>
+<script src="content.js?v=10.0"></script>
 <script src="highlights.enc.js?v=9.2-letter"></script>
-<script src="script.js?v=9.1-data"></script>
+<script src="birthday.js?v=10.0"></script>
+<script src="script.js?v=10.0"></script>
 <script defer="" src="starmap-data.js?v=8.2-sky"></script>
-<script defer="" src="starmap.js?v=8.2-sky"></script>
+<script defer="" src="starmap.js?v=10.0"></script>
 </body>
 </html>
